@@ -1,0 +1,43 @@
+body {
+    font-family: Inter;
+    background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
+                radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
+                linear-gradient(120deg, #0f1027, #111936);
+    color: #e6e8ee;
+    margin: 0;
+    text-align: center;
+    padding: 40px;
+}
+.card {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.3);
+    padding: 25px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+input, button {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+}
+input {
+    width: 100%;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.2);
+}
+button {
+    cursor: pointer;
+    background: linear-gradient(180deg, #c7b7ff, #9b87ff);
+    color: #0b0d1b;
+    font-weight: 700;
+}
+#resultado {
+    margin-top: 20px;
+    font-size: 18px;
+}
+.muted { color: #b9bfd0; }
