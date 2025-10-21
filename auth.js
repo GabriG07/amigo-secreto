@@ -144,6 +144,42 @@ onAuthStateChanged(auth, async (user) => {
           const li = document.createElement("li");
           li.textContent = `🎁 ${s.id} — Admin: ${s.adminNome} (${s.participantes.length} participantes)`;
 
+          li.addEventListener("mouseenter", () => li.style.cursor = "pointer");
+
+li.addEventListener("click", () => {
+  console.log(`Sorteio clicado: ${s.id}`);
+
+  // Cria ou seleciona área para exibir os participantes
+  let divParticipantes = document.getElementById("participantesSorteio");
+  if (!divParticipantes) {
+    divParticipantes = document.createElement("div");
+    divParticipantes.id = "participantesSorteio";
+    divParticipantes.style.marginTop = "15px";
+    lista.parentElement.appendChild(divParticipantes);
+  }
+
+  // Monta a lista de participantes
+  if (s.participantes && s.participantes.length > 0) {
+    const ul = document.createElement("ul");
+    ul.innerHTML = "";
+    s.participantes.forEach(p => {
+      const item = document.createElement("li");
+      item.textContent = `👤 ${p.nome || p}`;
+      ul.appendChild(item);
+    });
+
+    divParticipantes.innerHTML = `
+      <h4>Participantes do sorteio <strong>${s.id}</strong>:</h4>
+    `;
+    divParticipantes.appendChild(ul);
+  } else {
+    divParticipantes.innerHTML = `
+      <p>Este sorteio ainda não tem participantes cadastrados 😕</p>
+    `;
+  }
+});
+
+
           lista.appendChild(li);
         });
       }

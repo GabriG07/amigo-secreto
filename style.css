@@ -40,4 +40,12 @@ button {
     margin-top: 20px;
     font-size: 18px;
 }
+
+li {
+    margin: 8px;
+    background-color: #9b87ff79;
+    border-radius: 20px;
+}
+
+
 .muted { color: #b9bfd0; }
