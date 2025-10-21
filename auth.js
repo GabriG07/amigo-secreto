@@ -123,6 +123,8 @@ onAuthStateChanged(auth, async (user) => {
     // Exibe botões
     const btnCriar = document.getElementById('btnCriarSorteio');
     const btnVer = document.getElementById('btnVerSorteios');
+    const btnEntrar= document.getElementById('btnEntrarSorteio');
+    const btnEntrar2 = document.getElementById('btnEntrarSorteio2');
 
     btnCriar.onclick = async () => {
       const nome = document.getElementById('meuNome').textContent;
@@ -146,38 +148,80 @@ onAuthStateChanged(auth, async (user) => {
 
           li.addEventListener("mouseenter", () => li.style.cursor = "pointer");
 
-li.addEventListener("click", () => {
-  console.log(`Sorteio clicado: ${s.id}`);
+          li.addEventListener("click", async () => {
+            console.log(`Sorteio clicado: ${s.id}`);
 
-  // Cria ou seleciona área para exibir os participantes
-  let divParticipantes = document.getElementById("participantesSorteio");
-  if (!divParticipantes) {
-    divParticipantes = document.createElement("div");
-    divParticipantes.id = "participantesSorteio";
-    divParticipantes.style.marginTop = "15px";
-    lista.parentElement.appendChild(divParticipantes);
-  }
+            // Cria ou seleciona área para exibir os participantes
+            let divParticipantes = document.getElementById("participantesSorteio");
+            if (!divParticipantes) {
+              divParticipantes = document.createElement("div");
+              divParticipantes.id = "participantesSorteio";
+              divParticipantes.style.marginTop = "15px";
+              lista.parentElement.appendChild(divParticipantes);
+            }
 
-  // Monta a lista de participantes
-  if (s.participantes && s.participantes.length > 0) {
-    const ul = document.createElement("ul");
-    ul.innerHTML = "";
-    s.participantes.forEach(p => {
-      const item = document.createElement("li");
-      item.textContent = `👤 ${p.nome || p}`;
-      ul.appendChild(item);
-    });
+            // Verifica se há participantes
+            if (s.participantes && s.participantes.length > 0) {
+              const ul = document.createElement("ul");
+              ul.innerHTML = "";
 
-    divParticipantes.innerHTML = `
-      <h4>Participantes do sorteio <strong>${s.id}</strong>:</h4>
-    `;
-    divParticipantes.appendChild(ul);
-  } else {
-    divParticipantes.innerHTML = `
-      <p>Este sorteio ainda não tem participantes cadastrados 😕</p>
-    `;
-  }
-});
+              s.participantes.forEach((p, i) => {
+                const item = document.createElement("li");
+                item.style.display = "flex";
+                item.style.justifyContent = "space-between";
+                item.style.alignItems = "center";
+
+                const nome = document.createElement("span");
+                nome.textContent = `👤 ${p.nome || p}`;
+                item.appendChild(nome);
+
+                // Se o usuário for o admin do sorteio, adiciona botão de excluir
+                if (s.adminEmail === user.email) {
+                  const btnExcluir = document.createElement("button");
+                  btnExcluir.textContent = "❌";
+                  btnExcluir.style.marginLeft = "10px";
+                  btnExcluir.style.background = "none";
+                  btnExcluir.style.border = "none";
+                  btnExcluir.style.cursor = "pointer";
+                  btnExcluir.style.color = "red";
+                  btnExcluir.title = "Remover participante";
+
+                  btnExcluir.addEventListener("click", async (e) => {
+                    e.stopPropagation(); // impede clique no li principal
+                    if (confirm(`Deseja remover ${p.nome || p} deste sorteio?`)) {
+                      try {
+                        // Remove o participante localmente
+                        s.participantes.splice(i, 1);
+
+                        // Atualiza no Firestore
+                        const sorteioRef = doc(db, "sorteios", s.id);
+                        await setDoc(sorteioRef, { participantes: s.participantes }, { merge: true });
+
+                        alert("Participante removido com sucesso!");
+                        item.remove(); // remove visualmente da lista
+                      } catch (err) {
+                        console.error("Erro ao remover participante:", err);
+                        alert("❌ Erro ao remover participante.");
+                      }
+                    }
+                  });
+
+                  item.appendChild(btnExcluir);
+                }
+
+                ul.appendChild(item);
+            });
+
+            divParticipantes.innerHTML = `
+              <h4>Participantes do sorteio <strong>${s.id}</strong>:</h4>
+            `;
+            divParticipantes.appendChild(ul);
+          } else {
+            divParticipantes.innerHTML = `
+              <p>Este sorteio ainda não tem participantes cadastrados 😕</p>
+            `;
+          }
+        });
 
 
           lista.appendChild(li);
@@ -186,6 +230,31 @@ li.addEventListener("click", () => {
 
       document.getElementById("sorteiosUsuario").style.display = "block";
     };
+
+    btnEntrar.onclick = async () => {
+      const div = document.getElementById("entrarSorteio");
+      // Se estiver visível, esconde. Se estiver invisível, mostra.
+      if (div.style.display === "block") {
+        div.style.display = "none";
+      } else {
+        div.style.display = "block";
+      }
+    }
+
+    btnEntrar2.onclick = async () => {
+      const codigo = document.getElementById("codigoEntrada").value.trim();
+      alert(codigo)
+
+       if (codigo.length !== 5) {
+        alert("O código deve ter 5 caracteres!");
+        return;
+      }
+
+      await Sorteio.adicionarParticipante(codigo, nomeUsuario, user.email)
+    }
+
+
+
   } else {
     document.getElementById('login').style.display = 'block';
     document.getElementById('resultado').style.display = 'none';

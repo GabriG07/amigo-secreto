@@ -1,7 +1,7 @@
 import { db } from './firebaseConfig.js';
 import { Pessoa } from './pessoa.js';
 import { 
-  setDoc, getDoc, doc, collection, query, where, getDocs
+  setDoc, getDoc, doc, collection, query, where, getDocs, updateDoc, arrayUnion
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 
@@ -133,6 +133,28 @@ export class Sorteio {
         });
 
         return resultados;
+    }
+
+    static async adicionarParticipante(codigo, nomeParticipante, emailParticipante) {
+        const sorteioRef = doc(db, "sorteios", codigo);
+        const snap = await getDoc(sorteioRef);
+
+        try {
+            if (!snap.exists()) {
+                alert(`O Amigo Secreto de código ${codigo} não existe!`);
+                return;
+            }
+
+            await updateDoc(sorteioRef, {
+                participantes: arrayUnion({
+                    nome: nomeParticipante,
+                    email: emailParticipante
+                })
+            });
+            alert(`✅ Entrada com sucesso no sorteio ${codigo}!`);
+        } catch (error) {
+            alert("❌ Erro ao entrar no sorteio: " + error.message);
+        }
     }
 
 }

@@ -38,8 +38,14 @@
       <p>Olá, <strong id="meuNome"></strong>!</p>
       
       <div id="acoesUsuario">
+        <button id="btnEntrarSorteio">➕ Entrar em amigo secreto</button>
         <button id="btnCriarSorteio">➕ Criar novo amigo secreto</button>
         <button id="btnVerSorteios">👀 Ver meus sorteios</button>
+      </div>
+
+      <div id="entrarSorteio" style="display:none">
+        <input id="codigoEntrada" type="text" minlength="5" maxlength="5" placeholder="Insira o código de entrada do amigo secreto (Ex: ANFGZ)">
+        <button id="btnEntrarSorteio2">Entrar</button>
       </div>
 
       <div id="sorteiosUsuario" style="margin-top:20px; display:none">
