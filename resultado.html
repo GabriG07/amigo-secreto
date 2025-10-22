@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado Amigo Secreto</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Amigo Secreto 🎁</h1>
+  <div class="card" id="selecionarUsuario">
+    <h2>Escolha seu avatar:</h2>
+    <div id="avatarContainer" class="avatar-grid"></div>
+  </div>
+
+  <div class="card" id="loginUsuario" style="display:none;">
+    <p>Digite sua senha:</p>
+    <input type="password" id="senhaUsuario" placeholder="Senha" />
+    <button id="btnLogin">Ver resultado</button>
+    <div id="msgErro" style="color:red; margin-top:10px;"></div>
+  </div>
+
+  <div class="card" id="resultado" style="display:none;">
+    <p>Olá, <strong id="nomeUsuario"></strong>!</p>
+    <p class="muted">Seu amigo secreto é:</p>
+    <p style="font-size:26px;font-weight:800" id="nomeAmigo"></p>
+    <img id="avatarAmigo" src="" style="width:120px; height:120px; border-radius:50%; margin-top:10px;" />
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { getDoc, doc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+    const avatarContainer = document.getElementById("avatarContainer");
+    const loginUsuario = document.getElementById("loginUsuario");
+    const senhaUsuario = document.getElementById("senhaUsuario");
+    const btnLogin = document.getElementById("btnLogin");
+    const msgErro = document.getElementById("msgErro");
+    const resultadoDiv = document.getElementById("resultado");
+    const nomeUsuarioElem = document.getElementById("nomeUsuario");
+    const nomeAmigoElem = document.getElementById("nomeAmigo");
+    const avatarAmigoElem = document.getElementById("avatarAmigo");
+
+    let participantes = [];
+    let usuarioSelecionado = null;
+
+    async function carregarParticipantes() {
+      const querySnapshot = await getDocs(collection(db, "participantes"));
+      participantes = [];
+      querySnapshot.forEach(docSnap => {
+        participantes.push(docSnap.data());
+      });
+      participantes.forEach(p => {
+        const img = document.createElement("img");
+        img.src = p.avatar;
+        img.classList.add("avatar-option");
+        const nome = document.createElement("p");
+        nome.textContent = p.nome;
+        nome.style.textAlign = "center";
+        const wrapper = document.createElement("div");
+        wrapper.style.display = "inline-block";
+        wrapper.style.margin = "10px";
+        wrapper.appendChild(img);
+        wrapper.appendChild(nome);
+        img.addEventListener("click", () => {
+          usuarioSelecionado = p;
+          document.getElementById("selecionarUsuario").style.display = "none";
+          loginUsuario.style.display = "block";
+        });
+        avatarContainer.appendChild(wrapper);
+      });
+    }
+
+    btnLogin.addEventListener("click", async () => {
+      if (!usuarioSelecionado) return;
+      if (senhaUsuario.value !== usuarioSelecionado.senha) {
+        msgErro.textContent = "Senha incorreta!";
+        return;
+      }
+      const resultadoSnap = await getDoc(doc(db, "sorteio", "resultado"));
+      if (!resultadoSnap.exists()) {
+        msgErro.textContent = "O sorteio ainda não foi realizado.";
+        return;
+      }
+      const pares = resultadoSnap.data();
+      const amigoNome = pares[usuarioSelecionado.nome];
+      const amigoDocSnap = await getDoc(doc(db, "participantes", amigoNome));
+      const amigoData = amigoDocSnap.data();
+      nomeUsuarioElem.textContent = usuarioSelecionado.nome;
+      nomeAmigoElem.textContent = amigoNome;
+      avatarAmigoElem.src = amigoData.avatar;
+      loginUsuario.style.display = "none";
+      resultadoDiv.style.display = "block";
+    });
+
+    carregarParticipantes();
+  </script>
+</body>
+</html>
