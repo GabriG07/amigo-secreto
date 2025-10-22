@@ -176,8 +176,11 @@ button:hover {
 }
 
 .avatar-wrapper:hover {
-  transform: scale(1.1);
   border-color: #9b87ff;
+}
+
+.avatar-wrapper img:hover {
+  transform: scale(1.1);
 }
 
 .avatar-wrapper.selected {
