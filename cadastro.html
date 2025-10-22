@@ -3,85 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro Amigo Secreto</title>
-  <link rel="stylesheet" href="style2.css">
+  <title>Cadastro - Amigo Secreto</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Cadastro - Amigo Secreto 🎄</h1>
+  <h1>Cadastro 🎄</h1>
   <div class="card">
-    <div id="formCadastro">
-      <input type="text" id="nome" placeholder="Digite seu nome" />
-      <input type="password" id="senha" placeholder="Digite sua senha" />
-      <p>Escolha seu avatar:</p>
-      <div id="avatarContainer" class="avatar-grid"></div>
-      <button id="btnCadastrar">Cadastrar</button>
-    </div>
-    <div id="mensagem" style="display:none; margin-top:20px; font-weight:bold;"></div>
+    <h2>Crie seu perfil</h2>
+    <input id="nome" placeholder="Seu nome" />
+    <input type="password" id="senha" placeholder="Crie uma senha" />
+    <h3>Escolha seu avatar</h3>
+    <div class="avatar-grid" id="avatarContainer"></div>
+    <button id="cadastrar">Cadastrar</button>
   </div>
 
   <script type="module">
     import { db } from "./firebase-config.js";
-    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    // Caminhos absolutos para GitHub Pages
-    const avatares = [
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar1.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar2.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar3.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar4.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar5.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar6.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar7.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar8.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar9.png",
-      "https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar10.png"
-    ];
-
+    const avatarContainer = document.getElementById("avatarContainer");
+    const cadastrar = document.getElementById("cadastrar");
+    const nome = document.getElementById("nome");
+    const senha = document.getElementById("senha");
     let avatarSelecionado = null;
 
-    const container = document.getElementById("avatarContainer");
+    const avatares = Array.from({length: 10}, (_, i) => `https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar${i+1}.png`);
 
     avatares.forEach(url => {
+      const div = document.createElement("div");
+      div.classList.add("avatar-wrapper");
       const img = document.createElement("img");
       img.src = url;
       img.classList.add("avatar-option");
+      div.appendChild(img);
+      avatarContainer.appendChild(div);
       img.addEventListener("click", () => {
         document.querySelectorAll(".avatar-option").forEach(i => i.style.borderColor = "transparent");
-        img.style.borderColor = "#fff";
+        img.style.borderColor = "#a78bfa";
         avatarSelecionado = url;
       });
-      container.appendChild(img);
     });
 
-    const btn = document.getElementById("btnCadastrar");
-
-    btn.addEventListener("click", async () => {
-      const nome = document.getElementById("nome").value.trim();
-      const senha = document.getElementById("senha").value.trim();
-
-      if (!nome || !senha || !avatarSelecionado) {
-        alert("Preencha todos os campos e selecione um avatar!");
+    cadastrar.addEventListener("click", async () => {
+      if (!nome.value || !senha.value || !avatarSelecionado) {
+        alert("Preencha todos os campos e escolha um avatar!");
         return;
       }
-
-      const docRef = doc(db, "participantes", nome);
-      const snapshot = await getDoc(docRef);
-
-      if (snapshot.exists()) {
-        alert("Esse nome já está cadastrado!");
-        return;
-      }
-
-      await setDoc(docRef, {
-        nome,
-        senha,
+      await setDoc(doc(db, "participantes", nome.value), {
+        nome: nome.value,
+        senha: senha.value,
         avatar: avatarSelecionado
       });
-
-      document.getElementById("formCadastro").style.display = "none";
-      const msg = document.getElementById("mensagem");
-      msg.style.display = "block";
-      msg.textContent = "Cadastro realizado com sucesso!";
+      alert("Cadastro realizado com sucesso!");
+      nome.value = "";
+      senha.value = "";
     });
   </script>
 </body>
