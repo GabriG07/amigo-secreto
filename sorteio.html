@@ -4,65 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sorteio - Amigo Secreto</title>
-  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Sorteio - Amigo Secreto 🎁</h1>
+  <h1>Painel do Sorteio 🎁</h1>
   <div class="card">
-    <h2>Participantes cadastrados:</h2>
+    <h2>Participantes</h2>
     <ul id="listaParticipantes"></ul>
-    <button id="btnSortear" style="margin-top:20px;">Sortear</button>
-    <div id="mensagem" style="margin-top:20px; font-weight:bold;"></div>
+    <button id="btnSortear">Realizar Sorteio</button>
   </div>
 
   <script type="module">
     import { db } from "./firebase-config.js";
-    import { collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+    import { collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    const listaElement = document.getElementById("listaParticipantes");
+    const listaParticipantes = document.getElementById("listaParticipantes");
     const btnSortear = document.getElementById("btnSortear");
-    const mensagem = document.getElementById("mensagem");
-    let participantes = [];
 
     async function carregarParticipantes() {
-      listaElement.innerHTML = "";
-      const querySnapshot = await getDocs(collection(db, "participantes"));
-      participantes = [];
-      querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        participantes.push(data.nome);
-        const li = document.createElement("li");
-        li.textContent = data.nome;
-        listaElement.appendChild(li);
+      const snapshot = await getDocs(collection(db, "participantes"));
+      const participantes = [];
+      snapshot.forEach(docSnap => participantes.push(docSnap.data().nome));
+      listaParticipantes.innerHTML = participantes.map(p => `<li>${p}</li>`).join("");
+      return participantes;
+    }
+
+    async function sortear() {
+      const participantes = await carregarParticipantes();
+      const embaralhado = [...participantes].sort(() => Math.random() - 0.5);
+      const resultado = {};
+      participantes.forEach((p, i) => {
+        resultado[p] = embaralhado[(i + 1) % embaralhado.length];
       });
+      await setDoc(doc(db, "sorteio", "resultado"), resultado);
+      alert("Sorteio realizado com sucesso!");
     }
 
-    function gerarPares(lista) {
-      let nomes = [...lista];
-      let pares = {};
-      while (nomes.length > 0) {
-        const sorteador = nomes.shift();
-        let opcoes = lista.filter(n => n !== sorteador && !Object.values(pares).includes(n));
-        if (opcoes.length === 0) {
-          return gerarPares(lista);
-        }
-        const escolhido = opcoes[Math.floor(Math.random() * opcoes.length)];
-        pares[sorteador] = escolhido;
-      }
-      return pares;
-    }
-
-    btnSortear.addEventListener("click", async () => {
-      if (participantes.length < 2) {
-        alert("É necessário ter pelo menos 2 participantes cadastrados.");
-        return;
-      }
-      const pares = gerarPares(participantes);
-      const resultadoRef = doc(db, "sorteio", "resultado");
-      await setDoc(resultadoRef, pares);
-      mensagem.textContent = "Sorteio realizado com sucesso!";
-    });
-
+    btnSortear.addEventListener("click", sortear);
     carregarParticipantes();
   </script>
 </body>
