@@ -1,66 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cadastro - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
 </head>
 <body>
   <div class="container">
     <h1>Cadastro</h1>
-    <form id="cadastroForm">
-      <input type="text" id="nome" placeholder="Digite seu nome" required>
-      <input type="password" id="senha" placeholder="Crie uma senha" required>
-      <div class="avatar-container" id="avatarContainer"></div>
-      <button type="submit">Cadastrar</button>
-    </form>
+    <div class="form-row">
+      <label class="label">Nome</label>
+      <input id="nome" type="text" placeholder="Digite seu nome">
+      <label class="label">Senha</label>
+      <input id="senha" type="password" placeholder="Crie uma senha">
+      <label class="label">Escolha seu avatar</label>
+      <div class="avatar-grid" id="avatarGrid"></div>
+      <button id="btnCadastrar">Cadastrar</button>
+    </div>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+    import { db } from "./firebase-config.js";
+    import { ref, push } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCNE1_uwrV1q3z97koXqT9nHCXuqpT9kmo",
-      authDomain: "amigo-secreto-6df8d.firebaseapp.com",
-      databaseURL: "https://amigo-secreto-6df8d-default-rtdb.firebaseio.com",
-      projectId: "amigo-secreto-6df8d",
-      storageBucket: "amigo-secreto-6df8d.appspot.com",
-      messagingSenderId: "529548546490",
-      appId: "1:529548546490:web:fc37ea8b61d0ddfe8cbeb9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const container = document.getElementById("avatarContainer");
-    for (let i = 1; i <= 10; i++) {
-      const img = document.createElement("img");
-      img.src = `https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar${i}.png`;
-      img.className = "avatar";
-      img.onclick = () => {
-        document.querySelectorAll(".avatar").forEach(a => a.classList.remove("selected"));
-        img.classList.add("selected");
+    const avatarGrid = document.getElementById('avatarGrid');
+    const avatars = Array.from({length:10},(_,i)=>`https://gabrig07.github.io/amigo-secreto/imagens/avatar${i+1}.png`);
+    let selected = null;
+    avatars.forEach(src=>{
+      const el = document.createElement('div');
+      el.className = 'avatar-option';
+      el.innerHTML = `<img src="${src}" alt="avatar">`;
+      el.onclick = ()=>{
+        document.querySelectorAll('.avatar-option').forEach(a=>a.classList.remove('selected'));
+        el.classList.add('selected');
+        selected = src;
       };
-      container.appendChild(img);
-    }
+      avatarGrid.appendChild(el);
+    });
 
-    document.getElementById("cadastroForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const nome = document.getElementById("nome").value.trim();
-      const senha = document.getElementById("senha").value.trim();
-      const avatar = document.querySelector(".avatar.selected")?.src;
-
-      if (!nome || !senha || !avatar) {
-        alert("Preencha todos os campos e selecione um avatar!");
-        return;
-      }
-
-      await push(ref(db, "participantes"), { nome, senha, avatar });
-      alert("Cadastro realizado com sucesso!");
-      document.getElementById("cadastroForm").reset();
-      document.querySelectorAll(".avatar").forEach(a => a.classList.remove("selected"));
+    document.getElementById('btnCadastrar').addEventListener('click', async ()=>{
+      const nome = document.getElementById('nome').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+      if(!nome||!senha||!selected){alert('Preencha nome, senha e escolha um avatar');return}
+      await push(ref(db,'participantes'),{nome,senha,avatar:selected});
+      alert('Cadastro realizado');
+      document.getElementById('nome').value='';
+      document.getElementById('senha').value='';
+      document.querySelectorAll('.avatar-option').forEach(a=>a.classList.remove('selected'));
     });
   </script>
 </body>
