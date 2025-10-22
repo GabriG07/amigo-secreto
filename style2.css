@@ -1,145 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
 body {
-  height: 100vh;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(270deg, #3a1c71, #d76d77, #ffaf7b);
+  background-size: 600% 600%;
+  animation: gradientMove 12s ease infinite;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #1b1e34, #0a0c1a);
-  overflow: hidden;
-  position: relative;
-  color: #fff;
+  min-height: 100vh;
 }
 
-body::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(from 0deg, #6f8ef6, #9b87ff, #6f8ef6);
-  animation: rotate 12s linear infinite;
-  filter: blur(160px);
-  opacity: 0.25;
-  z-index: 0;
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .container {
-  position: relative;
-  z-index: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   width: 90%;
   max-width: 400px;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 20px;
-  backdrop-filter: blur(12px);
-  padding: 30px 20px;
   text-align: center;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-h1, h2 {
+h1 {
+  font-size: 2em;
   margin-bottom: 20px;
-  font-weight: 600;
 }
 
-input, select, button {
-  display: block;
-  width: 88%;
-  max-width: 380px;
-  margin: 10px auto;
+input, button {
+  width: 100%;
   padding: 12px;
-  border: none;
+  margin: 8px 0;
   border-radius: 10px;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
+  border: none;
+  font-size: 1em;
 }
 
-input, select {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.25);
+input {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
 }
 
 button {
-  background: linear-gradient(135deg, #6f8ef6, #9b87ff);
-  color: #0b0d1b;
-  font-weight: 700;
+  background: #ff7b54;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
-  transition: all .3s ease;
+  transition: transform 0.2s, background 0.3s;
 }
 
 button:hover {
+  background: #ff9e80;
   transform: scale(1.05);
-  background: linear-gradient(135deg, #8ea3ff, #b197ff);
 }
 
-.avatar-grid {
+.avatar-container, #participantesContainer, #participantesResultado {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 10px;
-  margin: 20px 0;
+  gap: 15px;
+  justify-items: center;
 }
 
-.avatar-option {
-  width: 80px;
-  height: 80px;
+.avatar, .participante img {
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform .3s ease, box-shadow .3s ease;
-  border: 2px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.avatar-option:hover {
+.avatar:hover, .participante img:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 12px rgba(255,255,255,0.4);
+  box-shadow: 0 0 15px #fff;
 }
 
-.avatar-option.selected {
-  border: 2px solid #9b87ff;
-  box-shadow: 0 0 20px rgba(155,135,255,0.6);
+.avatar.selected {
+  border: 3px solid #ffb347;
+  transform: scale(1.1);
 }
 
-.result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.participante {
+  text-align: center;
 }
 
-.result img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  object-fit: cover;
+.participante span, .participante h2, .participante p {
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-size: 1em;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .container {
-    width: 92%;
-    padding: 25px 15px;
+    max-width: 90%;
+    padding: 20px;
   }
-  input, select, button {
-    width: 94%;
-    font-size: 15px;
-    padding: 10px;
+  h1 {
+    font-size: 1.6em;
   }
-  .avatar-option {
-    width: 70px;
-    height: 70px;
+  .avatar, .participante img {
+    width: 60px;
+    height: 60px;
   }
 }
