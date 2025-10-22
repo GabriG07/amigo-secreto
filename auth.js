@@ -45,7 +45,7 @@ document.getElementById('loginEmail').addEventListener('click', async () => {
 });
 
 document.getElementById('cadastroEmail').addEventListener('click', async () => {
-  const nome = document.getElementById('nome').value.trim();
+  const nome = capitalize(document.getElementById('nome').value.trim());
   const email = document.getElementById('email').value.trim();
   const senha = document.getElementById('senha').value.trim();
 
@@ -61,7 +61,7 @@ document.getElementById('cadastroEmail').addEventListener('click', async () => {
     const pessoa = new Pessoa(nome, email);
     pessoa.salvar(cred);
 
-    document.getElementById('meuNome').textContent = nome;
+    document.getElementById('meuNome').textContent = pessoa.nome;
     alert(`Conta criada com sucesso! Bem-vindo, ${nome}! 🎉`);
   } catch (error) {
     alert("Erro ao criar conta: " + error.message);
@@ -179,7 +179,7 @@ onAuthStateChanged(auth, async (user) => {
                 item.style.alignItems = "center";
 
                 const nome = document.createElement("span");
-                nome.textContent = `👤 ${p.nome || p}`;
+                nome.textContent = `👤 ${p.nome || p.email}`;
                 item.appendChild(nome);
 
                 // Se o usuário for o admin do sorteio, adiciona botão de excluir
@@ -193,24 +193,16 @@ onAuthStateChanged(auth, async (user) => {
                   btnExcluir.style.color = "red";
                   btnExcluir.title = "Remover participante";
 
+                  //Remoção de participante
                   btnExcluir.addEventListener("click", async (e) => {
                     e.stopPropagation(); // impede clique no li principal
-                    if (confirm(`Deseja remover ${p.nome || p} deste sorteio?`)) {
+                    if (confirm(`Deseja remover ${p.nome || p.email} deste sorteio?`)) {
                       try {
-                        if(p.email == s.admin.email){ //Admin não pode remover ele mesmo
-                          alert("Você não pode se remover!")
-                          return;
-                        }
-
-                        // Remove o participante localmente
-                        s.participantes.splice(i, 1);
-
-                        // Atualiza no Firestore
-                        const sorteioRef = doc(db, "sorteios", s.id);
-                        await setDoc(sorteioRef, { participantes: s.participantes }, { merge: true });
-
-                        alert("Participante removido com sucesso!");
-                        item.remove(); // remove visualmente da lista
+                        const sucesso = await s.removerParticipante(p.email);
+                        if(sucesso){
+                          alert("Participante removido com sucesso!");
+                          item.remove(); // remove visualmente da lista
+                        }    
                       } catch (err) {
                         console.error("Erro ao remover participante:", err);
                         alert("❌ Erro ao remover participante.");

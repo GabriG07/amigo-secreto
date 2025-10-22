@@ -182,6 +182,33 @@ export class Sorteio {
         }
     }
 
+    async removerParticipante(email) {
+        if(email == this.admin.email){ //Admin não pode remover ele mesmo
+            alert("Você não pode se remover!")
+            return false;
+        }
+
+        try {
+            this.participantes = this.participantes.filter(p => p.email !== email); //mantém todos os participantes, exceto o que queremos remover
+
+            const participantesFS = this.participantes.map(p => ({
+                nome: p.nome,
+                email: p.email
+            }));
+
+            const sorteioRef = doc(db, "sorteios", this.id);
+            await setDoc(sorteioRef, { participantes: participantesFS }, { merge: true });
+
+            console.log(`🗑️ Participante com email ${email} removido do sorteio ${this.id}`);
+            return true;
+        } catch (err) {
+            console.error("Erro ao remover participante:", err);
+            alert("❌ Erro ao remover participante.");
+            return false;
+        }
+    }
+
+
     // Carrega um sorteio do Firestore e recria o objeto Sorteio
     static async carregar(id) {
         const ref = doc(db, "sorteios", id);

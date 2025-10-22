@@ -3,8 +3,8 @@ import { Sorteio } from './Sorteio.js';
 import { capitalize } from './utils.js';
 
 export class Pessoa {
-    constructor(nome, email = null){
-        this.nome = capitalize(nome);
+    constructor(nome, email){
+        this.nome = nome;
         this.email = email;
     }
 
