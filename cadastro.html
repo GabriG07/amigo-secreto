@@ -133,26 +133,29 @@
       "https://i.pravatar.cc/150?img=65"
     ];
 
-    const avatarGrid = document.getElementById('avatarGrid');
-    let selecionadoIndex = 0; // por padrão primeiro avatar
+const avatarGrid = document.getElementById('avatarGrid');
+if (!avatarGrid) {
+  console.error("Elemento #avatarGrid não encontrado no DOM!");
+} else {
+  avatares.forEach((url, idx) => {
+    const div = document.createElement('div');
+    div.className = 'avatar-option' + (idx === selecionadoIndex ? ' selected' : '');
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `Avatar ${idx+1}`;
+    div.appendChild(img);
 
-    // cria os elementos de avatar dinamicamente
-    avatares.forEach((url, idx) => {
-      const div = document.createElement('div');
-      div.className = 'avatar-option' + (idx === selecionadoIndex ? ' selected' : '');
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = `Avatar ${idx+1}`;
-      div.appendChild(img);
-
-      div.addEventListener('click', () => {
-        document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
-        div.classList.add('selected');
-        selecionadoIndex = idx;
-      });
-
-      avatarGrid.appendChild(div);
+    div.addEventListener('click', () => {
+      console.log("Avatar clicado:", idx, url); // DEBUG
+      document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+      div.classList.add('selected');
+      selecionadoIndex = idx;
     });
+
+    avatarGrid.appendChild(div);
+  });
+}
+
 
     // CADASTRO (salva no Firestore)
     document.getElementById('btnCadastrar').addEventListener('click', async () => {
