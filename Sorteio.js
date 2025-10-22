@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig.js';
-import { Pessoa } from './pessoa.js';
+import { Pessoa } from './Pessoa.js';
 import { 
   setDoc, getDoc, doc, collection, query, where, getDocs, updateDoc, arrayUnion
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -139,7 +139,7 @@ export class Sorteio {
         const sorteioRef = doc(db, "sorteios", codigo);
         const snap = await getDoc(sorteioRef);
 
-        try {
+        try {   
             if (!snap.exists()) {
                 alert(`O Amigo Secreto de código ${codigo} não existe!`);
                 return;

@@ -9,5 +9,5 @@ export class Pessoa {
         nome: this.nome,
         email: this.email,
         };
-  }
+    }
 }

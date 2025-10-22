@@ -1,7 +1,8 @@
 //Tratamento do login e firebase
-import { auth, db } from './firebaseconfig.js';
-import { Pessoa } from './pessoa.js';
-import { Sorteio } from './sorteio.js';
+import { auth, db } from './firebaseConfig.js';
+import { Pessoa } from './Pessoa.js';
+import { Sorteio } from './Sorteio.js';
+import { capitalize } from './utils.js';
 import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { 
   getAuth,
@@ -45,7 +46,7 @@ document.getElementById('loginEmail').addEventListener('click', async () => {
 });
 
 document.getElementById('cadastroEmail').addEventListener('click', async () => {
-  const nome = document.getElementById('nome').value.trim();
+  const nome = capitalize(document.getElementById('nome').value.trim());
   const email = document.getElementById('email').value.trim();
   const senha = document.getElementById('senha').value.trim();
 
@@ -95,7 +96,7 @@ onAuthStateChanged(auth, async (user) => {
       const dadosUsuario = await buscarUsuarioPorEmail(user.email);
 
       if (dadosUsuario && dadosUsuario.nome) {
-        nomeUsuario = dadosUsuario.nome;
+        nomeUsuario = capitalize(dadosUsuario.nome);
       } else {
         console.warn("⚠️ Usuário não encontrado na coleção 'usuarios' com esse e-mail.");
       }
@@ -128,6 +129,10 @@ onAuthStateChanged(auth, async (user) => {
 
     btnCriar.onclick = async () => {
       const nome = document.getElementById('meuNome').textContent;
+
+      const confirmar = confirm("🎁 Deseja realmente criar um novo amigo secreto?");
+      if (!confirmar) return; // se cancelar, sai da função
+
       const id = await Sorteio.criar(user.email, nome);
       alert(`🎁 Novo amigo secreto criado com ID: ${id}`);
     };
@@ -190,6 +195,11 @@ onAuthStateChanged(auth, async (user) => {
                     e.stopPropagation(); // impede clique no li principal
                     if (confirm(`Deseja remover ${p.nome || p} deste sorteio?`)) {
                       try {
+                        if(p.email == s.adminEmail){ //Admin não pode remover ele mesmo
+                          alert("Você não pode se remover!")
+                          return;
+                        }
+
                         // Remove o participante localmente
                         s.participantes.splice(i, 1);
 
@@ -243,7 +253,6 @@ onAuthStateChanged(auth, async (user) => {
 
     btnEntrar2.onclick = async () => {
       const codigo = document.getElementById("codigoEntrada").value.trim();
-      alert(codigo)
 
        if (codigo.length !== 5) {
         alert("O código deve ter 5 caracteres!");
@@ -274,7 +283,7 @@ document.getElementById('logout').addEventListener('click', async () => {
 async function buscarUsuarioPorEmail(email) {
   const usuariosRef = collection(db, "usuarios");
   const q = query(usuariosRef, where("email", "==", email));
-  const snapshot = await getDocs(q);
+  const snapshot = await getDoc(q);
 
   if (snapshot.empty) {
     console.log("Usuário não encontrado");
