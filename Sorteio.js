@@ -134,13 +134,20 @@ export class Sorteio {
         const q = query(collection(db, "sorteios"));
         const snapshot = await getDocs(q);
 
+        // Armazena IDs de sorteios em que o usuário participa
+        const ids = snapshot.docs
+            .filter(docSnap => {
+                const data = docSnap.data();
+                return data.participantes?.some(p => p.email === email);
+            })
+            .map(docSnap => docSnap.id);
+
+        // Carrega cada sorteio e adiciona no array
         const resultados = [];
-        snapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            if (data.participantes?.some(p => p.email === email)) {
-            resultados.push({ id: docSnap.id, ...data });
-            }
-        });
+        for (const id of ids) {
+            const sorteio = await Sorteio.carregar(id);
+            if (sorteio) resultados.push(sorteio);
+        }
 
         return resultados;
     }

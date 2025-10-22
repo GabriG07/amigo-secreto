@@ -151,7 +151,7 @@ onAuthStateChanged(auth, async (user) => {
       } else {
         sorteios.forEach(s => {
           const li = document.createElement("li");
-          li.textContent = `🎁 ${s.id} — Admin: ${s.adminNome} (${s.participantes.length} participantes)`;
+          li.textContent = `🎁 ${s.id} — Admin: ${s.admin.nome} (${s.participantes.length} participantes)`;
 
           li.addEventListener("mouseenter", () => li.style.cursor = "pointer");
 
@@ -183,7 +183,7 @@ onAuthStateChanged(auth, async (user) => {
                 item.appendChild(nome);
 
                 // Se o usuário for o admin do sorteio, adiciona botão de excluir
-                if (s.adminEmail === user.email) {
+                if (s.admin.email === user.email) {
                   const btnExcluir = document.createElement("button");
                   btnExcluir.textContent = "❌";
                   btnExcluir.style.marginLeft = "10px";
@@ -197,7 +197,7 @@ onAuthStateChanged(auth, async (user) => {
                     e.stopPropagation(); // impede clique no li principal
                     if (confirm(`Deseja remover ${p.nome || p} deste sorteio?`)) {
                       try {
-                        if(p.email == s.adminEmail){ //Admin não pode remover ele mesmo
+                        if(p.email == s.admin.email){ //Admin não pode remover ele mesmo
                           alert("Você não pode se remover!")
                           return;
                         }
@@ -245,6 +245,7 @@ onAuthStateChanged(auth, async (user) => {
 
     btnEntrar.onclick = async () => {
       const div = document.getElementById("entrarSorteio");
+
       // Se estiver visível, esconde. Se estiver invisível, mostra.
       if (div.style.display === "block") {
         div.style.display = "none";
