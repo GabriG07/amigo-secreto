@@ -22,13 +22,38 @@
     const btnSortear = document.getElementById("btnSortear");
 
     async function carregarParticipantes() {
-      const snapshot = await getDocs(collection(db, "participantes"));
-      const participantes = [];
-      snapshot.forEach(docSnap => participantes.push(docSnap.data().nome));
-      listaParticipantes.innerHTML = participantes.map(p => `<li>${p}</li>`).join("");
-      return participantes;
+      avatarContainer.innerHTML = "";
+      const snap = await getDocs(collection(db, "participantes"));
+      let participantes = []; // local dentro da função
+      snap.forEach(s => participantes.push(s.data()));
+      
+      console.log("participantes carregados:", participantes); // <- veja no console
+    
+      participantes.forEach(p => {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("avatar-wrapper");
+        const img = document.createElement("img");
+        img.src = p.avatar;
+        img.classList.add("avatar");
+        const nome = document.createElement("div");
+        nome.textContent = p.nome;
+        nome.classList.add("avatar-name");
+        wrapper.appendChild(img);
+        wrapper.appendChild(nome);
+        avatarContainer.appendChild(wrapper);
+    
+        img.addEventListener("click", () => {
+          usuarioSelecionado = p;
+          selecionarUsuarioCard.style.display = "none";
+          loginUsuario.style.display = "block";
+          senhaUsuario.value = "";
+          msgErro.textContent = "";
+        });
+      });
     }
-
+    
+    carregarParticipantes();
+    
     async function sortear() {
       const participantes = await carregarParticipantes();
       const embaralhado = [...participantes].sort(() => Math.random() - 0.5);
