@@ -1,49 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Resultado - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
 </head>
 <body>
   <div class="container">
     <h1>Resultado</h1>
-    <div id="participantesResultado"></div>
+    <div id="grid" class="participants-grid"></div>
+    <div id="senhaBox" style="display:none;margin-top:12px">
+      <h2 id="selNome" style="margin-bottom:10px"></h2>
+      <input id="senhaInput" type="password" placeholder="Digite sua senha">
+      <button id="btnVer">Ver resultado</button>
+      <button id="btnCancelar" style="margin-top:8px;background:linear-gradient(135deg,#ff8a7a,#ffb37a)">Cancelar</button>
+    </div>
+    <div id="displayResult" style="display:none;margin-top:18px" class="result-card"></div>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+    import { db } from "./firebase-config.js";
+    import { ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCNE1_uwrV1q3z97koXqT9nHCXuqpT9kmo",
-      authDomain: "amigo-secreto-6df8d.firebaseapp.com",
-      databaseURL: "https://amigo-secreto-6df8d-default-rtdb.firebaseio.com",
-      projectId: "amigo-secreto-6df8d",
-      storageBucket: "amigo-secreto-6df8d.appspot.com",
-      messagingSenderId: "529548546490",
-      appId: "1:529548546490:web:fc37ea8b61d0ddfe8cbeb9"
+    const grid = document.getElementById('grid');
+    let selected = null;
+
+    async function carregar(){
+      const snap = await get(ref(db,'participantes'));
+      const data = snap.exists()?Object.values(snap.val()):[];
+      if(data.length===0){grid.innerHTML='<div class="notice">Nenhum participante cadastrado.</div>';return}
+      grid.innerHTML='';
+      data.forEach(p=>{
+        const d = document.createElement('div');
+        d.className='participant';
+        d.innerHTML=`<img src="${p.avatar}"><div class="participant-name">${p.nome}</div>`;
+        d.onclick=()=>abrirSenha(p);
+        grid.appendChild(d);
+      });
+    }
+
+    function abrirSenha(p){
+      selected=p;
+      document.getElementById('grid').style.display='none';
+      document.getElementById('senhaBox').style.display='block';
+      document.getElementById('selNome').textContent=p.nome;
+      document.getElementById('senhaInput').value='';
+      document.getElementById('displayResult').style.display='none';
+    }
+
+    document.getElementById('btnCancelar').onclick=()=>{
+      selected=null;
+      document.getElementById('senhaBox').style.display='none';
+      document.getElementById('grid').style.display='grid';
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    document.getElementById('btnVer').onclick=async ()=>{
+      const s = document.getElementById('senhaInput').value.trim();
+      if(!selected||s!==selected.senha){alert('Nome ou senha incorretos');return}
+      const snap = await get(ref(db,'resultado'));
+      const res = snap.exists()?snap.val():null;
+      if(!res){alert('Sorteio ainda não realizado');return}
+      const encontrado = res.find(r=>r.deNome===selected.nome);
+      if(!encontrado){alert('Resultado não encontrado');return}
+      const display = document.getElementById('displayResult');
+      display.innerHTML = `<img src="${encontrado.paraAvatar}"><h2>${encontrado.paraNome}</h2>`;
+      document.getElementById('senhaBox').style.display='none';
+      display.style.display='block';
+    };
 
-    const snapshot = await get(ref(db, "resultado"));
-    const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
-    const container = document.getElementById("participantesResultado");
-
-    participantes.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "participante";
-      div.innerHTML = `
-        <img src="${p.avatar}">
-        <div>
-          <h2>${p.nome}</h2>
-          <p>🎁 Tirou: <strong>${p.amigo || "Aguardando sorteio"}</strong></p>
-        </div>`;
-      container.appendChild(div);
-    });
+    carregar();
   </script>
 </body>
 </html>
