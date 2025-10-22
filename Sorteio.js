@@ -9,6 +9,7 @@ export class Sorteio {
     constructor(admin){
         this.id = null;
         this.admin = admin;
+        this.criadoEm = Date.now();
         this.participantes = [];
         this.resultado = new Map();
     }
@@ -87,8 +88,17 @@ export class Sorteio {
         }
     }
 
+    toFirestore() {
+        return {
+            adminEmail: this.admin.email,
+            adminNome: this.admin.nome,
+            criadoEm: this.criadoEm,
+            participantes: null
+        };
+    }
+
     // Cria um novo sorteio no banco
-    static async criar(adminEmail, adminNome) {
+    async criar() {
         const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
         let id;
         const dbRef = collection(db, "sorteios");
@@ -102,15 +112,15 @@ export class Sorteio {
 
         // Estrutura do novo sorteio
         const novo = {
-            adminEmail: adminEmail,
-            adminNome: adminNome,
-            participantes: [{ nome: adminNome, email: adminEmail }],
-            criadoEm: new Date().toISOString(),
+            adminEmail: this.admin.email,
+            adminNome: this.admin.nome,
+            participantes: [{ nome: this.admin.nome, email: this.admin.email }],
+            criadoEm: this.criadoEm,
         };
 
         try {
             await setDoc(doc(db, "sorteios", id), novo);
-            console.log(`🎁 Novo sorteio criado: ${id} (${adminNome})`);
+            console.log(`🎁 Novo sorteio criado: ${id} (${this.admin.nome})`);
             return id;
         } catch (e) {
             console.error("❌ Erro ao criar sorteio:", e);
@@ -135,27 +145,67 @@ export class Sorteio {
         return resultados;
     }
 
-    static async adicionarParticipante(codigo, nomeParticipante, emailParticipante) {
-        const sorteioRef = doc(db, "sorteios", codigo);
+    async adicionarParticipante(participante) {
+        const sorteioRef = doc(db, "sorteios", this.id);
         const snap = await getDoc(sorteioRef);
 
         try {   
             if (!snap.exists()) {
-                alert(`O Amigo Secreto de código ${codigo} não existe!`);
+                alert(`O Amigo Secreto não existe!`);
+                return;
+            }
+
+            if (!this.participantes.some(p => p.email === participante.email)) {
+                this.participantes.push(participante);
+            }
+            else{
+                alert(`Você já está participando do Amigo Secreto ${this.id}`)
                 return;
             }
 
             await updateDoc(sorteioRef, {
                 participantes: arrayUnion({
-                    nome: nomeParticipante,
-                    email: emailParticipante
+                    nome: participante.nome,
+                    email: participante.email
                 })
             });
-            alert(`✅ Entrada com sucesso no sorteio ${codigo}!`);
+            alert(`✅ Entrada com sucesso no sorteio ${this.id}!`);
         } catch (error) {
             alert("❌ Erro ao entrar no sorteio: " + error.message);
         }
     }
+
+    // Carrega um sorteio do Firestore e recria o objeto Sorteio
+    static async carregar(id) {
+        const ref = doc(db, "sorteios", id);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+            alert("❌ Sorteio não encontrado:", id);
+            return null;
+        }
+
+        const data = snap.data();
+
+        // Reconstrói o admin como Pessoa
+        const admin = new Pessoa(data.adminNome, data.adminEmail);
+        const sorteio = new Sorteio(admin);
+
+        // Reatribui o ID e outros campos
+        sorteio.id = id;
+        sorteio.criadoEm = data.criadoEm;
+
+        // Reconstrói os participantes (que vieram como objetos simples)
+        sorteio.participantes = (data.participantes || []).map(
+            p => new Pessoa(p.nome, p.email)
+        );
+
+        console.log(`🎁 Sorteio ${id} carregado com sucesso!`);
+        return sorteio;
+    }
+
+
+
 
 }
 

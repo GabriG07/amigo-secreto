@@ -121,6 +121,7 @@ onAuthStateChanged(auth, async (user) => {
       document.getElementById('amigoNome').textContent = "Sorteio não encontrado";
     }
 
+
     // Exibe botões
     const btnCriar = document.getElementById('btnCriarSorteio');
     const btnVer = document.getElementById('btnVerSorteios');
@@ -133,7 +134,8 @@ onAuthStateChanged(auth, async (user) => {
       const confirmar = confirm("🎁 Deseja realmente criar um novo amigo secreto?");
       if (!confirmar) return; // se cancelar, sai da função
 
-      const id = await Sorteio.criar(user.email, nome);
+      const sorteio = new Sorteio(new Pessoa(nome, user.email));
+      const id = await sorteio.criar(user.email, nome);
       alert(`🎁 Novo amigo secreto criado com ID: ${id}`);
     };
 
@@ -259,7 +261,8 @@ onAuthStateChanged(auth, async (user) => {
         return;
       }
 
-      await Sorteio.adicionarParticipante(codigo, nomeUsuario, user.email)
+      const sorteio = await Sorteio.carregar(codigo)
+      await sorteio.adicionarParticipante(new Pessoa(nomeUsuario, user.email));
     }
 
 
