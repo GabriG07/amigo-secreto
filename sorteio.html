@@ -1,68 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sorteio - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
 </head>
 <body>
   <div class="container">
-    <h1>Sorteio</h1>
-    <div id="senhaContainer">
-      <input type="password" id="senhaAdmin" placeholder="Digite a senha de administrador">
-      <button id="verificarSenha">Entrar</button>
+    <h1>Painel do Sorteio</h1>
+    <div id="adminAuth">
+      <label class="label">Senha de administrador</label>
+      <input id="senhaAdmin" type="password" placeholder="Senha do admin">
+      <button id="btnEntrar">Entrar</button>
     </div>
-    <div id="participantesContainer" style="display:none;"></div>
-    <button id="sortear" style="display:none;">Sortear</button>
+    <div id="painel" style="display:none">
+      <h2>Participantes</h2>
+      <div class="participants-grid" id="listaParticipantes"></div>
+      <button id="btnSortear">Realizar Sorteio</button>
+      <button id="btnLimpar" style="margin-top:8px;background:linear-gradient(135deg,#ff8a7a,#ffb37a)">Limpar dados</button>
+    </div>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+    import { db } from "./firebase-config.js";
+    import { ref, get, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCNE1_uwrV1q3z97koXqT9nHCXuqpT9kmo",
-      authDomain: "amigo-secreto-6df8d.firebaseapp.com",
-      databaseURL: "https://amigo-secreto-6df8d-default-rtdb.firebaseio.com",
-      projectId: "amigo-secreto-6df8d",
-      storageBucket: "amigo-secreto-6df8d.appspot.com",
-      messagingSenderId: "529548546490",
-      appId: "1:529548546490:web:fc37ea8b61d0ddfe8cbeb9"
+    const ADMIN_PW = 'admin123';
+    const btnEntrar = document.getElementById('btnEntrar');
+    const painel = document.getElementById('painel');
+    const lista = document.getElementById('listaParticipantes');
+
+    btnEntrar.onclick = async ()=>{
+      const v = document.getElementById('senhaAdmin').value.trim();
+      if(v!==ADMIN_PW){alert('Senha incorreta');return}
+      document.getElementById('adminAuth').style.display='none';
+      painel.style.display='block';
+      const snap = await get(ref(db,'participantes'));
+      const data = snap.exists()?Object.values(snap.val()):[];
+      lista.innerHTML='';
+      data.forEach(p=>{
+        const d = document.createElement('div');
+        d.className='participant';
+        d.innerHTML=`<img src="${p.avatar}"><div class="participant-name">${p.nome}</div>`;
+        lista.appendChild(d);
+      });
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const ADMIN_PASSWORD = "admin123";
+    document.getElementById('btnSortear').onclick = async ()=>{
+      const snap = await get(ref(db,'participantes'));
+      const data = snap.exists()?Object.values(snap.val()):[];
+      if(data.length<2){alert('Pelo menos 2 participantes necessários');return}
+      const shuffled = [...data].sort(()=>Math.random()-0.5);
+      const resultado = [];
+      for(let i=0;i<data.length;i++){
+        const de = data[i];
+        const para = shuffled[(i+1)%shuffled.length];
+        resultado.push({deNome:de.nome, deAvatar:de.avatar, paraNome:para.nome, paraAvatar:para.avatar});
+      }
+      await set(ref(db,'resultado'),resultado);
+      alert('Sorteio salvo');
+    };
 
-    document.getElementById("verificarSenha").onclick = async () => {
-      const senhaDigitada = document.getElementById("senhaAdmin").value.trim();
-      if (senhaDigitada !== ADMIN_PASSWORD) return alert("Senha incorreta!");
-
-      document.getElementById("senhaContainer").style.display = "none";
-      document.getElementById("participantesContainer").style.display = "grid";
-      document.getElementById("sortear").style.display = "block";
-
-      const snapshot = await get(ref(db, "participantes"));
-      const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
-      const container = document.getElementById("participantesContainer");
-
-      container.innerHTML = "";
-      participantes.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "participante";
-        div.innerHTML = `<img src="${p.avatar}"><span>${p.nome}</span>`;
-        container.appendChild(div);
-      });
-
-      document.getElementById("sortear").onclick = () => {
-        const sorteados = [...participantes].sort(() => Math.random() - 0.5);
-        for (let i = 0; i < participantes.length; i++) {
-          participantes[i].amigo = sorteados[i === participantes.length - 1 ? 0 : i + 1].nome;
-        }
-        set(ref(db, "resultado"), participantes);
-        alert("Sorteio realizado com sucesso!");
-      };
+    document.getElementById('btnLimpar').onclick = async ()=>{
+      await set(ref(db,'participantes'),null);
+      await set(ref(db,'resultado'),null);
+      alert('Dados limpos');
+      lista.innerHTML='';
     };
   </script>
 </body>
