@@ -1,9 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
   authDomain: "amigosecreto-bec0a.firebaseapp.com",
+  databaseURL: "https://amigosecreto-bec0a-default-rtdb.firebaseio.com/",
   projectId: "amigosecreto-bec0a",
   storageBucket: "amigosecreto-bec0a.firebasestorage.app",
   messagingSenderId: "153625267113",
@@ -11,4 +12,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const db = getDatabase(app);
+
+export { app, db };
