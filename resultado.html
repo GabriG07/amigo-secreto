@@ -5,30 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resultado - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
+  <style>
+    .participants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      justify-items: center;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .participant {
+      text-align: center;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    .participant:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+    .participant img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+    }
+    .participant-name {
+      font-weight: 600;
+      color: #fff;
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn .8s ease forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .password-box {
+      margin-top: 25px;
+      text-align: center;
+      animation: fadeIn .5s ease forwards;
+    }
+    .password-box input {
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .result-display {
+      margin-top: 30px;
+      animation: fadeIn 1s ease forwards;
+      text-align: center;
+    }
+    .result-display img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
+      margin: 12px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Resultado</h1>
-    <div id="resultados"></div>
-    <button onclick="voltar()">Voltar</button>
+  <div class="container fade-in">
+    <h1>Participantes</h1>
+    <div id="participants" class="participants-grid"></div>
+    <div id="senhaSection" class="password-box" style="display:none;">
+      <h3 id="nomeSelecionado"></h3>
+      <input type="password" id="senha" placeholder="Digite sua senha">
+      <button onclick="verResultado()">Ver Resultado</button>
+      <button onclick="cancelar()">Cancelar</button>
+    </div>
+    <div id="resultadoSection" class="result-display" style="display:none;"></div>
   </div>
 
   <script>
-    const resultadosDiv = document.getElementById('resultados')
-    const resultados = JSON.parse(localStorage.getItem('resultado')) || []
-    resultados.forEach(r => {
-      const div = document.createElement('div')
-      div.classList.add('result')
+    let participanteSelecionado = null
+    const participantes = JSON.parse(localStorage.getItem('participantes')) || []
+    const resultado = JSON.parse(localStorage.getItem('resultado')) || []
+    const participantsContainer = document.getElementById('participants')
+
+    if (participantes.length === 0) {
+      participantsContainer.innerHTML = '<p>Nenhum participante cadastrado.</p>'
+    } else {
+      participantes.forEach(p => {
+        const div = document.createElement('div')
+        div.classList.add('participant')
+        div.innerHTML = `<img src="${p.avatar}" alt="${p.nome}"><div class="participant-name">${p.nome}</div>`
+        div.onclick = () => abrirSenha(p)
+        participantsContainer.appendChild(div)
+      })
+    }
+
+    function abrirSenha(participante) {
+      participanteSelecionado = participante
+      document.getElementById('participants').style.display = 'none'
+      document.getElementById('senhaSection').style.display = 'block'
+      document.getElementById('nomeSelecionado').textContent = participante.nome
+    }
+
+    function cancelar() {
+      participanteSelecionado = null
+      document.getElementById('senhaSection').style.display = 'none'
+      document.getElementById('participants').style.display = 'grid'
+    }
+
+    function verResultado() {
+      const senha = document.getElementById('senha').value.trim()
+      if (senha !== participanteSelecionado.senha) {
+        alert('Senha incorreta.')
+        return
+      }
+      const sorteado = resultado.find(r => r.de.nome === participanteSelecionado.nome)
+      if (!sorteado) {
+        alert('O sorteio ainda não foi realizado.')
+        return
+      }
+      document.getElementById('senhaSection').style.display = 'none'
+      const div = document.getElementById('resultadoSection')
+      div.style.display = 'block'
       div.innerHTML = `
-        <img src="${r.de.avatar}">
-        <h2>${r.de.nome} tirou:</h2>
-        <img src="${r.para.avatar}">
-        <h3>${r.para.nome}</h3>
+        <h2>${sorteado.de.nome} tirou:</h2>
+        <img src="${sorteado.para.avatar}">
+        <h3>${sorteado.para.nome}</h3>
       `
-      resultadosDiv.appendChild(div)
-    })
-    function voltar() {
-      window.location.href = 'cadastro.html'
     }
   </script>
 </body>
