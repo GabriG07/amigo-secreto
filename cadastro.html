@@ -5,61 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
+  <script type="module" src="firebase-config.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Cadastro 🎄</h1>
-    <div class="card">
-      <h2>Crie seu perfil</h2>
-      <input id="nome" placeholder="Seu nome" />
-      <input type="password" id="senha" placeholder="Crie uma senha" />
-      <h3>Escolha seu avatar</h3>
-      <div class="avatar-grid" id="avatarContainer"></div>
-      <button id="cadastrar">Cadastrar</button>
-      </div>
-    </div>
+    <h1>Cadastro</h1>
+    <input type="text" id="nome" placeholder="Digite seu nome">
+    <div class="avatar-grid" id="avatarContainer"></div>
+    <button onclick="cadastrarParticipante()">Cadastrar</button>
+  </div>
 
-  <script type="module">
-    import { db } from "./firebase-config.js";
-    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-    const avatarContainer = document.getElementById("avatarContainer");
-    const cadastrar = document.getElementById("cadastrar");
-    const nome = document.getElementById("nome");
-    const senha = document.getElementById("senha");
-    let avatarSelecionado = null;
-
-    const avatares = Array.from({length: 10}, (_, i) => `https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar${i+1}.png`);
-
-    avatares.forEach(url => {
-      const div = document.createElement("div");
-      div.classList.add("avatar-wrapper");
-      const img = document.createElement("img");
-      img.src = url;
-      img.classList.add("avatar");
-      div.appendChild(img);
-      avatarContainer.appendChild(div);
-      img.addEventListener("click", () => {
-        document.querySelectorAll(".avatar").forEach(i => i.style.borderColor = "transparent");
-        img.style.borderColor = "#a78bfa";
-        avatarSelecionado = url;
-      });
-    });
-
-    cadastrar.addEventListener("click", async () => {
-      if (!nome.value || !senha.value || !avatarSelecionado) {
-        alert("Preencha todos os campos e escolha um avatar!");
-        return;
+  <script>
+    const avatarContainer = document.getElementById('avatarContainer')
+    const avatarPaths = Array.from({length: 10}, (_, i) => `https://gabrig07.github.io/amigo-secreto/imagens/avatar${i+1}.png`)
+    let selectedAvatar = null
+    avatarPaths.forEach(path => {
+      const img = document.createElement('img')
+      img.src = path
+      img.classList.add('avatar-option')
+      img.onclick = () => {
+        document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'))
+        img.classList.add('selected')
+        selectedAvatar = path
       }
-      await setDoc(doc(db, "participantes", nome.value), {
-        nome: nome.value,
-        senha: senha.value,
-        avatar: avatarSelecionado
-      });
-      alert("Cadastro realizado com sucesso!");
-      nome.value = "";
-      senha.value = "";
-    });
+      avatarContainer.appendChild(img)
+    })
+    function cadastrarParticipante() {
+      const nome = document.getElementById('nome').value.trim()
+      if (!nome || !selectedAvatar) {
+        alert('Preencha o nome e escolha um avatar.')
+        return
+      }
+      const participantes = JSON.parse(localStorage.getItem('participantes')) || []
+      participantes.push({ nome, avatar: selectedAvatar })
+      localStorage.setItem('participantes', JSON.stringify(participantes))
+      window.location.href = 'sorteio.html'
+    }
   </script>
 </body>
 </html>
