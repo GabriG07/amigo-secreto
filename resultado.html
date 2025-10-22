@@ -52,32 +52,38 @@
     let participantes = [];
     let usuarioSelecionado = null;
 
-    async function carregarParticipantes() {
-      avatarContainer.innerHTML = "";
-      const snap = await getDocs(collection(db, "participantes"));
-      participantes = [];
-      snap.forEach(s => participantes.push(s.data()));
-      participantes.forEach(p => {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("avatar-wrapper");
-        const img = document.createElement("img");
-        img.src = p.avatar;
-        img.classList.add("avatar");
-        const nome = document.createElement("div");
-        nome.textContent = p.nome;
-        nome.classList.add("avatar-name");
-        wrapper.appendChild(img);
-        wrapper.appendChild(nome);
-        avatarContainer.appendChild(wrapper);
-        img.addEventListener("click", () => {
-          usuarioSelecionado = p;
-          selecionarUsuarioCard.style.display = "none";
-          loginUsuario.style.display = "block";
-          senhaUsuario.value = "";
-          msgErro.textContent = "";
-        });
-      });
-    }
+async function carregarParticipantes() {
+  avatarContainer.innerHTML = "";
+  const snap = await getDocs(collection(db, "participantes"));
+  let participantes = [];
+  snap.forEach(s => participantes.push(s.data()));
+  
+  console.log("participantes carregados:", participantes);
+
+  participantes.forEach(p => {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("avatar-wrapper");
+    const img = document.createElement("img");
+    img.src = p.avatar;
+    img.classList.add("avatar");
+    const nome = document.createElement("div");
+    nome.textContent = p.nome;
+    nome.classList.add("avatar-name");
+    wrapper.appendChild(img);
+    wrapper.appendChild(nome);
+    avatarContainer.appendChild(wrapper);
+
+    img.addEventListener("click", () => {
+      usuarioSelecionado = p;
+      selecionarUsuarioCard.style.display = "none";
+      loginUsuario.style.display = "block";
+      senhaUsuario.value = "";
+      msgErro.textContent = "";
+    });
+  });
+}
+
+carregarParticipantes();
 
     btnLogin.addEventListener("click", async () => {
       if (!usuarioSelecionado) return;
