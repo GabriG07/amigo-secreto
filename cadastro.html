@@ -34,11 +34,11 @@
       div.classList.add("avatar-wrapper");
       const img = document.createElement("img");
       img.src = url;
-      img.classList.add("avatar-option");
+      img.classList.add("avatar");
       div.appendChild(img);
       avatarContainer.appendChild(div);
       img.addEventListener("click", () => {
-        document.querySelectorAll(".avatar-option").forEach(i => i.style.borderColor = "transparent");
+        document.querySelectorAll(".avatar").forEach(i => i.style.borderColor = "transparent");
         img.style.borderColor = "#a78bfa";
         avatarSelecionado = url;
       });
