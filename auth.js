@@ -38,7 +38,6 @@ document.getElementById('loginEmail').addEventListener('click', async () => {
   const email = document.getElementById('email').value.trim();
   const senha = document.getElementById('senha').value.trim();
   try {
-    
     await signInWithEmailAndPassword(auth, email, senha);
   } catch (error) {
     alert("Erro no login: " + error.message);
@@ -46,7 +45,7 @@ document.getElementById('loginEmail').addEventListener('click', async () => {
 });
 
 document.getElementById('cadastroEmail').addEventListener('click', async () => {
-  const nome = capitalize(document.getElementById('nome').value.trim());
+  const nome = document.getElementById('nome').value.trim();
   const email = document.getElementById('email').value.trim();
   const senha = document.getElementById('senha').value.trim();
 
@@ -60,7 +59,7 @@ document.getElementById('cadastroEmail').addEventListener('click', async () => {
     await updateProfile(cred.user, { displayName: nome });
 
     const pessoa = new Pessoa(nome, email);
-    await setDoc(doc(db, "usuarios", cred.user.uid), pessoa.toObject());
+    pessoa.salvar(cred);
 
     document.getElementById('meuNome').textContent = nome;
     alert(`Conta criada com sucesso! Bem-vindo, ${nome}! 🎉`);
@@ -90,19 +89,20 @@ onAuthStateChanged(auth, async (user) => {
     await new Promise(res => setTimeout(res, 800));
 
     // Busca nome no Firestore
-    let nomeUsuario = user.displayName || user.email || user.phoneNumber;
+    let nomeUsuario = user.displayName || user.email;
 
-    try {
+    /*try {
       const dadosUsuario = await buscarUsuarioPorEmail(user.email);
+      alert(dadosUsuario);
 
       if (dadosUsuario && dadosUsuario.nome) {
-        nomeUsuario = capitalize(dadosUsuario.nome);
+        nomeUsuario = dadosUsuario.nome;
       } else {
-        console.warn("⚠️ Usuário não encontrado na coleção 'usuarios' com esse e-mail.");
+        alert("⚠️ Usuário não encontrado na coleção 'usuarios' com esse e-mail.");
       }
     } catch (e) {
-      console.error("❌ Erro ao buscar usuário por e-mail:", e);
-    }
+      alert("❌ Erro ao buscar usuário por e-mail:", e);
+    }*/
 
     // Atualiza tela
     document.getElementById('login').style.display = 'none';
