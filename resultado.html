@@ -1,124 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resultado - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
 </head>
 <body>
-  <h1>Amigo Secreto 🎁</h1>
-
-  <div class="card" id="selecionarUsuario">
-    <h2>Escolha seu perfil</h2>
-    <div id="avatarContainer" class="avatar-grid"></div>
+  <div class="container">
+    <h1>Resultado</h1>
+    <div id="resultados"></div>
+    <button onclick="voltar()">Voltar</button>
   </div>
 
-  <div class="card" id="loginUsuario" style="display:none;">
-    <h2>Autenticação</h2>
-    <p class="muted">Digite sua senha para ver o resultado</p>
-    <input id="senhaUsuario" type="password" placeholder="Senha" />
-    <button id="btnLogin">Ver resultado</button>
-    <div id="msgErro"></div>
-  </div>
-
-  <div class="card" id="resultado" style="display:none;">
-    <p class="muted">Olá,</p>
-    <p style="font-size:1.2rem;font-weight:700" id="nomeUsuario"></p>
-    <p class="muted" style="margin-top:10px">Seu amigo secreto é:</p>
-    <p id="nomeAmigo" style="font-size:1.3rem;font-weight:800;margin-top:6px"></p>
-    <img id="avatarAmigo" src="" alt="Avatar do amigo" style="display:block;margin:18px auto 0;border-radius:50%" />
-    <div style="margin-top:14px;">
-      <button id="voltar">Voltar</button>
-    </div>
-  </div>
-
-  <script type="module">
-    import { db } from "./firebase-config.js";
-    import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-    const avatarContainer = document.getElementById("avatarContainer");
-    const loginUsuario = document.getElementById("loginUsuario");
-    const senhaUsuario = document.getElementById("senhaUsuario");
-    const btnLogin = document.getElementById("btnLogin");
-    const msgErro = document.getElementById("msgErro");
-    const resultadoDiv = document.getElementById("resultado");
-    const nomeUsuarioElem = document.getElementById("nomeUsuario");
-    const nomeAmigoElem = document.getElementById("nomeAmigo");
-    const avatarAmigoElem = document.getElementById("avatarAmigo");
-    const selecionarUsuarioCard = document.getElementById("selecionarUsuario");
-    const voltarBtn = document.getElementById("voltar");
-
-    let participantes = [];
-    let usuarioSelecionado = null;
-
-async function carregarParticipantes() {
-  avatarContainer.innerHTML = "";
-  const snap = await getDocs(collection(db, "participantes"));
-  let participantes = [];
-  snap.forEach(s => participantes.push(s.data()));
-  
-  console.log("participantes carregados:", participantes);
-
-  participantes.forEach(p => {
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("avatar-wrapper");
-    const img = document.createElement("img");
-    img.src = p.avatar;
-    img.classList.add("avatar");
-    const nome = document.createElement("div");
-    nome.textContent = p.nome;
-    nome.classList.add("avatar-name");
-    wrapper.appendChild(img);
-    wrapper.appendChild(nome);
-    avatarContainer.appendChild(wrapper);
-
-    img.addEventListener("click", () => {
-      usuarioSelecionado = p;
-      selecionarUsuarioCard.style.display = "none";
-      loginUsuario.style.display = "block";
-      senhaUsuario.value = "";
-      msgErro.textContent = "";
-    });
-  });
-}
-
-carregarParticipantes();
-
-    btnLogin.addEventListener("click", async () => {
-      if (!usuarioSelecionado) return;
-      if (senhaUsuario.value !== usuarioSelecionado.senha) {
-        msgErro.textContent = "Senha incorreta!";
-        return;
-      }
-      const resultadoSnap = await getDoc(doc(db, "sorteio", "resultado"));
-      if (!resultadoSnap.exists()) {
-        msgErro.textContent = "O sorteio ainda não foi realizado.";
-        return;
-      }
-      const pares = resultadoSnap.data();
-      const amigoNome = pares[usuarioSelecionado.nome];
-      if (!amigoNome) {
-        msgErro.textContent = "Resultado não encontrado para este usuário.";
-        return;
-      }
-      const amigoDoc = await getDoc(doc(db, "participantes", amigoNome));
-      const amigoData = amigoDoc.exists() ? amigoDoc.data() : { avatar: "", nome: amigoNome };
-      nomeUsuarioElem.textContent = usuarioSelecionado.nome;
-      nomeAmigoElem.textContent = amigoNome;
-      avatarAmigoElem.src = amigoData.avatar || "";
-      loginUsuario.style.display = "none";
-      resultadoDiv.style.display = "block";
-    });
-
-    voltarBtn.addEventListener("click", () => {
-      resultadoDiv.style.display = "none";
-      selecionarUsuarioCard.style.display = "block";
-      usuarioSelecionado = null;
-      msgErro.textContent = "";
-    });
-
-    carregarParticipantes();
+  <script>
+    const resultadosDiv = document.getElementById('resultados')
+    const resultados = JSON.parse(localStorage.getItem('resultado')) || []
+    resultados.forEach(r => {
+      const div = document.createElement('div')
+      div.classList.add('result')
+      div.innerHTML = `
+        <img src="${r.de.avatar}">
+        <h2>${r.de.nome} tirou:</h2>
+        <img src="${r.para.avatar}">
+        <h3>${r.para.nome}</h3>
+      `
+      resultadosDiv.appendChild(div)
+    })
+    function voltar() {
+      window.location.href = 'cadastro.html'
+    }
   </script>
 </body>
 </html>
