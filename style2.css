@@ -1,0 +1,74 @@
+body {
+  font-family: Inter, sans-serif;
+  background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
+              radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
+              linear-gradient(120deg, #0f1027, #111936);
+  color: #e6e8ee;
+  text-align: center;
+  margin: 0;
+  padding: 40px;
+}
+
+.card {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.3);
+  padding: 25px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+input, button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+}
+
+input {
+  width: 100%;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.2);
+}
+
+button {
+  cursor: pointer;
+  background: linear-gradient(180deg, #c7b7ff, #9b87ff);
+  color: #0b0d1b;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.avatar-opcao {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.avatar-opcao:hover { transform: scale(1.1); }
+.avatar-opcao.selecionado { border: 3px solid #9b87ff; }
+
+#listaParticipantes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.perfil {
+  width: 110px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.perfil-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.2);
+}
