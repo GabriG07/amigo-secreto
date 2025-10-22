@@ -24,27 +24,35 @@ body {
 }
 
 input, button {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
 input {
-  width: 100%;
-  margin-bottom: 10px;
-  background: rgba(255,255,255,.1);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.2);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 10px auto;
+    display: block;
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.2);
 }
 
+
 button {
-  cursor: pointer;
-  background: linear-gradient(180deg, #c7b7ff, #9b87ff);
-  color: #0b0d1b;
-  font-weight: 700;
-  margin-top: 10px;
+    cursor: pointer;
+    background: linear-gradient(180deg, #c7b7ff, #9b87ff);
+    color: #0b0d1b;
+    font-weight: 700;
+    width: 100%;
+    max-width: 400px;
+    display: block;
+    margin: 0 auto;
 }
+
 
 .avatar-opcao {
   width: 70px;
