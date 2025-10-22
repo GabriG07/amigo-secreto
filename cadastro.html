@@ -21,33 +21,65 @@
   </div>
 
   <script type="module">
-    import { db } from "./firebase-config.js";
-    import { ref, push } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
+      authDomain: "amigosecreto-bec0a.firebaseapp.com",
+      projectId: "amigosecreto-bec0a",
+      storageBucket: "amigosecreto-bec0a.appspot.com",
+      messagingSenderId: "153625267113",
+      appId: "1:153625267113:web:4c891417a0c7ad560652b8"
+    };
+
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Avatares
     const avatarGrid = document.getElementById('avatarGrid');
-    const avatars = Array.from({length:10},(_,i)=>`https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar${i+1}.png`);
+    const avatars = Array.from({ length: 10 }, (_, i) =>
+      `https://gabrig07.github.io/amigo-secreto/assets/avatars/avatar${i + 1}.png`
+    );
+
     let selected = null;
-    avatars.forEach(src=>{
+    avatars.forEach(src => {
       const el = document.createElement('div');
       el.className = 'avatar-option';
       el.innerHTML = `<img src="${src}" alt="avatar">`;
-      el.onclick = ()=>{
-        document.querySelectorAll('.avatar-option').forEach(a=>a.classList.remove('selected'));
+      el.onclick = () => {
+        document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
         el.classList.add('selected');
         selected = src;
       };
       avatarGrid.appendChild(el);
     });
 
-    document.getElementById('btnCadastrar').addEventListener('click', async ()=>{
+    // Cadastrar no Firestore
+    document.getElementById('btnCadastrar').addEventListener('click', async () => {
       const nome = document.getElementById('nome').value.trim();
       const senha = document.getElementById('senha').value.trim();
-      if(!nome||!senha||!selected){alert('Preencha nome, senha e escolha um avatar');return}
-      await push(ref(db,'participantes'),{nome,senha,avatar:selected});
-      alert('Cadastro realizado');
-      document.getElementById('nome').value='';
-      document.getElementById('senha').value='';
-      document.querySelectorAll('.avatar-option').forEach(a=>a.classList.remove('selected'));
+
+      if (!nome || !senha || !selected) {
+        alert('Preencha nome, senha e escolha um avatar');
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "participantes"), {
+          nome,
+          senha,
+          avatar: selected
+        });
+        alert("✅ Cadastro realizado com sucesso!");
+        document.getElementById('nome').value = '';
+        document.getElementById('senha').value = '';
+        document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+      } catch (err) {
+        console.error("❌ Erro ao cadastrar:", err);
+        alert("Erro ao cadastrar participante.");
+      }
     });
   </script>
 </body>
