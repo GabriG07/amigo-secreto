@@ -8,6 +8,10 @@ body {
   margin: 0;
   padding: 40px;
 }
+.avatar-grid { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:15px; }
+.avatar-option { width:80px; height:80px; border-radius:50%; cursor:pointer; border:3px solid transparent; }
+.avatar-option:hover { border-color: #ccc; }
+
 
 .card {
   background: rgba(255,255,255,.1);
