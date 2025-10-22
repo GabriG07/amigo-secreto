@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
-  <script type="module" src="firebase-config.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Cadastro</h1>
     <input type="text" id="nome" placeholder="Digite seu nome">
+    <input type="password" id="senha" placeholder="Crie uma senha">
     <div class="avatar-grid" id="avatarContainer"></div>
     <button onclick="cadastrarParticipante()">Cadastrar</button>
   </div>
@@ -32,14 +32,20 @@
     })
     function cadastrarParticipante() {
       const nome = document.getElementById('nome').value.trim()
-      if (!nome || !selectedAvatar) {
-        alert('Preencha o nome e escolha um avatar.')
+      const senha = document.getElementById('senha').value.trim()
+      if (!nome || !senha || !selectedAvatar) {
+        alert('Preencha o nome, senha e selecione um avatar.')
         return
       }
       const participantes = JSON.parse(localStorage.getItem('participantes')) || []
-      participantes.push({ nome, avatar: selectedAvatar })
+      if (participantes.find(p => p.nome.toLowerCase() === nome.toLowerCase())) {
+        alert('Esse nome já está cadastrado.')
+        return
+      }
+      participantes.push({ nome, senha, avatar: selectedAvatar })
       localStorage.setItem('participantes', JSON.stringify(participantes))
-      window.location.href = 'sorteio.html'
+      alert('Cadastro realizado com sucesso!')
+      window.location.href = 'resultado.html'
     }
   </script>
 </body>
