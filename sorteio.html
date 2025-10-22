@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Sorteio</h1>
+    <h1>Sorteio (Admin)</h1>
     <button onclick="sortear()">Realizar Sorteio</button>
     <button onclick="limpar()">Limpar Participantes</button>
   </div>
@@ -30,9 +30,8 @@
         sorteados = sorteados.filter(s => s.nome !== sorteado.nome)
       }
       localStorage.setItem('resultado', JSON.stringify(sorteio))
-      window.location.href = 'resultado.html'
+      alert('Sorteio realizado com sucesso!')
     }
-
     function limpar() {
       localStorage.removeItem('participantes')
       localStorage.removeItem('resultado')
