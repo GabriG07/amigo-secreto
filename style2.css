@@ -160,6 +160,11 @@ button:hover {
 }
 
 @media (max-width: 480px) {
+    input, select, button {
+    width: 94%;
+    font-size: 15px;
+    padding: 10px;
+  
   .container {
     padding: 25px 20px;
     width: 92%;
