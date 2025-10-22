@@ -1,69 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cadastro - Amigo Secreto 🎄</title>
-  <link href="style2.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastro - Amigo Secreto (modelo de avatares)</title>
+
+  <style>
+    :root{
+      --card-bg: rgba(255,255,255,.06);
+      --accent: #9b87ff;
+      --text: #e6e8ee;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, Arial, sans-serif;
+      margin:0; padding:32px;
+      background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
+                  radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
+                  linear-gradient(120deg, #0f1027, #111936);
+      color:var(--text);
+      display:flex; align-items:flex-start; justify-content:center;
+      min-height:100vh;
+    }
+
+    .container{
+      width:100%;
+      max-width:700px;
+    }
+
+    h1{ text-align:center; margin:0 0 18px 0; font-size:22px; }
+
+    .card{
+      background:var(--card-bg);
+      border-radius:14px;
+      padding:20px;
+      box-shadow:0 20px 40px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .row{ display:flex; gap:12px; margin-bottom:12px; }
+    input[type="text"], input[type="password"]{
+      flex:1;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      font-size:15px;
+    }
+
+    .avatar-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+      margin-top:8px;
+      margin-bottom:12px;
+    }
+
+    .avatar-option{
+      width:84px;
+      height:84px;
+      border-radius:50%;
+      overflow:hidden;
+      border:3px solid transparent;
+      cursor:pointer;
+      transition: transform 140ms ease, border-color 140ms;
+      display:inline-flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.05));
+    }
+
+    .avatar-option img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .avatar-option:hover{ transform:translateY(-4px) scale(1.04); }
+    .avatar-option.selected{ border-color: var(--accent); box-shadow:0 6px 18px rgba(155,135,255,.12); }
+
+    .actions{ text-align:center; margin-top:8px; }
+    button{
+      padding:10px 16px;
+      background:linear-gradient(180deg,#c7b7ff,#9b87ff);
+      color:#071022;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+
+    .note{ font-size:13px; color:#b9bfd0; text-align:center; margin-top:10px; }
+
+
+    @media (max-width:520px){
+      .avatar-option{ width:68px; height:68px; }
+      input[type="text"], input[type="password"]{ font-size:14px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Cadastro de Participantes 🎁</h1>
+  <div class="container">
+    <h1>Cadastro de Participante — escolha um avatar</h1>
 
-  <div class="card">
-    <input id="nome" placeholder="Digite seu nome">
-    <input id="senha" type="password" placeholder="Crie uma senha">
+    <div class="card">
+      <div class="row">
+        <input id="nome" type="text" placeholder="Digite seu nome" />
+        <input id="senha" type="password" placeholder="Crie uma senha" />
+      </div>
 
-    <p>Escolha seu avatar:</p>
-    <div id="avatarList"></div>
+      <p style="text-align:center;margin:8px 0 6px 0">Escolha um avatar (sem upload)</p>
+      <div id="avatarGrid" class="avatar-grid"></div>
 
-    <button id="btnCadastrar">Cadastrar</button>
+      <div class="actions">
+        <button id="btnCadastrar">Cadastrar</button>
+      </div>
+
+      <p class="note">Exemplo com 7 avatares placeholders. Substitua os links no código pelos seus arquivos em <code>/assets/avatars/</code> quando quiser.</p>
+    </div>
   </div>
 
   <script type="module">
+
     import { db } from "./firebase-config.js";
     import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
+
     const avatares = [
-      "https://i.pravatar.cc/100?img=1",
-      "https://i.pravatar.cc/100?img=2",
-      "https://i.pravatar.cc/100?img=3",
-      "https://i.pravatar.cc/100?img=4",
-      "https://i.pravatar.cc/100?img=5",
-      "https://i.pravatar.cc/100?img=6",
-      "https://i.pravatar.cc/100?img=7",
-      "https://i.pravatar.cc/100?img=8"
+      "https://i.pravatar.cc/150?img=12",
+      "https://i.pravatar.cc/150?img=20",
+      "https://i.pravatar.cc/150?img=28",
+      "https://i.pravatar.cc/150?img=35",
+      "https://i.pravatar.cc/150?img=45",
+      "https://i.pravatar.cc/150?img=54",
+      "https://i.pravatar.cc/150?img=65"
     ];
 
-    let avatarSelecionado = avatares[0];
-    const avatarList = document.getElementById('avatarList');
+    const avatarGrid = document.getElementById('avatarGrid');
+    let selecionadoIndex = 0; // por padrão primeiro avatar
 
+    // cria os elementos de avatar dinamicamente
     avatares.forEach((url, idx) => {
+      const div = document.createElement('div');
+      div.className = 'avatar-option' + (idx === selecionadoIndex ? ' selected' : '');
       const img = document.createElement('img');
       img.src = url;
-      img.className = "avatar-opcao";
-      if (idx === 0) img.classList.add("selecionado");
-      img.onclick = () => {
-        document.querySelectorAll('.avatar-opcao').forEach(i => i.classList.remove('selecionado'));
-        img.classList.add('selecionado');
-        avatarSelecionado = url;
-      };
-      avatarList.appendChild(img);
-    });
+      img.alt = `Avatar ${idx+1}`;
+      div.appendChild(img);
 
-    document.getElementById('btnCadastrar').onclick = async () => {
-      const nome = document.getElementById('nome').value.trim();
-      const senha = document.getElementById('senha').value.trim();
-
-      if (!nome || !senha) return alert("Preencha nome e senha!");
-
-      await setDoc(doc(db, "participantes", nome), {
-        nome, senha, avatar: avatarSelecionado
+      div.addEventListener('click', () => {
+        document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+        div.classList.add('selected');
+        selecionadoIndex = idx;
       });
 
-      alert("✅ Cadastro realizado com sucesso!");
-      document.getElementById('nome').value = "";
-      document.getElementById('senha').value = "";
-    };
+      avatarGrid.appendChild(div);
+    });
+
+    // CADASTRO (salva no Firestore)
+    document.getElementById('btnCadastrar').addEventListener('click', async () => {
+      const nome = document.getElementById('nome').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+      const avatar = avatares[selecionadoIndex];
+
+      if(!nome || !senha){
+        alert("Preencha nome e senha antes de cadastrar.");
+        return;
+      }
+
+      try{
+        // salva na coleção "participantes" com documento = nome
+        await setDoc(doc(db, "participantes", nome), {
+          nome, senha, avatar
+        });
+        // feedback
+        alert("✅ Cadastro realizado com sucesso!");
+        // limpa inputs (opcional)
+        document.getElementById('nome').value = "";
+        document.getElementById('senha').value = "";
+      }catch(err){
+        console.error(err);
+        alert("Erro ao salvar. Verifique o console.");
+      }
+    });
   </script>
 </body>
 </html>
