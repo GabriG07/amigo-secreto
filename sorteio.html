@@ -7,66 +7,37 @@
   <link rel="stylesheet" href="style2.css">
 </head>
 <body>
-  <h1>Painel do Sorteio 🎁</h1>
-  <div class="card">
-    <h2>Participantes</h2>
-    <ul id="listaParticipantes"></ul>
-    <button id="btnSortear">Realizar Sorteio</button>
+  <div class="container">
+    <h1>Sorteio</h1>
+    <button onclick="sortear()">Realizar Sorteio</button>
+    <button onclick="limpar()">Limpar Participantes</button>
   </div>
 
-  <script type="module">
-    import { db } from "./firebase-config.js";
-    import { collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-    const listaParticipantes = document.getElementById("listaParticipantes");
-    const btnSortear = document.getElementById("btnSortear");
-
-    async function carregarParticipantes() {
-      avatarContainer.innerHTML = "";
-      const snap = await getDocs(collection(db, "participantes"));
-      let participantes = []; // local dentro da função
-      snap.forEach(s => participantes.push(s.data()));
-      
-      console.log("participantes carregados:", participantes); // <- veja no console
-    
-      participantes.forEach(p => {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("avatar-wrapper");
-        const img = document.createElement("img");
-        img.src = p.avatar;
-        img.classList.add("avatar");
-        const nome = document.createElement("div");
-        nome.textContent = p.nome;
-        nome.classList.add("avatar-name");
-        wrapper.appendChild(img);
-        wrapper.appendChild(nome);
-        avatarContainer.appendChild(wrapper);
-    
-        img.addEventListener("click", () => {
-          usuarioSelecionado = p;
-          selecionarUsuarioCard.style.display = "none";
-          loginUsuario.style.display = "block";
-          senhaUsuario.value = "";
-          msgErro.textContent = "";
-        });
-      });
-    }
-    
-    carregarParticipantes();
-    
-    async function sortear() {
-      const participantes = await carregarParticipantes();
-      const embaralhado = [...participantes].sort(() => Math.random() - 0.5);
-      const resultado = {};
-      participantes.forEach((p, i) => {
-        resultado[p] = embaralhado[(i + 1) % embaralhado.length];
-      });
-      await setDoc(doc(db, "sorteio", "resultado"), resultado);
-      alert("Sorteio realizado com sucesso!");
+  <script>
+    function sortear() {
+      const participantes = JSON.parse(localStorage.getItem('participantes')) || []
+      if (participantes.length < 2) {
+        alert('É necessário pelo menos 2 participantes.')
+        return
+      }
+      const sorteio = []
+      let sorteados = [...participantes]
+      for (let p of participantes) {
+        let possiveis = sorteados.filter(s => s.nome !== p.nome)
+        if (possiveis.length === 0) return alert('Erro no sorteio. Tente novamente.')
+        let sorteado = possiveis[Math.floor(Math.random() * possiveis.length)]
+        sorteio.push({ de: p, para: sorteado })
+        sorteados = sorteados.filter(s => s.nome !== sorteado.nome)
+      }
+      localStorage.setItem('resultado', JSON.stringify(sorteio))
+      window.location.href = 'resultado.html'
     }
 
-    btnSortear.addEventListener("click", sortear);
-    carregarParticipantes();
+    function limpar() {
+      localStorage.removeItem('participantes')
+      localStorage.removeItem('resultado')
+      alert('Participantes removidos.')
+    }
   </script>
 </body>
 </html>
