@@ -1,15 +1,119 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultado Amigo Secreto</title>
-  <link rel="stylesheet" href="style2.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resultado - Amigo Secreto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 20px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+
+    .avatar-option {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 3px solid transparent;
+    }
+
+    .avatar-option:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border-color: #007bff;
+    }
+
+    .avatar-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar-name {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #333;
+      word-break: break-word;
+    }
+
+    input[type="password"] {
+      width: 90%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #resultado img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 15px;
+      border: 3px solid #007bff;
+    }
+
+    #msgErro {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .muted {
+      color: #666;
+    }
+  </style>
 </head>
 <body>
   <h1>Amigo Secreto 🎁</h1>
+
   <div class="card" id="selecionarUsuario">
-    <h2>Escolha seu avatar:</h2>
+    <h2>Escolha seu avatar</h2>
     <div id="avatarContainer" class="avatar-grid"></div>
   </div>
 
@@ -17,14 +121,14 @@
     <p>Digite sua senha:</p>
     <input type="password" id="senhaUsuario" placeholder="Senha" />
     <button id="btnLogin">Ver resultado</button>
-    <div id="msgErro" style="color:red; margin-top:10px;"></div>
+    <div id="msgErro"></div>
   </div>
 
   <div class="card" id="resultado" style="display:none;">
     <p>Olá, <strong id="nomeUsuario"></strong>!</p>
     <p class="muted">Seu amigo secreto é:</p>
-    <p style="font-size:26px;font-weight:800" id="nomeAmigo"></p>
-    <img id="avatarAmigo" src="" style="width:120px; height:120px; border-radius:50%; margin-top:10px;" />
+    <p style="font-size:22px;font-weight:700" id="nomeAmigo"></p>
+    <img id="avatarAmigo" src="" alt="Amigo Secreto" />
   </div>
 
   <script type="module">
@@ -47,27 +151,28 @@
     async function carregarParticipantes() {
       const querySnapshot = await getDocs(collection(db, "participantes"));
       participantes = [];
-      querySnapshot.forEach(docSnap => {
-        participantes.push(docSnap.data());
-      });
+      querySnapshot.forEach(docSnap => participantes.push(docSnap.data()));
       participantes.forEach(p => {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("avatar-wrapper");
+
         const img = document.createElement("img");
         img.src = p.avatar;
         img.classList.add("avatar-option");
-        const nome = document.createElement("p");
+
+        const nome = document.createElement("div");
         nome.textContent = p.nome;
-        nome.style.textAlign = "center";
-        const wrapper = document.createElement("div");
-        wrapper.style.display = "inline-block";
-        wrapper.style.margin = "10px";
+        nome.classList.add("avatar-name");
+
         wrapper.appendChild(img);
         wrapper.appendChild(nome);
+        avatarContainer.appendChild(wrapper);
+
         img.addEventListener("click", () => {
           usuarioSelecionado = p;
           document.getElementById("selecionarUsuario").style.display = "none";
           loginUsuario.style.display = "block";
         });
-        avatarContainer.appendChild(wrapper);
       });
     }
 
