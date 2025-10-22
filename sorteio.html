@@ -8,35 +8,62 @@
 </head>
 <body>
   <div class="container">
-    <h1>Sorteio (Admin)</h1>
-    <button onclick="sortear()">Realizar Sorteio</button>
-    <button onclick="limpar()">Limpar Participantes</button>
+    <h1>Sorteio</h1>
+    <div id="senhaContainer">
+      <input type="password" id="senhaAdmin" placeholder="Digite a senha de administrador">
+      <button id="verificarSenha">Entrar</button>
+    </div>
+    <div id="participantesContainer" style="display:none;"></div>
+    <button id="sortear" style="display:none;">Sortear</button>
   </div>
 
-  <script>
-    function sortear() {
-      const participantes = JSON.parse(localStorage.getItem('participantes')) || []
-      if (participantes.length < 2) {
-        alert('É necessário pelo menos 2 participantes.')
-        return
-      }
-      const sorteio = []
-      let sorteados = [...participantes]
-      for (let p of participantes) {
-        let possiveis = sorteados.filter(s => s.nome !== p.nome)
-        if (possiveis.length === 0) return alert('Erro no sorteio. Tente novamente.')
-        let sorteado = possiveis[Math.floor(Math.random() * possiveis.length)]
-        sorteio.push({ de: p, para: sorteado })
-        sorteados = sorteados.filter(s => s.nome !== sorteado.nome)
-      }
-      localStorage.setItem('resultado', JSON.stringify(sorteio))
-      alert('Sorteio realizado com sucesso!')
-    }
-    function limpar() {
-      localStorage.removeItem('participantes')
-      localStorage.removeItem('resultado')
-      alert('Participantes removidos.')
-    }
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNE1_uwrV1q3z97koXqT9nHCXuqpT9kmo",
+      authDomain: "amigo-secreto-6df8d.firebaseapp.com",
+      databaseURL: "https://amigo-secreto-6df8d-default-rtdb.firebaseio.com",
+      projectId: "amigo-secreto-6df8d",
+      storageBucket: "amigo-secreto-6df8d.appspot.com",
+      messagingSenderId: "529548546490",
+      appId: "1:529548546490:web:fc37ea8b61d0ddfe8cbeb9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const ADMIN_PASSWORD = "admin123";
+
+    document.getElementById("verificarSenha").onclick = async () => {
+      const senhaDigitada = document.getElementById("senhaAdmin").value.trim();
+      if (senhaDigitada !== ADMIN_PASSWORD) return alert("Senha incorreta!");
+
+      document.getElementById("senhaContainer").style.display = "none";
+      document.getElementById("participantesContainer").style.display = "grid";
+      document.getElementById("sortear").style.display = "block";
+
+      const snapshot = await get(ref(db, "participantes"));
+      const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
+      const container = document.getElementById("participantesContainer");
+
+      container.innerHTML = "";
+      participantes.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "participante";
+        div.innerHTML = `<img src="${p.avatar}"><span>${p.nome}</span>`;
+        container.appendChild(div);
+      });
+
+      document.getElementById("sortear").onclick = () => {
+        const sorteados = [...participantes].sort(() => Math.random() - 0.5);
+        for (let i = 0; i < participantes.length; i++) {
+          participantes[i].amigo = sorteados[i === participantes.length - 1 ? 0 : i + 1].nome;
+        }
+        set(ref(db, "resultado"), participantes);
+        alert("Sorteio realizado com sucesso!");
+      };
+    };
   </script>
 </body>
 </html>
