@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amigo Secreto 🎁</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+  <link href="../assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <h1>TESTE 🎄</h1>
+
+  <div class="card">
+    <!-- Login / Cadastro -->
+    <div id="login">
+      <h2>Entre com sua conta</h2>
+
+      <input id="email" type="email" placeholder="E-mail">
+      <input id="senha" type="password" placeholder="Senha">
+      <div style="margin-top: 10px;">
+        <button id="loginEmail">Entrar com E-mail</button>
+        <button id="cadastroEmail">Criar Conta</button>
+      </div>
+
+      <hr>
+      <button id="loginGoogle">Entrar com Google</button>
+
+      <div id="recaptcha-container"></div>
+    </div>
+
+  <!-- Importa o script separado -->
+  <script type="module" src="../js/login.js"></script>
+</body>
+</html>

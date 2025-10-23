@@ -1,96 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amigo Secreto 🎁</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecionando...</title>
+  <meta http-equiv="refresh" content="0; url=html/loginPage.html">
+  <script>
+    // Redirecionamento via JavaScript (caso o meta não funcione)
+    window.location.href = "html/loginPage.html";
+  </script>
 </head>
 <body>
-  <h1>Amigo Secreto 🎄</h1>
-  <div class="card">
-    <div id="cadastro">
-      <input id="nome" placeholder="Digite seu nome" />
-      <button id="entrar">Entrar</button>
-    </div>
-    <div id="resultado" style="display:none">
-      <p>Olá, <strong id="meuNome"></strong>!</p>
-      <p class="muted">Seu amigo secreto é:</p>
-      <p style="font-size:26px;font-weight:800" id="amigoNome"></p>
-    </div>
-  </div>
-
-  <!-- Firebase e lógica -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getFirestore, getDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
-      authDomain: "amigosecreto-bec0a.firebaseapp.com",
-      projectId: "amigosecreto-bec0a",
-      storageBucket: "amigosecreto-bec0a.firebasestorage.app",
-      messagingSenderId: "153625267113",
-      appId: "1:153625267113:web:4c891417a0c7ad560652b8"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const btn = document.getElementById('entrar');
-    const input = document.getElementById('nome');
-
-    btn.addEventListener('click', async () => {
-      const nome = input.value.trim();
-      if (!nome) {
-        alert('Digite seu nome!');
-        return;
-      }
-
-      // 🔹 Busca o documento com o sorteio
-      const docRef = doc(db, "sorteio", "resultado");
-      const snapshot = await getDoc(docRef);
-
-      if (!snapshot.exists()) {
-        alert('Sorteio ainda não foi realizado!');
-        return;
-      }
-
-      const pares = snapshot.data();
-      const amigo = pares[nome];
-
-      if (!amigo) {
-        alert('Participante não encontrado 😕');
-        return;
-      }
-
-      localStorage.setItem('usuarioAmigo', nome);
-      mostrarResultado(nome, amigo);
-    });
-
-    function mostrarResultado(nome, amigo) {
-      document.getElementById('cadastro').style.display = 'none';
-      document.getElementById('resultado').style.display = 'block';
-      document.getElementById('meuNome').textContent = nome;
-      document.getElementById('amigoNome').textContent = amigo;
-    }
-
-    //Se já entrou antes, mostra automaticamente
-    const usuario = localStorage.getItem('usuarioAmigo');
-    if (usuario) {
-      const docRef = doc(db, "sorteio", "resultado");
-      getDoc(docRef).then(snapshot => {
-        if (snapshot.exists()) {
-          const pares = snapshot.data();
-          const amigo = pares[usuario];
-          if (amigo) mostrarResultado(usuario, amigo);
-        }
-      });
-    }
-  </script>
+  <p>Redirecionando para a página de login...</p>
 </body>
 </html>
