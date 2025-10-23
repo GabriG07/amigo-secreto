@@ -244,11 +244,44 @@ export class Sorteio {
             p => new Pessoa(p.nome, p.email, p.avatar)
         );
 
+        if(sorteio.sorteado){
+            try{
+                const resultadoRef = doc(db, "resultados", id);
+                const resultadoSnap = await getDoc(resultadoRef);
+                if (resultadoSnap.exists()) {
+                    const pares = resultadoSnap.data();
+
+                    // pares = { [email]: { nome, email, avatar } }
+                    for (const [email, v] of Object.entries(pares)) {
+                        const k = sorteio.participantes.find(p => p.email === email);
+                        const vPessoa = new Pessoa(v.nome, v.email, v.avatar);
+                        if (k) sorteio.resultado.set(k, vPessoa);
+                    }
+                    console.log(`🧩 Resultado reconstruído com ${sorteio.resultado.size} pares.`);
+                } else {
+                    console.warn("⚠️ Nenhum resultado encontrado para o sorteio:", id);
+                }
+            } catch (err) {
+                console.error("Erro ao carregar resultado:", err);
+            }
+        }
+
+        console.log(sorteio.resultado);
         console.log(`🎁 Sorteio ${id} carregado com sucesso!`);
         return sorteio;
     }
 
-
+    // Dado o email de um participante, busca quem ele tirou no amigo secreto
+    buscaResultadoPorEmail(email){
+        let amigo = null;
+        for (const [chave, valor] of this.resultado) {
+            if (chave.email === email) {
+                amigo = valor;
+                break;
+            }
+        }
+        return amigo
+    }
 
 
 }

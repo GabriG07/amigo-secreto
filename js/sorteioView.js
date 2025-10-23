@@ -63,6 +63,14 @@ onAuthStateChanged(auth, async (user) => {
     nome.style.fontWeight = "500";
     nome.style.color = "#fff";
 
+    if(sorteio.sorteado){
+      const amigo = sorteio.buscaResultadoPorEmail(user.email);
+      if(amigo && p.email === amigo.email){
+        li.style.backgroundColor = "#07d950be";
+      }
+    }
+    
+
     spanNome.appendChild(img);
     spanNome.appendChild(nome);
     li.appendChild(spanNome);
