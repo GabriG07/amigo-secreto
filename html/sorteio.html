@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sorteio 🎁 - Amigo Secreto</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+  <link href="../assets/style-dashboard.css" rel="stylesheet">
+</head>
+
+<style>
+  /* Botão de sortear mais compacto */
+  #btnSortear {
+    width: auto;
+    min-width: 160px;
+    padding: 10px 18px;
+    font-size: 15px;
+    margin: 10px 0;
+    display: inline-block;
+  }
+
+  /* Evita que todos os botões fiquem 100% nesta página */
+  .card button {
+    width: auto;
+  }
+
+
+</style>
+
+
+<body>
+  <div class="container">
+    <h1>🎁 Detalhes do Sorteio</h1>
+
+    <div class="card">
+      <h2>ID: <span id="idSorteio"></span></h2>
+      <p>Admin: <strong id="adminNome"></strong></p>
+
+      <div id="acoesAdmin" style="display:none; margin:15px 0;">
+        <button id="btnSortear">🎲 Realizar Sorteio</button>
+      </div>
+
+      <div id="participantesBox" class="lista" style="margin-top:25px;">
+        <h3>👥 Participantes</h3>
+        <ul id="listaParticipantes"></ul>
+      </div>
+
+      <button id="btnVoltar" class="logout">⬅ Voltar</button>
+    </div>
+  </div>
+
+  <script type="module" src="../js/sorteioView.js"></script>
+</body>
+</html>

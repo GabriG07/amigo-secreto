@@ -1,0 +1,127 @@
+/* Fonte base e fundo */
+body {
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
+              radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
+              linear-gradient(120deg, #0f1027, #111936);
+  color: #e6e8ee;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container principal */
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Card principal */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  backdrop-filter: blur(12px);
+  margin-top: 20px;
+}
+
+h1 {
+  font-weight: 800;
+  color: #c7b7ff;
+  margin-bottom: 15px;
+}
+
+.welcome {
+  font-size: 18px;
+  color: #dcdffa;
+  margin-bottom: 20px;
+}
+
+/* Botões principais */
+button {
+  background: linear-gradient(180deg, #c7b7ff, #9b87ff);
+  color: #0b0d1b;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 8px 5px;
+  width: 100%;
+}
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(155, 135, 255, 0.5);
+}
+
+/* Botão de logout */
+.logout {
+  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+  color: #1a1a1a;
+  margin-top: 20px;
+}
+
+.logout:hover {
+  box-shadow: 0 4px 12px rgba(255, 110, 110, 0.6);
+}
+
+/* Campo de entrada de código */
+.entrada {
+  display: none;
+  margin-top: 20px;
+}
+
+.entrada input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.entrada input::placeholder {
+  color: #b9bfd0;
+}
+
+/* Lista de sorteios */
+.lista {
+  margin-top: 25px;
+  text-align: left;
+}
+
+.lista h3 {
+  color: #c7b7ff;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.lista ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lista li {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  margin: 8px 0;
+  padding: 10px;
+  color: #e6e8ee;
+  font-size: 15px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.lista li:hover {
+  background: rgba(155, 135, 255, 0.25);
+}

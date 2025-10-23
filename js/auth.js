@@ -91,19 +91,6 @@ onAuthStateChanged(auth, async (user) => {
     // Busca nome no Firestore
     let nomeUsuario = user.displayName || user.email;
 
-    /*try {
-      const dadosUsuario = await buscarUsuarioPorEmail(user.email);
-      alert(dadosUsuario);
-
-      if (dadosUsuario && dadosUsuario.nome) {
-        nomeUsuario = dadosUsuario.nome;
-      } else {
-        alert("⚠️ Usuário não encontrado na coleção 'usuarios' com esse e-mail.");
-      }
-    } catch (e) {
-      alert("❌ Erro ao buscar usuário por e-mail:", e);
-    }*/
-
     // Atualiza tela
     document.getElementById('login').style.display = 'none';
     document.getElementById('resultado').style.display = 'block';
@@ -273,21 +260,3 @@ document.getElementById('logout').addEventListener('click', async () => {
   await signOut(auth);
 });
 
-
-
-// Buscar um usuario pelo seu email
-async function buscarUsuarioPorEmail(email) {
-  const usuariosRef = collection(db, "usuarios");
-  const q = query(usuariosRef, where("email", "==", email));
-  const snapshot = await getDoc(q);
-
-  if (snapshot.empty) {
-    console.log("Usuário não encontrado");
-    return null;
-  }
-
-  // Se houver mais de um, pega o primeiro
-  const docUser = snapshot.docs[0];
-  console.log("Usuário encontrado:", docUser.id, docUser.data());
-  return { id: docUser.id, ...docUser.data() };
-}

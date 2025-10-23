@@ -49,3 +49,7 @@ li {
 
 
 .muted { color: #b9bfd0; }
+
+#cadastroEmail{
+    cursor: pointer;
+}

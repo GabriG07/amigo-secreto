@@ -12,6 +12,7 @@ export class Sorteio {
         this.criadoEm = Date.now();
         this.participantes = [];
         this.resultado = new Map();
+        this.sorteado = false;
     }
 
     async gerarId() {
@@ -36,11 +37,16 @@ export class Sorteio {
         array.sort(() => Math.random() - 0.5);
     }
 
-    sortear(){
+    async sortear(){
         const sorteados = [...this.participantes];
         this.shuffle(this.participantes);
         this.shuffle(sorteados);
         this.noRepeat(sorteados);  
+        this.sorteado = true;
+
+        //Atualiza no firestore
+        const sorteioRef = doc(db, "sorteios", this.id);
+        await updateDoc(sorteioRef, { sorteado: true });
     }
 
     //Embaralha segundo array até ninguém tirar a si mesmo
@@ -93,7 +99,8 @@ export class Sorteio {
             adminEmail: this.admin.email,
             adminNome: this.admin.nome,
             criadoEm: this.criadoEm,
-            participantes: null
+            participantes: null,
+            sorteado: this.sorteado
         };
     }
 
@@ -114,7 +121,7 @@ export class Sorteio {
         const novo = {
             adminEmail: this.admin.email,
             adminNome: this.admin.nome,
-            participantes: [{ nome: this.admin.nome, email: this.admin.email }],
+            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar }],
             criadoEm: this.criadoEm,
         };
 
@@ -173,7 +180,8 @@ export class Sorteio {
             await updateDoc(sorteioRef, {
                 participantes: arrayUnion({
                     nome: participante.nome,
-                    email: participante.email
+                    email: participante.email,
+                    avatar: participante.avatar
                 })
             });
             alert(`✅ Entrada com sucesso no sorteio ${this.id}!`);
@@ -228,10 +236,11 @@ export class Sorteio {
         // Reatribui o ID e outros campos
         sorteio.id = id;
         sorteio.criadoEm = data.criadoEm;
+        sorteio.sorteado = data.sorteado;
 
         // Reconstrói os participantes (que vieram como objetos simples)
         sorteio.participantes = (data.participantes || []).map(
-            p => new Pessoa(p.nome, p.email)
+            p => new Pessoa(p.nome, p.email, p.avatar)
         );
 
         console.log(`🎁 Sorteio ${id} carregado com sucesso!`);
@@ -244,18 +253,3 @@ export class Sorteio {
 }
 
 
-/*
-const p1 = new Pessoa("Bitela","bitela@gmail.com");
-const p2 = new Pessoa("Papita","papita@gmail.com");
-const p3 = new Pessoa("Vidoca","vidoca@gmail.com");
-const p4 = new Pessoa("Prima","prima@gmail.com");
-const p5 = new Pessoa("Cuse","cuse@gmail.com");
-const sorteio = new Sorteio(p1);
-sorteio.participantes.push(p1);
-sorteio.participantes.push(p2);
-sorteio.participantes.push(p3);
-sorteio.participantes.push(p4);
-sorteio.participantes.push(p5);
-
-sorteio.sortear();
-*/
