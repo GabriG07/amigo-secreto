@@ -88,7 +88,7 @@ export class Sorteio {
         });
 
         try {
-            await setDoc(doc(db, "sorteio", "resultado"), pares);
+            await setDoc(doc(db, "resultados", this.id), pares);
             console.log("Resultado salvo no Firestore com sucesso!");
         } catch (e) {
             console.error("Erro ao salvar no Firestore:", e);

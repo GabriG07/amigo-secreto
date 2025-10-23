@@ -21,7 +21,7 @@ export class Pessoa {
     }
 
     async salvar(cred){
-        await setDoc(doc(db, "usuarios", cred), this.toFirestore());
+        await setDoc(doc(db, "usuarios", cred.user.uid), this.toFirestore());
     }
 
     static async carregar(uid) {
