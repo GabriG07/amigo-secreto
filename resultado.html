@@ -1,64 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Resultado - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
-  <style>
-    .modal {
-      position: fixed;
-      left: 0; right: 0; top: 0; bottom: 0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(0,0,0,0.5);
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .25s ease;
-    }
-    .modal.show { opacity: 1; pointer-events: auto; }
-    .card-modal {
-      width: 92%;
-      max-width: 380px;
-      background: rgba(255,255,255,0.06);
-      padding:18px;
-      border-radius:14px;
-      text-align:center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-      color: #fff;
-    }
-    .profile-avatar { width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(155,135,255,0.25);margin:8px auto;display:block }
-    .btn-row { display:flex;gap:10px;justify-content:center;margin-top:12px }
-    .btn-row button { width:44%; }
-    .result-reveal { animation: fadeIn .45s ease forwards; text-align:center }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px) } to { opacity:1; transform:none } }
-  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Participantes</h1>
-    <div id="grid" class="participants-grid"></div>
+    <h1>Resultado</h1>
+    <p id="info">Selecione seu perfil para ver quem você tirou 🎁</p>
+    <div id="participantes" class="avatar-grid"></div>
   </div>
 
-  <div id="modal" class="modal">
-    <div class="card-modal">
-      <img id="modalAvatar" class="profile-avatar" src="">
-      <div id="modalName" style="font-weight:700;margin-bottom:8px"></div>
-      <input id="modalSenha" type="password" placeholder="Digite sua senha" style="width:84%;max-width:300px;margin:8px auto">
-      <div class="btn-row">
-        <button id="verBtn">Ver amigo secreto</button>
-        <button id="cancelBtn" style="background:linear-gradient(135deg,#ff8a7a,#ffb37a);">Cancelar</button>
-      </div>
-      <div id="modalMsg" style="color:#ffd7a8;margin-top:10px"></div>
+  <div id="modalSenha" class="modal">
+    <div class="modal-content">
+      <img id="modalAvatar" src="" alt="">
+      <h2 id="modalNome"></h2>
+      <input type="password" id="inputSenha" placeholder="Digite sua senha">
+      <button id="btnVer">Ver amigo secreto</button>
+    </div>
+  </div>
+
+  <div id="modalResultado" class="modal">
+    <div class="modal-content">
+      <h2>Você tirou:</h2>
+      <img id="resultadoAvatar" src="" alt="">
+      <h3 id="resultadoNome"></h3>
+      <button id="btnFechar">Fechar</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
@@ -72,83 +47,83 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const grid = document.getElementById('grid');
-    const modal = document.getElementById('modal');
-    const modalAvatar = document.getElementById('modalAvatar');
-    const modalName = document.getElementById('modalName');
-    const modalSenha = document.getElementById('modalSenha');
-    const modalMsg = document.getElementById('modalMsg');
-    const verBtn = document.getElementById('verBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
+    const participantesDiv = document.getElementById("participantes");
+    const modalSenha = document.getElementById("modalSenha");
+    const modalAvatar = document.getElementById("modalAvatar");
+    const modalNome = document.getElementById("modalNome");
+    const inputSenha = document.getElementById("inputSenha");
+    const btnVer = document.getElementById("btnVer");
+    const modalResultado = document.getElementById("modalResultado");
+    const resultadoAvatar = document.getElementById("resultadoAvatar");
+    const resultadoNome = document.getElementById("resultadoNome");
+    const btnFechar = document.getElementById("btnFechar");
 
     let participantes = [];
     let selecionado = null;
 
-    async function carregar() {
-      const q = await getDocs(collection(db, "participantes"));
+    async function carregarParticipantes() {
+      const snap = await getDocs(collection(db, "participantes"));
+      participantesDiv.innerHTML = "";
       participantes = [];
-      q.forEach(s => {
-        participantes.push({ id: s.id, nome: s.data().nome, senha: s.data().senha, avatar: s.data().avatar });
+      snap.forEach(docSnap => {
+        const p = docSnap.data();
+        const el = document.createElement("div");
+        el.className = "avatar-option";
+        el.innerHTML = `<img src="${p.avatar}" alt=""><span>${p.nome}</span>`;
+        el.onclick = () => abrirModalSenha(p, docSnap.id);
+        participantesDiv.appendChild(el);
+        participantes.push({ id: docSnap.id, ...p });
       });
-      render();
     }
 
-    function render() {
-      grid.innerHTML = '';
-      if (participantes.length === 0) {
-        grid.innerHTML = '<div style="color:#ffd7a8">Nenhum participante cadastrado.</div>';
+    function abrirModalSenha(p, id) {
+      selecionado = { ...p, id };
+      modalAvatar.src = p.avatar;
+      modalNome.textContent = p.nome;
+      inputSenha.value = "";
+      modalSenha.style.display = "flex";
+      inputSenha.focus();
+    }
+
+    btnVer.addEventListener("click", async () => {
+      if (!selecionado) return;
+      const senha = inputSenha.value.trim();
+      if (senha !== selecionado.senha) {
+        alert("Senha incorreta!");
         return;
       }
-      participantes.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'participant';
-        div.innerHTML = `<img src="${p.avatar}"><div class="participant-name">${p.nome}</div>`;
-        div.onclick = () => abrirPerfil(p);
-        grid.appendChild(div);
-      });
-    }
-
-    function abrirPerfil(p) {
-      selecionado = p;
-      modalAvatar.src = p.avatar;
-      modalName.textContent = p.nome;
-      modalSenha.value = '';
-      modalMsg.textContent = '';
-      modal.classList.add('show');
-    }
-  
-    cancelBtn.onclick = () => {
-      modal.classList.remove('show');
-      selecionado = null;
-    };
-    modalSenha.addEventListener('keydown', e => {
-      if (e.key === 'Enter') verBtn.click();
+      const sorteioSnap = await getDoc(doc(db, "sorteio", "resultado"));
+      if (!sorteioSnap.exists()) {
+        alert("O sorteio ainda não foi realizado.");
+        return;
+      }
+      const resultado = sorteioSnap.data();
+      const idSorteado = resultado[selecionado.id];
+      const sorteado = participantes.find(p => p.id === idSorteado);
+      if (!sorteado) {
+        alert("Não foi possível encontrar o resultado.");
+        return;
+      }
+      modalSenha.style.display = "none";
+      resultadoAvatar.src = sorteado.avatar;
+      resultadoNome.textContent = sorteado.nome;
+      modalResultado.style.display = "flex";
     });
 
-    verBtn.onclick = async () => {
-      if (!selecionado) return;
-      const s = modalSenha.value.trim();
-      if (!s) { modalMsg.textContent = 'Digite sua senha'; return; }
-      if (s !== selecionado.senha) { modalMsg.textContent = 'Senha incorreta'; return; }
-      const snap = await getDoc(doc(db, "sorteio", "resultado"));
-      if (!snap.exists()) { modalMsg.textContent = 'Sorteio ainda não foi realizado'; return; }
-      const pares = snap.data();
-      const amigoNome = pares[selecionado.nome];
-      if (!amigoNome) { modalMsg.textContent = 'Resultado não encontrado'; return; }
-      const q = await getDocs(collection(db, "participantes"));
-      let amigo = null;
-      q.forEach(snap => {
-        const d = snap.data();
-        if (d.nome === amigoNome) amigo = d;
-      });
-      const display = document.createElement('div');
-      display.className = 'result-reveal';
-      display.innerHTML = `<h2 style="margin-bottom:6px">${selecionado.nome} tirou:</h2><img src="${amigo?amigo.avatar:''}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid rgba(155,135,255,0.25);"><h3 style="margin-top:12px">${amigoNome}</h3>`;
-      modal.querySelector('.card-modal').innerHTML = display.outerHTML + `<div style="margin-top:12px"><button id="fecharBtn" style="width:88%;max-width:260px;margin-top:12px">Fechar</button></div>`;
-      document.getElementById('fecharBtn').onclick = ()=>{ modal.classList.remove('show'); carregar(); };
-    };
+    modalSenha.addEventListener("keydown", e => {
+      if (e.key === "Enter") btnVer.click();
+    });
 
-    carregar();
+    btnFechar.addEventListener("click", () => {
+      modalResultado.style.display = "none";
+    });
+
+    window.addEventListener("click", e => {
+      if (e.target === modalSenha) modalSenha.style.display = "none";
+      if (e.target === modalResultado) modalResultado.style.display = "none";
+    });
+
+    carregarParticipantes();
   </script>
 </body>
 </html>
