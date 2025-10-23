@@ -1,120 +1,243 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  font-family:'Inter',sans-serif;
-  background:linear-gradient(-45deg,#0b1028,#161a3a,#0f1830,#071225);
-  background-size:400% 400%;
-  animation:gradientMove 14s ease infinite;
-  color:#e6e8ee;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-}
-@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-
-.container{
-  width:100%;
-  max-width:520px;
-  background:rgba(255,255,255,0.06);
-  border-radius:16px;
-  padding:28px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.45);
-  text-align:center;
+/* === Reset & Base === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-h1{font-size:1.9rem;margin-bottom:12px;font-weight:700}
-h2{font-size:1.05rem;margin-bottom:8px;font-weight:600;color:#cfcffb}
-
-.form-row{width:100%;display:flex;flex-direction:column;align-items:center}
-
-.label{width:88%;max-width:420px;text-align:left;color:#cfcffb;margin:8px auto 4px;font-weight:600}
-
-input,select,button{
-  width:88%;
-  max-width:420px;
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.12);
-  background:rgba(255,255,255,0.04);
-  color:#fff;
-  font-size:15px;
-  margin:8px auto;
-  outline:none;
-  transition:all .22s ease;
-  display:block;
+body {
+  background: radial-gradient(circle at top, #1a1a1a, #0b0b0b);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
 }
 
-input:focus,select:focus{box-shadow:0 6px 20px rgba(155,135,255,0.08);border-color:rgba(155,135,255,0.3)}
-button{
-  background:linear-gradient(135deg,#7b9bff,#b89bff);
-  color:#081024;
-  font-weight:700;
-  border:none;
-  cursor:pointer;
-  box-shadow:0 8px 30px rgba(123,110,255,0.12);
-}
-button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,0.18)}
-
-.avatar-grid{
-  width:88%;
-  max-width:420px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(72px,1fr));
-  gap:12px;
-  margin:14px auto;
-  justify-items:center;
-  align-items:center;
+/* === Container Principal === */
+.container {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 0 25px rgba(255, 204, 0, 0.15);
+  text-align: center;
 }
 
-.avatar-option{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  overflow:hidden;
-  cursor:pointer;
-  border:2px solid transparent;
-  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
-  display:inline-block;
-}
-.avatar-option img{width:100%;height:100%;object-fit:cover;display:block}
-.avatar-option:hover{transform:scale(1.12);box-shadow:0 10px 22px rgba(155,135,255,0.15);border-color:rgba(155,135,255,0.28)}
-.avatar-option.selected{border-color:#c7b7ff;box-shadow:0 14px 32px rgba(155,135,255,0.22);transform:scale(1.14)}
-
-.participants-grid{
-  width:100%;
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
-  gap:14px;
-  justify-items:center;
+/* === Títulos e Textos === */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #ffcd4a;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
 }
 
-.participant{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  transition:transform .2s ease,filter .2s ease;
+p {
+  color: #d1d1d1;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  line-height: 1.5;
 }
-.participant img{width:82px;height:82px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.06);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
-.participant:hover{transform:translateY(-6px);filter:brightness(1.08)}
-.participant-name{color:#e9e9ff;font-weight:700;font-size:0.95rem;text-align:center}
 
-.result-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:8px}
-.result-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid rgba(183,152,255,0.25);box-shadow:0 12px 36px rgba(123,90,255,0.18)}
+/* === Campos de Entrada === */
+label {
+  display: block;
+  text-align: left;
+  font-weight: 600;
+  color: #ffcd4a;
+  margin-bottom: 6px;
+}
 
-.notice{color:#ffd7a8;font-weight:600;margin-top:8px}
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.2s;
+}
 
-@media (max-width:480px){
-  .container{padding:20px}
-  h1{font-size:1.5rem}
-  .avatar-option{width:64px;height:64px}
-  .participant img{width:68px;height:68px}
-  input,button,select{width:94%;max-width:360px;font-size:15px;padding:10px}
-  .avatar-grid{gap:10px}
+input:focus {
+  border-color: #ffcd4a;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+}
+
+/* === Botões === */
+button {
+  background: linear-gradient(135deg, #ffcd4a, #ff8c00);
+  border: none;
+  color: #000;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+}
+
+/* === Grid de Avatares === */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 15px;
+  margin-top: 10px;
+  justify-items: center;
+}
+
+.avatar-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.avatar-option img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 204, 0, 0.5);
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+}
+
+.avatar-option.selected img {
+  border-color: #ffcd4a;
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+  transform: scale(1.08);
+}
+
+.avatar-option:hover {
+  transform: scale(1.08);
+}
+
+/* === Modal === */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: rgba(30, 30, 30, 0.95);
+  padding: 25px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(255, 204, 0, 0.25);
+  width: 90%;
+  max-width: 350px;
+}
+
+.modal-content img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 2px solid #ffcd4a;
+}
+
+.modal-content h2 {
+  color: #ffcd4a;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.modal-content input {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,204,0,0.3);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.modal-content button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* === Resultados === */
+.resultado {
+  margin-top: 20px;
+}
+
+#resultadoNome {
+  font-size: 1.2rem;
+  color: #ffcd4a;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+  margin-top: 15px;
+}
+
+/* === Botões secundários (ex: Limpar Dados) === */
+.btn-secundario {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffcd4a;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  margin-top: 10px;
+  width: 100%;
+}
+
+.btn-secundario:hover {
+  background: rgba(255, 204, 0, 0.1);
+  transform: scale(1.02);
+}
+
+/* === Responsividade === */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+
+  .container {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  input, button {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .avatar-option img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .modal-content {
+    padding: 20px;
+  }
+}
+
+/* === Animações sutis === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container, .modal-content {
+  animation: fadeIn 0.4s ease forwards;
 }
