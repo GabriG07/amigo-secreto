@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sorteio - Amigo Secreto</title>
   <link rel="stylesheet" href="style2.css">
 </head>
 <body>
   <div class="container">
-    <h1>Painel do Sorteio</h1>
-    <div id="info" style="margin-bottom:12px;color:#e6e8ee"></div>
-    <div id="lista" class="participants-grid" style="margin-bottom:18px"></div>
-    <button id="btnSortear" style="width:88%;max-width:420px">Realizar Sorteio</button>
-    <button id="btnLimpar" style="width:88%;max-width:420px;background:linear-gradient(135deg,#ff7676,#ffb476);margin-top:12px">Limpar Dados</button>
+    <h1>Sorteio</h1>
+    <p id="info">Aguarde o cadastro de todos os participantes antes de sortear.</p>
+    <ul id="lista" class="participant-list"></ul>
+    <button id="btnSortear">Realizar Sorteio</button>
+    <button id="btnLimpar" class="danger-btn">Limpar Dados</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
@@ -31,89 +31,72 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    const lista = document.getElementById("lista");
+    const info = document.getElementById("info");
+    const btnSortear = document.getElementById("btnSortear");
+    const btnLimpar = document.getElementById("btnLimpar");
+
     async function carregarParticipantes() {
-      const q = await getDocs(collection(db, "participantes"));
-      const arr = [];
-      q.forEach(s => {
-        const data = s.data();
-        arr.push({ id: s.id, nome: data.nome, senha: data.senha, avatar: data.avatar });
-      });
-      return arr;
-    }
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    function gerarPares(participantes) {
-      if (participantes.length < 2) return null;
-      const nomes = participantes.map(p => p.nome);
-      const maxAttempts = 5000;
-      let attempt = 0;
-      while (attempt < maxAttempts) {
-        attempt++;
-        const recipients = [...nomes];
-        shuffle(recipients);
-        const mapping = {};
-        let ok = true;
-        for (let i = 0; i < nomes.length; i++) {
-          if (nomes[i] === recipients[i]) { ok = false; break; }
-          mapping[nomes[i]] = recipients[i];
-        }
-        if (!ok) continue;
-        let mutual = false;
-        for (const a of nomes) {
-          const b = mapping[a];
-          if (mapping[b] === a) { mutual = true; break; }
-        }
-        if (mutual) continue;
-        return mapping;
-      }
-      return null;
-    }
-
-    function renderLista(participantes) {
-      const lista = document.getElementById('lista');
-      lista.innerHTML = '';
-      participantes.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'participant';
-        div.innerHTML = `<img src="${p.avatar}"><div class="participant-name">${p.nome}</div>`;
-        lista.appendChild(div);
-      });
-    }
-
-    document.getElementById('btnSortear').addEventListener('click', async () => {
-      document.getElementById('info').textContent = 'Processando sorteio...';
-      const participantes = await carregarParticipantes();
-      if (participantes.length < 2) { document.getElementById('info').textContent = 'É necessário pelo menos 2 participantes.'; return; }
-      const pares = gerarPares(participantes);
-      if (!pares) { document.getElementById('info').textContent = 'Não foi possível gerar pares sem conflitos. Tente novamente.'; return; }
-      await setDoc(doc(db, "sorteio", "resultado"), pares);
-      document.getElementById('info').textContent = 'Sorteio realizado com sucesso!';
-    });
-   
-    import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-    import { getDocs, collection } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
-    document.getElementById('btnLimpar').addEventListener('click', async () => {
-      if (!confirm("⚠️ Isso vai apagar TODOS os participantes e o resultado. Deseja continuar?")) return;
+      lista.innerHTML = "";
       const snap = await getDocs(collection(db, "participantes"));
-      for (const docu of snap.docs) await deleteDoc(doc(db, "participantes", docu.id));
-      await deleteDoc(doc(db, "sorteio", "resultado"));
-      document.getElementById('lista').innerHTML = '';
-      document.getElementById('info').textContent = 'Todos os dados foram apagados.';
+      if (snap.empty) {
+        info.textContent = "Nenhum participante cadastrado.";
+        return [];
+      }
+      const participantes = [];
+      snap.forEach(doc => {
+        const p = doc.data();
+        participantes.push({ id: doc.id, nome: p.nome, avatar: p.avatar });
+        const li = document.createElement("li");
+        li.innerHTML = `<img src="${p.avatar}" alt=""><span>${p.nome}</span>`;
+        lista.appendChild(li);
+      });
+      return participantes;
+    }
+
+    function gerarSorteio(participantes) {
+      let sorteio = {};
+      let disponiveis = [...participantes];
+      for (let p of participantes) {
+        let opcoes = disponiveis.filter(d => d.id !== p.id && sorteio[d.id] !== p.id);
+        if (opcoes.length === 0) return null;
+        let escolhido = opcoes[Math.floor(Math.random() * opcoes.length)];
+        sorteio[p.id] = escolhido.id;
+        disponiveis = disponiveis.filter(d => d.id !== escolhido.id);
+      }
+      return sorteio;
+    }
+
+    btnSortear.addEventListener("click", async () => {
+      const participantes = await carregarParticipantes();
+      if (participantes.length < 2) {
+        alert("É necessário pelo menos 2 participantes para sortear.");
+        return;
+      }
+      let resultado = gerarSorteio(participantes);
+      let tentativas = 0;
+      while (!resultado && tentativas < 50) {
+        resultado = gerarSorteio(participantes);
+        tentativas++;
+      }
+      if (!resultado) {
+        alert("Erro ao gerar sorteio. Tente novamente.");
+        return;
+      }
+      await setDoc(doc(db, "sorteio", "resultado"), resultado);
+      alert("✅ Sorteio realizado com sucesso!");
     });
 
+    btnLimpar.addEventListener("click", async () => {
+      if (!confirm("⚠️ Deseja realmente apagar todos os dados?")) return;
+      const snap = await getDocs(collection(db, "participantes"));
+      for (const d of snap.docs) await deleteDoc(doc(db, "participantes", d.id));
+      await deleteDoc(doc(db, "sorteio", "resultado"));
+      lista.innerHTML = "";
+      info.textContent = "Todos os dados foram apagados.";
+    });
 
-    (async ()=> {
-      const participantes = await carregarParticipantes();
-      renderLista(participantes);
-      if (participantes.length === 0) document.getElementById('info').textContent = 'Nenhum participante cadastrado.';
-    })();
+    carregarParticipantes();
   </script>
 </body>
 </html>
