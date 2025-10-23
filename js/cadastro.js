@@ -53,9 +53,17 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
         const pessoa = new Pessoa(nome, email, selected);
         await pessoa.salvar(cred);
 
-        window.location.href = '../index.html';
         alert(`Conta criada com sucesso! Bem-vindo, ${nome}! 🎉`);
+        window.location.href = '../index.html';
     } catch (error) {
         alert("Erro ao criar conta: " + error.message);
     }
 });
+
+
+// Ao clicar no texto para ir para o login
+document.getElementById('txtLogin').addEventListener('click', () => {
+    window.location.href = './loginPage.html';
+});
+
+

@@ -10,15 +10,20 @@
     <div class="container">
         <h1>Cadastro</h1>
         <div class="form-row">
-            <label class="label">Nome</label>
-            <input id="nome" type="text" placeholder="Digite seu nome">
-            <label class="label">Email</label>
+            <label for="nome" class="label">Nome</label>
+            <input id="nome" type="text" placeholder="Digite seu nome" required>
+
+            <label for="email" class="label">Email</label>
             <input id="email" type="email" placeholder="Digite seu email">
-            <label class="label">Senha</label>
+
+            <label for="senha" class="label">Senha</label>
             <input id="senha" type="password" placeholder="Crie uma senha">
+
             <label class="label">Escolha seu avatar</label>
             <div class="avatar-grid" id="avatarGrid"></div>
+
             <button id="btnCadastrar">Cadastrar</button>
+            <p id="txtLogin" style="font-size: 14px;">Já tem uma conta? Faça login agora</p>
         </div>
     </div>
 
