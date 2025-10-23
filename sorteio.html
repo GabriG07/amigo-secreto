@@ -9,65 +9,97 @@
 <body>
   <div class="container">
     <h1>Painel do Sorteio</h1>
-    <div id="adminAuth">
-      <label class="label">Senha de administrador</label>
-      <input id="senhaAdmin" type="password" placeholder="Senha do admin">
-      <button id="btnEntrar">Entrar</button>
-    </div>
-    <div id="painel" style="display:none">
-      <h2>Participantes</h2>
-      <div class="participants-grid" id="listaParticipantes"></div>
-      <button id="btnSortear">Realizar Sorteio</button>
-      <button id="btnLimpar" style="margin-top:8px;background:linear-gradient(135deg,#ff8a7a,#ffb37a)">Limpar dados</button>
-    </div>
+    <div id="info" style="margin-bottom:12px;color:#e6e8ee"></div>
+    <div id="lista" class="participants-grid" style="margin-bottom:18px"></div>
+    <button id="btnSortear" style="width:88%;max-width:420px">Realizar Sorteio</button>
   </div>
 
   <script type="module">
-    import { db } from "./firebase-config.js";
-    import { ref, get, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-    const ADMIN_PW = 'admin123';
-    const btnEntrar = document.getElementById('btnEntrar');
-    const painel = document.getElementById('painel');
-    const lista = document.getElementById('listaParticipantes');
+    const firebaseConfig = {
+      apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
+      authDomain: "amigosecreto-bec0a.firebaseapp.com",
+      projectId: "amigosecreto-bec0a",
+      storageBucket: "amigosecreto-bec0a.appspot.com",
+      messagingSenderId: "153625267113",
+      appId: "1:153625267113:web:4c891417a0c7ad560652b8"
+    };
 
-    btnEntrar.onclick = async ()=>{
-      const v = document.getElementById('senhaAdmin').value.trim();
-      if(v!==ADMIN_PW){alert('Senha incorreta');return}
-      document.getElementById('adminAuth').style.display='none';
-      painel.style.display='block';
-      const snap = await get(ref(db,'participantes'));
-      const data = snap.exists()?Object.values(snap.val()):[];
-      lista.innerHTML='';
-      data.forEach(p=>{
-        const d = document.createElement('div');
-        d.className='participant';
-        d.innerHTML=`<img src="${p.avatar}"><div class="participant-name">${p.nome}</div>`;
-        lista.appendChild(d);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function carregarParticipantes() {
+      const q = await getDocs(collection(db, "participantes"));
+      const arr = [];
+      q.forEach(s => {
+        const data = s.data();
+        arr.push({ id: s.id, nome: data.nome, senha: data.senha, avatar: data.avatar });
       });
-    };
+      return arr;
+    }
 
-    document.getElementById('btnSortear').onclick = async ()=>{
-      const snap = await get(ref(db,'participantes'));
-      const data = snap.exists()?Object.values(snap.val()):[];
-      if(data.length<2){alert('Pelo menos 2 participantes necessários');return}
-      const shuffled = [...data].sort(()=>Math.random()-0.5);
-      const resultado = [];
-      for(let i=0;i<data.length;i++){
-        const de = data[i];
-        const para = shuffled[(i+1)%shuffled.length];
-        resultado.push({deNome:de.nome, deAvatar:de.avatar, paraNome:para.nome, paraAvatar:para.avatar});
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
-      await set(ref(db,'resultado'),resultado);
-      alert('Sorteio salvo');
-    };
+    }
 
-    document.getElementById('btnLimpar').onclick = async ()=>{
-      await set(ref(db,'participantes'),null);
-      await set(ref(db,'resultado'),null);
-      alert('Dados limpos');
-      lista.innerHTML='';
-    };
+    function gerarPares(participantes) {
+      if (participantes.length < 2) return null;
+      const nomes = participantes.map(p => p.nome);
+      const maxAttempts = 5000;
+      let attempt = 0;
+      while (attempt < maxAttempts) {
+        attempt++;
+        const recipients = [...nomes];
+        shuffle(recipients);
+        const mapping = {};
+        let ok = true;
+        for (let i = 0; i < nomes.length; i++) {
+          if (nomes[i] === recipients[i]) { ok = false; break; }
+          mapping[nomes[i]] = recipients[i];
+        }
+        if (!ok) continue;
+        let mutual = false;
+        for (const a of nomes) {
+          const b = mapping[a];
+          if (mapping[b] === a) { mutual = true; break; }
+        }
+        if (mutual) continue;
+        return mapping;
+      }
+      return null;
+    }
+
+    function renderLista(participantes) {
+      const lista = document.getElementById('lista');
+      lista.innerHTML = '';
+      participantes.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'participant';
+        div.innerHTML = `<img src="${p.avatar}"><div class="participant-name">${p.nome}</div>`;
+        lista.appendChild(div);
+      });
+    }
+
+    document.getElementById('btnSortear').addEventListener('click', async () => {
+      document.getElementById('info').textContent = 'Processando sorteio...';
+      const participantes = await carregarParticipantes();
+      if (participantes.length < 2) { document.getElementById('info').textContent = 'É necessário pelo menos 2 participantes.'; return; }
+      const pares = gerarPares(participantes);
+      if (!pares) { document.getElementById('info').textContent = 'Não foi possível gerar pares sem conflitos. Tente novamente.'; return; }
+      await setDoc(doc(db, "sorteio", "resultado"), pares);
+      document.getElementById('info').textContent = 'Sorteio realizado com sucesso!';
+    });
+
+    (async ()=> {
+      const participantes = await carregarParticipantes();
+      renderLista(participantes);
+      if (participantes.length === 0) document.getElementById('info').textContent = 'Nenhum participante cadastrado.';
+    })();
   </script>
 </body>
 </html>
