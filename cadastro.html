@@ -72,6 +72,10 @@
           senha,
           avatar: selected
         });
+      modalSenha.addEventListener('keydown', e => {
+        if (e.key === 'Enter') verBtn.click();
+        });
+
         alert("✅ Cadastro realizado com sucesso!");
         document.getElementById('nome').value = '';
         document.getElementById('senha').value = '';
