@@ -1,8 +1,9 @@
 import { db } from './firebaseConfig.js';
 import { Pessoa } from './Pessoa.js';
-import { 
-  setDoc, getDoc, doc, collection, query, where, getDocs, updateDoc, arrayUnion
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { setDoc, getDoc, doc, collection, query, where, getDocs, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+//Rodando Localmente
+//import { setDoc, getDoc, doc, collection, query, where, getDocs, updateDoc, arrayUnion } from "firebase/firestore";
 
 
 export class Sorteio {
@@ -83,7 +84,7 @@ export class Sorteio {
     async salvarResultado() {
         const pares = {};
         this.resultado.forEach((v, k) => {
-            pares[k.email] = v.toObject();
+            pares[k.email] = v.toFirestore();
         });
 
         try {

@@ -3,6 +3,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebas
 import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
+// Rodando Localmente:
+//import { initializeApp } from "firebase/app";
+//import { getFirestore } from "firebase/firestore";
+//import { getAuth } from "firebase/auth";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDqdHnNCq_5ce2WaASz0-BriGO8ampNLvE",
   authDomain: "amigosecreto-bec0a.firebaseapp.com",
@@ -16,3 +21,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+
+
+

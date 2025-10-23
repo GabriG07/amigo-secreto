@@ -2,6 +2,9 @@ import { auth, db } from './firebaseConfig.js';
 import { Sorteio } from './Sorteio.js';
 import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
+//Rodando localmente:
+//import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "firebase/firestore";
+
 export class Pessoa {
     constructor(nome, email, avatar){
         this.nome = nome;
@@ -18,7 +21,7 @@ export class Pessoa {
     }
 
     async salvar(cred){
-        await setDoc(doc(db, "usuarios", cred.user.uid), this.toFirestore());
+        await setDoc(doc(db, "usuarios", cred), this.toFirestore());
     }
 
     static async carregar(uid) {
