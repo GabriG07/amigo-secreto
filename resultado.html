@@ -116,11 +116,14 @@
       modalMsg.textContent = '';
       modal.classList.add('show');
     }
-
+  
     cancelBtn.onclick = () => {
       modal.classList.remove('show');
       selecionado = null;
     };
+    modalSenha.addEventListener('keydown', e => {
+      if (e.key === 'Enter') verBtn.click();
+    });
 
     verBtn.onclick = async () => {
       if (!selecionado) return;
