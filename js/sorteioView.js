@@ -12,7 +12,7 @@ document.getElementById("idSorteio").textContent = id;
 // Quando o usuário estiver autenticado
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "index.html";
+    window.location.href = "loginPage.html";
     return;
   }
 
