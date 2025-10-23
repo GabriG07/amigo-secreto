@@ -12,6 +12,8 @@
     <div id="info" style="margin-bottom:12px;color:#e6e8ee"></div>
     <div id="lista" class="participants-grid" style="margin-bottom:18px"></div>
     <button id="btnSortear" style="width:88%;max-width:420px">Realizar Sorteio</button>
+    <button id="btnLimpar" style="width:88%;max-width:420px;background:linear-gradient(135deg,#ff7676,#ffb476);margin-top:12px">Limpar Dados</button>
+
   </div>
 
   <script type="module">
@@ -94,6 +96,23 @@
       await setDoc(doc(db, "sorteio", "resultado"), pares);
       document.getElementById('info').textContent = 'Sorteio realizado com sucesso!';
     });
+
+    import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { getDocs, collection } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    document.getElementById('btnLimpar').addEventListener('click', async () => {
+      if (!confirm("⚠️ Isso vai apagar TODOS os participantes e o resultado. Deseja continuar?")) return;
+      const snap = await getDocs(collection(db, "participantes"));
+      for (const docu of snap.docs) await deleteDoc(doc(db, "participantes", docu.id));
+      await deleteDoc(doc(db, "sorteio", "resultado"));
+      document.getElementById('lista').innerHTML = '';
+      document.getElementById('info').textContent = 'Todos os dados foram apagados.';
+    });
+  
+     modalSenha.addEventListener('keydown', e => {
+      if (e.key === 'Enter') verBtn.click();
+    });
+
 
     (async ()=> {
       const participantes = await carregarParticipantes();
