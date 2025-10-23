@@ -12,7 +12,7 @@ document.getElementById("idSorteio").textContent = id;
 // Quando o usuário estiver autenticado
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "loginPage.html";
+    window.location.href = "./loginPage.html";
     return;
   }
 
@@ -20,7 +20,7 @@ onAuthStateChanged(auth, async (user) => {
   const sorteio = await Sorteio.carregar(id);
   if (!sorteio) {
     alert("❌ Sorteio não encontrado!");
-    window.location.href = "dashboard.html";
+    window.location.href = "./dashboard.html";
     return;
   }
 

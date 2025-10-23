@@ -7,7 +7,7 @@ import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "htt
 // Observa se o usuário está logado
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        window.location.href = "loginPage.html";
+        window.location.href = "./loginPage.html";
         return;
     }
 

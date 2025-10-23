@@ -64,7 +64,7 @@ document.getElementById('cadastroEmail').addEventListener('click', async () => {
 // -------------------------
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        window.location.href = 'dashboard.html';
+        window.location.href = './dashboard.html';
     } 
 });
 
