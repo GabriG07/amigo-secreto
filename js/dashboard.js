@@ -11,6 +11,7 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
+    document.querySelector(".welcome").style.display = "block";
     const nome = user.displayName || user.email;
     document.getElementById("meuNome").textContent = nome;
 
@@ -40,7 +41,10 @@ onAuthStateChanged(auth, async (user) => {
             return;
         }
 
-        const sorteio = await Sorteio.carregar(codigo);
+        const sorteio = await Sorteio.carregar(codigo.toUpperCase());
+        if(!sorteio){ //Sorteio não encontrado
+            return;
+        }
 
         if(sorteio.sorteado){
             alert("O sorteio do amigo secreto já foi realizado!")

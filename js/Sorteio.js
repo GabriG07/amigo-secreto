@@ -224,7 +224,7 @@ export class Sorteio {
         const snap = await getDoc(ref);
 
         if (!snap.exists()) {
-            alert("❌ Sorteio não encontrado:", id);
+            alert("❌ Sorteio não encontrado: " + id);
             return null;
         }
 

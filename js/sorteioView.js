@@ -9,6 +9,10 @@ const id = params.get("id");
 
 document.getElementById("idSorteio").textContent = id;
 
+
+const lista = document.getElementById("listaParticipantes");
+lista.innerHTML = "<li>Carregando...</li>";
+
 // Quando o usuário estiver autenticado
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -19,14 +23,14 @@ onAuthStateChanged(auth, async (user) => {
   // Carrega o sorteio do Firestore
   const sorteio = await Sorteio.carregar(id);
   if (!sorteio) {
-    alert("❌ Sorteio não encontrado!");
     window.location.href = "./dashboard.html";
     return;
   }
 
+  document.getElementById("adminNomeContainer").style.display = "block";
   document.getElementById("adminNome").textContent = sorteio.admin.nome;
 
-  const lista = document.getElementById("listaParticipantes");
+  
   lista.innerHTML = "";
 
   // Se o usuário for admin, mostra botão de sortear
@@ -67,6 +71,10 @@ onAuthStateChanged(auth, async (user) => {
       const amigo = sorteio.buscaResultadoPorEmail(user.email);
       if(amigo && p.email === amigo.email){
         li.style.backgroundColor = "#07d950be";
+      }
+      else if(p.email != user.email){
+        li.style.filter="blur(2px)"
+        li.style.opacity="0.4"
       }
     }
     
