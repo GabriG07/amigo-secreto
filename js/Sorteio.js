@@ -122,7 +122,7 @@ export class Sorteio {
         const novo = {
             adminEmail: this.admin.email,
             adminNome: this.admin.nome,
-            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar }],
+            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar}],
             criadoEm: this.criadoEm,
         };
 
