@@ -76,6 +76,7 @@ onAuthStateChanged(auth, async (user) => {
 
         lista.innerHTML = "<li>Carregando...</li>";
         divLista.style.display = "block";
+        
 
         const sorteios = await Sorteio.listarPorEmail(user.email);
         lista.innerHTML = "";
@@ -86,15 +87,42 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         sorteios.forEach((s) => {
+            const divItemLista = document.createElement("div");
+            divItemLista.className = "itemLista";
             const li = document.createElement("li");
             li.textContent = `🎁 ${s.id} — Admin: ${s.admin.nome} (${s.participantes.length} participantes)`;
             li.style.cursor = "pointer";
+
+            const btnCopy = document.createElement("img");
+            btnCopy.className = "btnCopy";
+            btnCopy.src = "../assets/img/copy.png";
+            btnCopy.style.display = "none";
 
             li.addEventListener("click", async () => {
                 window.location.href = `sorteio.html?id=${s.id}`;
             });
 
-            lista.appendChild(li);
+            if(navigator.clipboard){
+                btnCopy.style.display = "block";
+                
+                btnCopy.addEventListener("click", async () => {
+                    const msg = document.getElementById("mensagemCopiado");
+                    try{
+                        msg.classList.add("mostrar");
+                        await navigator.clipboard.writeText(s.id);
+                        setTimeout(() => msg.classList.remove("mostrar"), 1500);                
+                    }
+                    catch (e){
+                        msg.textContent = "❌ Erro ao copiar!";
+                        msg.classList.add("mostrar");
+                        msg.style.backgroundColor = "#ff0000";
+                        setTimeout(() => msg.classList.remove("mostrar"), 1500);
+                    }       
+                });
+            }
+            lista.appendChild(divItemLista)
+            divItemLista.appendChild(li);
+            divItemLista.appendChild(btnCopy);
         });
     };
     
