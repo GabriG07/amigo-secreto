@@ -18,7 +18,7 @@ import {
 
 // Avatares
 const avatarGrid = document.getElementById('avatarGrid');
-const avatars = Array.from({ length: 20 }, (_, i) =>
+const avatars = Array.from({ length: 10 }, (_, i) =>
     `../assets/avatars/avatar${i + 1}.png`
 );
 
