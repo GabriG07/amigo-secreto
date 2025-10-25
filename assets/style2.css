@@ -116,6 +116,17 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
 
 .notice{color:#ffd7a8;font-weight:600;margin-top:8px}
 
+.logout {
+  width: auto;
+  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+  color: #1a1a1a;
+  margin-top: 20px;
+}
+
+.logout:hover {
+  box-shadow: 0 4px 12px rgba(255, 110, 110, 0.6);
+}
+
 @media (max-width:480px){
   .container{padding:20px}
   h1{font-size:1.5rem}

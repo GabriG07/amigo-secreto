@@ -139,7 +139,7 @@ button:hover {
 }
 
 .btnCopy{
-  width: 32px;
+  width: 28px;
   height: auto;
 }
 
@@ -163,7 +163,7 @@ button:hover {
   width: 72px;
   height: 72px;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 100%;
 }
 
 .avatarPerfil{

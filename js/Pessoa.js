@@ -1,6 +1,6 @@
 import { auth, db } from './firebaseConfig.js';
 import { Sorteio } from './Sorteio.js';
-import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, setDoc, getDoc, doc, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 //Rodando localmente:
 //import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "firebase/firestore";
@@ -35,5 +35,23 @@ export class Pessoa {
 
         const data = snap.data();
         return new Pessoa(data.nome, data.email, data.avatar);
+    }
+
+    async editarAvatar(novoAvatar){
+        try{
+            const user = auth.currentUser;
+            if(!user){
+                console.log("Usuário não autenticado!");
+                return;
+            }
+
+            const ref = doc(db, "usuarios", user.uid);
+            await updateDoc(ref, {avatar: novoAvatar});
+
+            this.avatar = novoAvatar;
+        }
+        catch(e){
+            console.log("Erro ao atualizar o avatar: " + e);
+        }
     }
 }
