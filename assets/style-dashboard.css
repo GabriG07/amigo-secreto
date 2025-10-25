@@ -8,6 +8,7 @@ body {
   margin: 0;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -39,7 +40,7 @@ h1 {
 .welcome {
   font-size: 18px;
   color: #dcdffa;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 /* Botões principais */
@@ -110,6 +111,10 @@ button:hover {
   padding: 0;
 }
 
+.lista li{
+  width: 100%;
+}
+
 .itemLista, #listaParticipantes li {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -139,10 +144,8 @@ button:hover {
 }
 
 #mensagemCopiado {
-  position: fixed;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin-top: 20px;
   background: #07d950;
   color: white;
   padding: 10px 20px;
@@ -155,11 +158,55 @@ button:hover {
   opacity: 1;
 }
 
+.avatarWrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.avatarPerfil{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.4s ease;
+}
+
+.btnEdit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  filter: invert();
+}
+
+.avatarWrapper:hover .avatarPerfil {
+  filter: blur(6px) brightness(0.7);
+  
+}
+
+.avatarWrapper:hover .btnEdit {
+  opacity: 1;
+  cursor: pointer;
+}
 
 @media (max-width:480px){
   .btnCopy{
     width: 24px;
     height: auto;
   }
+
+  .avatarWrapper:active .avatarPerfil {
+    filter: blur(6px) brightness(0.7); 
+  }
+
+  .avatarWrapper:active .btnEdit {
+    opacity: 1; 
+  }
+
 
 }

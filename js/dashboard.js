@@ -11,9 +11,28 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
+    const usuario = await Pessoa.carregar(user.uid);
+
     document.querySelector(".welcome").style.display = "block";
-    const nome = user.displayName || user.email;
+    const nome = usuario.nome || usuario.email;
     document.getElementById("meuNome").textContent = nome;
+
+    const avatarWrapper = document.querySelector(".avatarWrapper");
+    avatarWrapper.style.display = "inline-block";
+    const avatarImg = document.querySelector(".avatarPerfil");
+    const btnAvatarEdit = document.querySelector(".btnEdit");
+
+    avatarImg.src = usuario.avatar;
+    avatarWrapper.addEventListener("click", () =>{
+        if(getComputedStyle(btnAvatarEdit).opacity === "1"){
+            window.location.href = "./editarAvatar.html";
+        }
+    });
+
+
+
+
+
 
     // Botões
     const btnEntrar = document.getElementById("btnEntrarSorteio");
@@ -50,9 +69,6 @@ onAuthStateChanged(auth, async (user) => {
             alert("O sorteio do amigo secreto já foi realizado!")
             return;
         }
-
-        const usuario = await Pessoa.carregar(user.uid)
-
         
         await sorteio.adicionarParticipante(usuario);
     };
@@ -61,8 +77,6 @@ onAuthStateChanged(auth, async (user) => {
     btnCriar.onclick = async () => {
         const confirmar = confirm("🎁 Deseja criar um novo Amigo Secreto?");
         if (!confirmar) return;
-
-        const usuario = await Pessoa.carregar(user.uid)
 
         const sorteio = new Sorteio(usuario);
         const id = await sorteio.criar();
@@ -78,7 +92,7 @@ onAuthStateChanged(auth, async (user) => {
         divLista.style.display = "block";
         
 
-        const sorteios = await Sorteio.listarPorEmail(user.email);
+        const sorteios = await Sorteio.listarPorEmail(usuario.email);
         lista.innerHTML = "";
 
         if (sorteios.length === 0) {
