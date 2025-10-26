@@ -121,9 +121,9 @@ onAuthStateChanged(auth, async (user) => {
   });
 
 
+  const btnSortear = document.getElementById("btnSortear"); 
   if (!sorteio.sorteado){
       // Função de realizar o sorteio (admin)
-      btnSortear = document.getElementById("btnSortear"); 
       btnSortear.onclick = async () => {
         if (sorteio.admin.email !== user.email) return alert("Apenas o admin pode sortear!");
 
