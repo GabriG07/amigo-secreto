@@ -1,6 +1,7 @@
 import { auth } from './firebaseConfig.js';
 import { Sorteio } from './Sorteio.js';
 import { Pessoa } from './Pessoa.js';
+import { animacaoCarregando, terminaAnimacaoCarregando } from './utils.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 // Captura o ID do sorteio da URL
@@ -20,8 +21,17 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  const msgCarregando = document.getElementById("msgCarregando");
+  const anim = animacaoCarregando(msgCarregando)
+
   // Carrega o sorteio do Firestore
   const sorteio = await Sorteio.carregar(id);
+
+  terminaAnimacaoCarregando(anim, msgCarregando);
+
+  //Após carregar, deixa a div principal visível
+  document.querySelector(".container").style.display="block";
+
   if (!sorteio) {
     window.location.href = "./dashboard.html";
     return;

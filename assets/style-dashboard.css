@@ -192,6 +192,11 @@ button:hover {
   cursor: pointer;
 }
 
+#msgCarregandoLista{
+  text-align: center;
+}
+
+
 @media (max-width:480px){
   .btnCopy{
     width: 24px;

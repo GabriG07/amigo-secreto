@@ -1,5 +1,6 @@
 import { auth, db } from './firebaseConfig.js';
 import { Pessoa } from './Pessoa.js';
+import { animacaoCarregando, terminaAnimacaoCarregando } from './utils.js';
 import { Sorteio } from './Sorteio.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -11,7 +12,17 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
+    //Animação da mensagem de "carregando"
+    const msgCarregando = document.getElementById("msgCarregando");
+    const anim = animacaoCarregando(msgCarregando);
+
     const usuario = await Pessoa.carregar(user.uid);
+
+    terminaAnimacaoCarregando(anim, msgCarregando);
+
+    //Deixando os elementos visíveis após carregar os dados
+    document.querySelector(".dashboardTitle").style.display = "block";
+    document.querySelector(".card").style.display = "block";
 
     document.querySelector(".welcome").style.display = "block";
     const nome = usuario.nome || usuario.email;
@@ -86,14 +97,16 @@ onAuthStateChanged(auth, async (user) => {
     // Ver sorteios do usuário
     btnVer.onclick = async () => {
         const lista = document.getElementById("listaSorteios");
+        lista.innerHTML = `<li id="msgCarregandoLista"></li>`; //Necessário fazer assim para garantir que a lista será "Limpa" toda vez que o botão for clicado, evitando empilhar diversos amigos secretos repetidos
         const divLista = document.getElementById("sorteiosUsuario");
-
-        lista.innerHTML = "<li>Carregando...</li>";
         divLista.style.display = "block";
+        const msgCarregandoLista = document.getElementById("msgCarregandoLista");
+        msgCarregandoLista.style.display = "block";
+        const anim = animacaoCarregando(msgCarregandoLista);
         
-
         const sorteios = await Sorteio.listarPorEmail(usuario.email);
-        lista.innerHTML = "";
+        
+        terminaAnimacaoCarregando(anim, msgCarregandoLista);
 
         if (sorteios.length === 0) {
             lista.innerHTML = "<li>Nenhum sorteio encontrado 😕</li>";
@@ -139,8 +152,8 @@ onAuthStateChanged(auth, async (user) => {
             divItemLista.appendChild(btnCopy);
         });
     };
-    
 
+   
     // Logout
     btnLogout.onclick = async () => {
         await signOut(auth);

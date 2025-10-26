@@ -13,11 +13,11 @@
 
 <body>
   <div class="container">
-    <h1>🎁 Amigo Secreto</h1>
+    <h1 class="dashboardTitle" style="display: none;">🎁 Amigo Secreto</h1>
 
-    <div class="card">
-      <p class="welcome" style="display: none">Olá, <strong id="meuNome"></strong>!</p>
-      <div class="avatarWrapper" style="display: none">
+    <div class="card" style="display: none">
+      <p class="welcome">Olá, <strong id="meuNome"></strong>!</p>
+      <div class="avatarWrapper">
         <img class="avatarPerfil">
         <img src="../assets/img/edit.png" class="btnEdit">
       </div>
@@ -35,12 +35,18 @@
 
       <div id="sorteiosUsuario" class="lista" style="display:none;">
         <h3>🎉 Meus sorteios</h3>
-        <ul id="listaSorteios"></ul>
+        <ul id="listaSorteios">
+        </ul>
       </div>
 
       <button id="logout" class="logout">🚪 Sair</button>
     </div>
   </div>
+
+  <div>
+    <h1 id="msgCarregando"></h1>
+  </div>
+
   <div id="mensagemCopiado">Código Copiado!</div>
 
   <script type="module" src="../js/dashboard.js"></script>
