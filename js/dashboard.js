@@ -41,10 +41,6 @@ onAuthStateChanged(auth, async (user) => {
     });
 
 
-
-
-
-
     // Botões
     const btnEntrar = document.getElementById("btnEntrarSorteio");
     const btnEntrar2 = document.getElementById("btnEntrarSorteio2");
@@ -113,6 +109,7 @@ onAuthStateChanged(auth, async (user) => {
         
         terminaAnimacaoCarregando(anim, msgCarregandoLista);
         txtMeusSorteios.style.display="block";
+        lista.innerHTML = "";
 
         if (sorteios.length === 0) {
             lista.innerHTML = "<li>Nenhum sorteio encontrado 😕</li>";

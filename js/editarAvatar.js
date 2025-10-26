@@ -18,6 +18,7 @@ onAuthStateChanged(auth, async (user) => {
 
     const usuario = await Pessoa.carregar(user.uid);
     const btnAlterar = document.getElementById("btnAlterar");
+    const btnVoltar = document.getElementById("btnVoltar");
 
     let selected = null;
     avatars.forEach(src => {
@@ -38,6 +39,7 @@ onAuthStateChanged(auth, async (user) => {
             btnAlterar.disabled = true;
 
             const anim = animacaoCarregando(btnAlterar, "Salvando")
+            btnVoltar.style.display = "none"; //Tira o botão de voltar enquanto espera o novo avatar ser salvo
             await usuario.editarAvatar(selected);
             terminaAnimacaoCarregando(anim, btnAlterar);
             btnAlterar.style.display = "block";
@@ -48,12 +50,12 @@ onAuthStateChanged(auth, async (user) => {
             
         }
         else {
-            alert("❌ Selecione um avatar!")
+            alert("❌ Selecione um avatar!");
         }
     });
 
     // Voltar ao dashboard
-    document.getElementById("btnVoltar").onclick = () => {
+    btnVoltar.onclick = () => {
         window.location.href = "./dashboard.html";
     };
 

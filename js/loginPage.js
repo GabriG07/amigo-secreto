@@ -30,15 +30,36 @@ const provider = new GoogleAuthProvider();
 // -------------------------
 // 🔑 Login e Cadastro
 // -------------------------
-document.getElementById('loginEmail').addEventListener('click', async () => {
-  const email = document.getElementById('email').value.trim();
-  const senha = document.getElementById('senha').value.trim();
+const btnLogin = document.getElementById('loginEmail');
+const inputEmail = document.getElementById('email');
+const inputSenha = document.getElementById('senha'); 
+
+async function fazerLogin(){
+  const email = inputEmail.value.trim();
+  const senha = inputSenha.value.trim();
+
+  if (!email || !senha) {
+    alert("Preencha email e senha!");
+    return;
+  }
+
   try {
     await signInWithEmailAndPassword(auth, email, senha);
   } catch (error) {
     alert("Erro no login: " + error.message);
   }
+}
+
+btnLogin.addEventListener("click", fazerLogin);
+[inputEmail, inputSenha].forEach(input => { // Pressionar Enter (somente quando o foco estiver nos inputs)
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // evita bug de envio duplo
+      fazerLogin();
+    }
+  });
 });
+
 
 // -------------------------
 // 🔐 Login com Google

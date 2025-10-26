@@ -123,7 +123,8 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!sorteio.sorteado){
       // Função de realizar o sorteio (admin)
-      document.getElementById("btnSortear").onclick = async () => {
+      btnSortear = document.getElementById("btnSortear"); 
+      btnSortear.onclick = async () => {
         if (sorteio.admin.email !== user.email) return alert("Apenas o admin pode sortear!");
 
         if (sorteio.participantes.length < 3) {
@@ -135,7 +136,10 @@ onAuthStateChanged(auth, async (user) => {
         if (!confirmar) return;
 
         try {
+            btnSortear.disabled = true;
+            const anim = animacaoCarregando(btnSortear, "Sorteando");
             await sorteio.sortear();
+            terminaAnimacaoCarregando(anim, btnSortear);
             alert("✅ Sorteio realizado com sucesso!");
             location.reload();
         } catch (err) {
@@ -145,8 +149,8 @@ onAuthStateChanged(auth, async (user) => {
     };
   }
   else { //já foi sorteado
-    const botao = document.getElementById("btnSortear");
-    if (botao) botao.style.display = "none";
+    const btnSortear = document.getElementById("btnSortear");
+    if (btnSortear) btnSortear.style.display = "none";
   }
 
 
