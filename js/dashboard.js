@@ -97,9 +97,14 @@ onAuthStateChanged(auth, async (user) => {
     // Ver sorteios do usuário
     btnVer.onclick = async () => {
         const lista = document.getElementById("listaSorteios");
-        lista.innerHTML = `<li id="msgCarregandoLista"></li>`; //Necessário fazer assim para garantir que a lista será "Limpa" toda vez que o botão for clicado, evitando empilhar diversos amigos secretos repetidos
         const divLista = document.getElementById("sorteiosUsuario");
+        const txtMeusSorteios = document.getElementById("textoMeusSorteios");
         divLista.style.display = "block";
+        txtMeusSorteios.style.display = "none";
+        lista.innerHTML = `<li id="msgCarregandoLista"></li>`; //Necessário fazer assim para garantir que a lista será "Limpa" toda vez que o botão for clicado, evitando empilhar diversos amigos secretos repetidos
+        
+        
+        
         const msgCarregandoLista = document.getElementById("msgCarregandoLista");
         msgCarregandoLista.style.display = "block";
         const anim = animacaoCarregando(msgCarregandoLista);
@@ -107,6 +112,7 @@ onAuthStateChanged(auth, async (user) => {
         const sorteios = await Sorteio.listarPorEmail(usuario.email);
         
         terminaAnimacaoCarregando(anim, msgCarregandoLista);
+        txtMeusSorteios.style.display="block";
 
         if (sorteios.length === 0) {
             lista.innerHTML = "<li>Nenhum sorteio encontrado 😕</li>";

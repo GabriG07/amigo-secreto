@@ -1,5 +1,6 @@
 import { auth, db } from './firebaseConfig.js';
 import { Pessoa } from './Pessoa.js';
+import { animacaoCarregando, terminaAnimacaoCarregando } from './utils.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 // Avatares
@@ -35,8 +36,11 @@ onAuthStateChanged(auth, async (user) => {
         if(selected !== null){
             console.log(selected);
             btnAlterar.disabled = true;
-            btnAlterar.textContent = "Salvando...";
+
+            const anim = animacaoCarregando(btnAlterar, "Salvando")
             await usuario.editarAvatar(selected);
+            terminaAnimacaoCarregando(anim, btnAlterar);
+            btnAlterar.style.display = "block";
             btnAlterar.textContent = "Avatar atualizado!";
             setTimeout(() => { 
                 window.location.href = "./dashboard.html" 
@@ -50,7 +54,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // Voltar ao dashboard
     document.getElementById("btnVoltar").onclick = () => {
-        window.location.href = "dashboard.html";
+        window.location.href = "./dashboard.html";
     };
 
 });
