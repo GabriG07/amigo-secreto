@@ -48,10 +48,10 @@ onAuthStateChanged(auth, async (user) => {
         }
     });
 
-    
-
-
-
+    // Voltar ao dashboard
+    document.getElementById("btnVoltar").onclick = () => {
+        window.location.href = "dashboard.html";
+    };
 
 });
 
