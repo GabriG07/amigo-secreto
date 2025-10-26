@@ -283,6 +283,37 @@ export class Sorteio {
         return amigo
     }
 
+    async editarAvatar(email, novoAvatar){
+        try{
+            const ref = doc(db, "sorteios", this.id);
+            const snap = await getDoc(ref);
+
+            if(!snap.exists()){
+                console.warn(`⚠️ Sorteio ${this.id} não encontrado.`);
+                return;
+            }
+
+            const data = snap.data();
+            const participantes = data.participantes || [];
+            console.log("participantes: " + participantes);
+            let alterado = false;
+            for (const p of participantes){
+                if(p.email === email){
+                    console.log(`antigo: ${p.avatar} novo: ${novoAvatar}`);
+                    p.avatar = novoAvatar;
+                    alterado = true;
+                    
+                    break;
+                }
+            }
+            if(alterado) await updateDoc(ref, {participantes: participantes});
+            
+        }
+        catch (e){
+            console.log("Erro ao alterar avatar: " + e);
+        }
+    }
+
 
 }
 

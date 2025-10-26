@@ -34,8 +34,14 @@ onAuthStateChanged(auth, async (user) => {
     btnAlterar.addEventListener("click", async () => {
         if(selected !== null){
             console.log(selected);
+            btnAlterar.disabled = true;
+            btnAlterar.textContent = "Salvando...";
             await usuario.editarAvatar(selected);
-            window.location.href = "./dashboard.html";
+            btnAlterar.textContent = "Avatar atualizado!";
+            setTimeout(() => { 
+                window.location.href = "./dashboard.html" 
+            }, 1000); // Pequeno atraso para garantir consistência
+            
         }
         else {
             alert("❌ Selecione um avatar!")

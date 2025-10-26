@@ -112,8 +112,9 @@ button:hover {
 }
 
 .lista li{
-  width: 100%;
+  width: auto;
 }
+
 
 .itemLista, #listaParticipantes li {
   background: rgba(255, 255, 255, 0.08);
@@ -130,6 +131,7 @@ button:hover {
 .itemLista:hover, #listaParticipantes li:hover {
   background: rgba(155, 135, 255, 0.25);
 }
+
 
 .itemLista{
   display: flex;

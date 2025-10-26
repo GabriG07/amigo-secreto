@@ -40,7 +40,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // Exibe participantes
-  sorteio.participantes.forEach(async (p) => {
+  sorteio.participantes.forEach((p) => {
     const li = document.createElement("li");
     li.style.display = "flex";
     li.style.justifyContent = "space-between";
@@ -52,9 +52,8 @@ onAuthStateChanged(auth, async (user) => {
     spanNome.style.gap = "10px";
 
     // Cria o avatar (imagem)
-    const participante = await Pessoa.carregarPorEmail(p.email); //Usado apenas para carregar a imagem do avatar do participante
     const img = document.createElement("img");
-    img.src = participante.avatar || "../assets/avatars/avatar1.png"; 
+    img.src = p.avatar || "../assets/avatars/avatar1.png"; 
     img.alt = p.nome;
     img.style.width = "38px";
     img.style.height = "38px";

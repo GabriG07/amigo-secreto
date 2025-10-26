@@ -10,6 +10,7 @@ export class Pessoa {
         this.nome = nome;
         this.email = email;
         this.avatar = avatar
+        this.sorteios = [];
     }
 
     toFirestore() {
@@ -48,29 +49,15 @@ export class Pessoa {
             const ref = doc(db, "usuarios", user.uid);
             await updateDoc(ref, {avatar: novoAvatar});
             this.avatar = novoAvatar;
+
+            //Pega os sorteios que o usuario participa e atualiza o avatar na tabela deles também
+            const sorteiosParticipante = await Sorteio.listarPorEmail(this.email);
+            sorteiosParticipante.forEach((s) => {
+                s.editarAvatar(this.email, novoAvatar);
+            });
         }
         catch(e){
             console.log("Erro ao atualizar o avatar: " + e);
-        }
-    }
-
-    static async carregarPorEmail(email) {
-        try {
-            const q = query(collection(db, "usuarios"), where("email", "==", email));
-            const snapshot = await getDocs(q);
-
-            if (snapshot.empty) {
-                console.warn("⚠️ Nenhum usuário encontrado com o email:", email);
-                return null;
-            }
-
-            // Como email é único, pega o primeiro resultado
-            const docSnap = snapshot.docs[0];
-            const data = docSnap.data();
-            return new Pessoa(data.nome, data.email, data.avatar);
-        } catch (e) {
-            console.error("❌ Erro ao buscar usuário por email:", e);
-            return null;
         }
     }
 }
