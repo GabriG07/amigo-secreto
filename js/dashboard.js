@@ -102,24 +102,24 @@ onAuthStateChanged(auth, async (user) => {
 
         sorteios.forEach((s) => {
             const divItemLista = document.createElement("div");
-            divItemLista.className = "itemLista";
             const li = document.createElement("li");
+            divItemLista.className = "itemLista";
             li.textContent = `🎁 ${s.id} — Admin: ${s.admin.nome} (${s.participantes.length} participantes)`;
-            li.style.cursor = "pointer";
 
             const btnCopy = document.createElement("img");
             btnCopy.className = "btnCopy";
             btnCopy.src = "../assets/img/copy.png";
             btnCopy.style.display = "none";
 
-            li.addEventListener("click", async () => {
+            divItemLista.addEventListener("click", async () => {
                 window.location.href = `sorteio.html?id=${s.id}`;
             });
 
             if(navigator.clipboard){
                 btnCopy.style.display = "block";
                 
-                btnCopy.addEventListener("click", async () => {
+                btnCopy.addEventListener("click", async (e) => {
+                    e.stopPropagation();
                     const msg = document.getElementById("mensagemCopiado");
                     try{
                         msg.classList.add("mostrar");

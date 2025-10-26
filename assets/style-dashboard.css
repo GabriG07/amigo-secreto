@@ -111,10 +111,6 @@ button:hover {
   padding: 0;
 }
 
-.lista li{
-  width: 100%;
-}
-
 
 .itemLista, #listaParticipantes li {
   background: rgba(255, 255, 255, 0.08);
