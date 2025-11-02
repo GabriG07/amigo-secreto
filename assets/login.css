@@ -1,13 +1,17 @@
 body {
-    font-family: Inter;
+    font-family: "Inter", sans-serif;
     background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
                 radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
                 linear-gradient(120deg, #0f1027, #111936);
     color: #e6e8ee;
     margin: 0;
+    min-height: 100vh;
     text-align: center;
     padding: 40px;
+    
 }
+
+
 .card {
     background: rgba(255,255,255,.1);
     border: 1px solid rgba(255,255,255,.2);
@@ -42,19 +46,7 @@ button {
     color: #0b0d1b;
     font-weight: 700;
 }
-#resultado {
-    margin-top: 20px;
-    font-size: 18px;
-}
 
-li {
-    margin: 8px;
-    background-color: #9b87ff79;
-    border-radius: 20px;
-}
-
-
-.muted { color: #b9bfd0; }
 
 #cadastroEmail{
     cursor: pointer;
@@ -66,4 +58,15 @@ li {
     text-align: start;
     cursor: pointer;
     color: rgb(181, 181, 181);
+}
+
+
+@media (max-width:480px){
+  body{
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }

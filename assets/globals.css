@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+.form-row{width:100%;display:flex;flex-direction:column;align-items:center}
+
+.label{width:88%;max-width:420px;text-align:left;color:#cfcffb;margin:8px auto 4px;font-weight:600}
+.label{width:88%;max-width:420px;text-align:left;color:#cfcffb;margin:8px auto 4px;font-weight:600}
+
+input, button{
+    width:88%;
+    max-width:420px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.04);
+    color:#fff;
+    font-size:15px;
+    margin:8px auto;
+    outline:none;
+    transition:all .22s ease;
+    display:block;
+}
+
+.logout {
+  width: auto;
+  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+  color: #1a1a1a;
+  margin-top: 20px;
+}
+
+.logout:hover {
+  box-shadow: 0 4px 12px rgba(255, 110, 110, 0.6);
+}

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
+
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:'Inter',sans-serif;
@@ -8,44 +9,14 @@ body{
   animation:gradientMove 14s ease infinite;
   color:#e6e8ee;
   display:flex;
+  flex-direction: column;
   align-items:center;
   justify-content:center;
   padding:24px;
 }
 @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-.container{
-  width:100%;
-  max-width:520px;
-  background:rgba(255,255,255,0.06);
-  border-radius:16px;
-  padding:28px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.45);
-  text-align:center;
-}
-
 h1{font-size:1.9rem;margin-bottom:12px;font-weight:700}
-h2{font-size:1.05rem;margin-bottom:8px;font-weight:600;color:#cfcffb}
-
-.form-row{width:100%;display:flex;flex-direction:column;align-items:center}
-
-.label{width:88%;max-width:420px;text-align:left;color:#cfcffb;margin:8px auto 4px;font-weight:600}
-
-input,select,button{
-  width:88%;
-  max-width:420px;
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.12);
-  background:rgba(255,255,255,0.04);
-  color:#fff;
-  font-size:15px;
-  margin:8px auto;
-  outline:none;
-  transition:all .22s ease;
-  display:block;
-}
 
 input:focus,select:focus{box-shadow:0 6px 20px rgba(155,135,255,0.08);border-color:rgba(155,135,255,0.3)}
 button{
@@ -58,6 +29,17 @@ button{
   margin: 15px;
 }
 button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,0.18)}
+
+.container{
+  width:100%;
+  max-width:520px;
+  background:rgba(255,255,255,0.06);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.45);
+  text-align:center;
+}
 
 .avatar-grid{
   width:88%;
@@ -84,54 +66,16 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
 .avatar-option:hover{transform:scale(1.12);box-shadow:0 10px 22px rgba(155,135,255,0.15);border-color:rgba(155,135,255,0.28)}
 .avatar-option.selected{border-color:#c7b7ff;box-shadow:0 14px 32px rgba(155,135,255,0.22);transform:scale(1.14)}
 
-.participants-grid{
-  width:100%;
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
-  gap:14px;
-  justify-items:center;
-}
-
-.participant{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  transition:transform .2s ease,filter .2s ease;
-}
-
 #txtLogin:hover{
   cursor: pointer;
 }
 
-.participant img{width:82px;height:82px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.06);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
-.participant:hover{transform:translateY(-6px);filter:brightness(1.08)}
-.participant-name{color:#e9e9ff;font-weight:700;font-size:0.95rem;text-align:center}
-
-.result-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:8px}
-.result-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid rgba(183,152,255,0.25);box-shadow:0 12px 36px rgba(123,90,255,0.18)}
-
-.notice{color:#ffd7a8;font-weight:600;margin-top:8px}
-
-.logout {
-  width: auto;
-  background: linear-gradient(180deg, #ff9292, #ff6a6a);
-  color: #1a1a1a;
-  margin-top: 20px;
-}
-
-.logout:hover {
-  box-shadow: 0 4px 12px rgba(255, 110, 110, 0.6);
-}
 
 @media (max-width:480px){
   .container{padding:20px}
   h1{font-size:1.5rem}
   .avatar-option{width:64px;height:64px}
-  .participant img{width:68px;height:68px}
-  input,button,select{width:94%;max-width:360px;font-size:15px;padding:10px}
+  input,button{width:94%;max-width:360px;font-size:15px;padding:10px}
   .avatar-grid{gap:10px}
 }
 
