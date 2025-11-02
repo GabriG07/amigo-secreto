@@ -34,8 +34,9 @@ onAuthStateChanged(auth, async (user) => {
     const btnAvatarEdit = document.querySelector(".btnEdit");
 
     avatarImg.src = usuario.avatar;
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     avatarWrapper.addEventListener("click", () =>{
-        if(getComputedStyle(btnAvatarEdit).opacity === "1"){
+        if(getComputedStyle(btnAvatarEdit).opacity === "1" || isDesktop){
             window.location.href = "./editarAvatar.html";
         }
     });
