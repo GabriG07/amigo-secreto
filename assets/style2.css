@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
 body{
   font-family:'Inter',sans-serif;
   background:linear-gradient(-45deg,#0b1028,#161a3a,#0f1830,#071225);
@@ -135,3 +134,9 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
   input,button,select{width:94%;max-width:360px;font-size:15px;padding:10px}
   .avatar-grid{gap:10px}
 }
+
+@keyframes fade {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+

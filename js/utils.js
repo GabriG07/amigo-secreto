@@ -46,4 +46,21 @@ export function traduzErroFirebase(error) {
   }
 }
 
+export function toastError(msg) { //Para exibição de mensagens de erro
+  const box = document.createElement("div");
+  box.className = "toast-error-msg";
+  box.textContent = msg;
+  document.body.appendChild(box);
+
+  setTimeout(() => box.remove(), 5000);
+}
+
+export function toastSuccess(msg) { //Para exibição de mensagens de sucesso
+  const box = document.createElement("div");
+  box.className = "toast-success-msg";
+  box.textContent = msg;
+  document.body.appendChild(box);
+
+  setTimeout(() => box.remove(), 5000);
+}
 

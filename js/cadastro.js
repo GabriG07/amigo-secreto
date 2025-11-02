@@ -1,7 +1,7 @@
 //Tratamento do login e firebase
 import { auth, db } from './firebaseConfig.js';
 import { Pessoa } from './Pessoa.js';
-import { capitalize, traduzErroFirebase } from './utils.js';
+import { capitalize, traduzErroFirebase, toastError, toastSuccess } from './utils.js';
 import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { 
     getAuth,
@@ -42,7 +42,7 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
     const senha = document.getElementById('senha').value.trim();
 
     if (!nome || !email || !senha || !selected) {
-        alert('Preencha nome, email, senha e escolha um avatar');
+        toastError('Preencha nome, email, senha e escolha um avatar');
         return;
     }
 
@@ -56,7 +56,7 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
         alert(`Conta criada com sucesso! Bem-vindo, ${nome}! 🎉`);
         window.location.href = '../index.html';
     } catch (error) {
-        alert("Erro ao criar conta: " + traduzErroFirebase(error));
+        toastError("Erro ao criar conta: " + traduzErroFirebase(error));
     }
 });
 
@@ -65,5 +65,3 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
 document.getElementById('txtLogin').addEventListener('click', () => {
     window.location.href = './loginPage.html';
 });
-
-
