@@ -1,7 +1,7 @@
 //Tratamento do login e firebase
 import { auth, db } from './firebaseConfig.js';
 import { Pessoa } from './Pessoa.js';
-import { capitalize } from './utils.js';
+import { capitalize, traduzErroFirebase } from './utils.js';
 import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { 
     getAuth,
@@ -56,7 +56,7 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
         alert(`Conta criada com sucesso! Bem-vindo, ${nome}! 🎉`);
         window.location.href = '../index.html';
     } catch (error) {
-        alert("Erro ao criar conta: " + error.message);
+        alert("Erro ao criar conta: " + traduzErroFirebase(error));
     }
 });
 

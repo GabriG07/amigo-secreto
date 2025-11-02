@@ -1,5 +1,6 @@
 //Tratamento do login e firebase
 import { auth, db } from './firebaseConfig.js';
+import { traduzErroFirebase } from './utils.js';
 import { 
   getAuth,
   signInWithEmailAndPassword,
@@ -47,7 +48,7 @@ async function fazerLogin(){
   try {
     await signInWithEmailAndPassword(auth, email, senha);
   } catch (error) {
-    alert("Erro no login: " + error.message);
+    alert("Erro no login: " + traduzErroFirebase(error));
   }
 }
 
@@ -75,7 +76,7 @@ btnEsqueci.addEventListener("click", async () => {
     await sendPasswordResetEmail(auth, email);
     alert("✅ Enviamos um link para redefinir sua senha!\nVerifique sua caixa de entrada  e spam.");
   } catch (error) {
-    alert("⚠️ Erro ao enviar email: " + error.message);
+    alert("⚠️ Erro ao enviar email: " + traduzErroFirebase(error));
   }
 });
 
