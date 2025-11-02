@@ -10,6 +10,7 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
   onAuthStateChanged,
+  sendPasswordResetEmail, 
   signOut
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
@@ -59,6 +60,25 @@ btnLogin.addEventListener("click", fazerLogin);
     }
   });
 });
+
+
+//Esqueceu Senha
+const btnEsqueci = document.getElementById("btnEsqueciSenha");
+btnEsqueci.addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    return alert("Digite seu email primeiro!");
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("✅ Enviamos um link para redefinir sua senha!\nVerifique sua caixa de entrada  e spam.");
+  } catch (error) {
+    alert("⚠️ Erro ao enviar email: " + error.message);
+  }
+});
+
 
 
 // -------------------------

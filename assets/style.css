@@ -59,3 +59,11 @@ li {
 #cadastroEmail{
     cursor: pointer;
 }
+
+#btnEsqueciSenha{
+    margin: 0;
+    margin-left: 5px;
+    text-align: start;
+    cursor: pointer;
+    color: rgb(181, 181, 181);
+}
