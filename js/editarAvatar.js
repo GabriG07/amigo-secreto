@@ -15,8 +15,6 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = "./loginPage.html";
         return;
     }
-
-    const anim = animacaoCarregando(null, "Carregando");
     
     const btnAlterar = document.getElementById("btnAlterar");
     const btnVoltar = document.getElementById("btnVoltar");
