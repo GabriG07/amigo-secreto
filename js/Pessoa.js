@@ -6,24 +6,29 @@ import { getFirestore, setDoc, getDoc, doc, collection, query, where, updateDoc,
 //import { getFirestore, setDoc, getDoc, doc, collection, query, where } from "firebase/firestore";
 
 export class Pessoa {
-    constructor(nome, email, avatar){
+    constructor(nome, email, avatar, preferencias = {}) {
         this.nome = nome;
         this.email = email;
-        this.avatar = avatar
+        this.avatar = avatar;
         this.sorteios = [];
+        this.preferencias = preferencias; // novo objeto com calça, camisa, etc.
     }
 
     toFirestore() {
         return {
             nome: this.nome,
             email: this.email,
-            avatar: this.avatar
+            avatar: this.avatar,
+            sorteios: this.sorteios,
+            ...this.preferencias // insere dinamicamente os novos campos
         };
     }
 
-    async salvar(cred){
+    async salvar(cred) {
         await setDoc(doc(db, "usuarios", cred.user.uid), this.toFirestore());
     }
+}
+
 
     static async carregar(uid) {
         const ref = doc(db, "usuarios", uid);
