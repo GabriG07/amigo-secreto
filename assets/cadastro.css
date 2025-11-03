@@ -64,4 +64,35 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
   from { opacity: 0; transform: translateX(-50%) translateY(10px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+.extra-questions {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+}
+
+.extra-questions h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+.extra-questions label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.extra-questions input,
+.extra-questions select,
+.extra-questions textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
 
