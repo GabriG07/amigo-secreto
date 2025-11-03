@@ -42,31 +42,6 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
   text-align:center;
 }
 
-.avatar-grid{
-  width:88%;
-  max-width:420px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(72px,1fr));
-  gap:12px;
-  margin:14px auto;
-  justify-items:center;
-  align-items:center;
-}
-
-.avatar-option{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  overflow:hidden;
-  cursor:pointer;
-  border:2px solid transparent;
-  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
-  display:inline-block;
-}
-.avatar-option img{width:100%;height:100%;object-fit:cover;display:block}
-.avatar-option:hover{transform:scale(1.12);box-shadow:0 10px 22px rgba(155,135,255,0.15);border-color:rgba(155,135,255,0.28)}
-.avatar-option.selected{border-color:#c7b7ff;box-shadow:0 14px 32px rgba(155,135,255,0.22);transform:scale(1.14)}
-
 #txtLogin{
   transition:all .22s ease; 
 }
@@ -79,9 +54,10 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
 @media (max-width:480px){
   .container{padding:20px}
   h1{font-size:1.5rem}
-  .avatar-option{width:64px;height:64px}
   input,button{width:94%;max-width:360px;font-size:15px;padding:10px}
-  .avatar-grid{gap:10px}
+  body{
+    padding: 5px;
+  }
 }
 
 @keyframes fade {
