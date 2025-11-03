@@ -10,7 +10,6 @@ export class Pessoa {
         this.nome = nome;
         this.email = email;
         this.avatar = avatar;
-        this.sorteios = [];
         this.preferencias = preferencias; // novo objeto com calça, camisa, etc.
     }
 
@@ -19,7 +18,6 @@ export class Pessoa {
             nome: this.nome,
             email: this.email,
             avatar: this.avatar,
-            sorteios: this.sorteios,
             ...this.preferencias // insere dinamicamente os novos campos
         };
     }
