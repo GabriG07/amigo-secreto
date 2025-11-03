@@ -40,6 +40,13 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
     const nome = capitalize(document.getElementById('nome').value.trim());
     const email = document.getElementById('email').value.trim();
     const senha = document.getElementById('senha').value.trim();
+    const calca = document.getElementById('calca')?.value || "";
+    const calcado = document.getElementById('calcado')?.value || "";
+    const camisa = document.getElementById('camisa')?.value || "";
+    const heroi = document.getElementById('heroi')?.value || "";
+    const harrypotter = document.getElementById('harrypotter')?.value || "";
+    const religiosa = document.getElementById('religiosa')?.value || "";
+    const preferencias = document.getElementById('preferencias')?.value || "";
 
     if (!nome || !email || !senha || !selected) {
         toastError('Preencha nome, email, senha e escolha um avatar');
@@ -50,7 +57,20 @@ document.getElementById('btnCadastrar').addEventListener('click', async () => {
         const cred = await createUserWithEmailAndPassword(auth, email, senha);
         await updateProfile(cred.user, { displayName: nome });
 
-        const pessoa = new Pessoa(nome, email, selected);
+        const pessoa = new Pessoa(
+            nome,
+            email,
+            selected,
+            {
+                calca,
+                calcado,
+                camisa,
+                heroi,
+                harrypotter,
+                religiosa,
+                preferencias
+            }
+        );
         await pessoa.salvar(cred);
 
         alert(`Conta criada com sucesso! Bem-vindo, ${nome}! 🎉`);
