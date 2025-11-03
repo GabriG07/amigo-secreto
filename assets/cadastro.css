@@ -67,10 +67,14 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
 .avatar-option:hover{transform:scale(1.12);box-shadow:0 10px 22px rgba(155,135,255,0.15);border-color:rgba(155,135,255,0.28)}
 .avatar-option.selected{border-color:#c7b7ff;box-shadow:0 14px 32px rgba(155,135,255,0.22);transform:scale(1.14)}
 
-#txtLogin:hover{
-  cursor: pointer;
+#txtLogin{
+  transition:all .22s ease; 
 }
 
+#txtLogin:hover{
+  cursor: pointer;
+  transform: scale(1.015);
+}
 
 @media (max-width:480px){
   .container{padding:20px}
