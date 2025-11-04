@@ -82,15 +82,17 @@ onAuthStateChanged(auth, async (user) => {
     };
 
     // Criar novo sorteio
-
+    const container = document.querySelector(".container");
     btnCriar.onclick = () => {
         document.getElementById("modalCriar").style.display = "flex";
         document.body.style.overflow = "hidden"; 
+        container.classList.add("blur-fundo");
     };
 
     document.getElementById("cancelarCriar").onclick = () => {
         document.getElementById("modalCriar").style.display = "none";
         document.body.style.overflow = "auto"; 
+        container.classList.remove("blur-fundo");
     };
 
     document.getElementById("confirmarCriar").onclick = async () => {
@@ -106,6 +108,7 @@ onAuthStateChanged(auth, async (user) => {
         const id = await sorteio.criar();
         document.getElementById("modalCriar").style.display = "none";
         document.body.style.overflow = "auto"; 
+        container.classList.remove("blur-fundo");
         alert(`✅ Amigo Secreto criado! Código: ${id}`);
     };
 
@@ -115,6 +118,7 @@ onAuthStateChanged(auth, async (user) => {
         if (e.target === modal) {
             modal.style.display = "none";
             document.body.style.overflow = "auto"; 
+            container.classList.remove("blur-fundo");
         }
     });
 
