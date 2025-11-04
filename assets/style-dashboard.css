@@ -72,6 +72,11 @@ button:hover {
   box-shadow: 0 4px 12px rgba(155, 135, 255, 0.5);
 }
 
+#btnEntrarSorteio2{
+  width: auto;
+  background: linear-gradient(180deg, #b7ffc1, #0fb63b);
+}
+
 /* Botão de logout */
 .logout {
   background: linear-gradient(180deg, #ff9292, #ff6a6a);
