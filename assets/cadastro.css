@@ -94,5 +94,6 @@ button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,
   border: none;
   background: rgba(255, 255, 255, 0.1);
   color: white;
+  resize: none;
 }
 

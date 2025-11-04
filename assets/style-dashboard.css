@@ -198,6 +198,84 @@ button:hover {
   text-align: center;
 }
 
+/* --- MODAL --- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
+  touch-action: none;
+}
+
+.modal-content {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 24px;
+  width: 90%;
+  max-width: 380px;
+  text-align: left;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  animation: aparecer 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.708);
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #c7b7ff;
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #d1d2ef;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 15px;
+}
+
+.modal-botoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-botoes button {
+  flex: 1;
+}
+
+.modal-botoes .cancelar {
+  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+}
+
+
 @media (max-width:480px){
   .btnCopy{
     width: 24px;

@@ -8,9 +8,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/fi
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-document.getElementById("idSorteio").textContent = id;
-
-
 const lista = document.getElementById("listaParticipantes");
 lista.innerHTML = "<li>Carregando...</li>";
 
@@ -31,14 +28,29 @@ onAuthStateChanged(auth, async (user) => {
 
   //Após carregar, deixa a div principal visível
   document.querySelector(".container").style.display="block";
+  
+
+  //Mostrando o nome, valor e data do Amigo Secreto, quando existirem
+  document.getElementById("nomeSorteio").textContent = sorteio.nome || `ID: ${sorteio.id}`;
+  if(sorteio.valorMaximo) document.getElementById("infoValor").textContent = `💵: R$${Number(sorteio.valorMaximo).toFixed(2)}`;
+  if (sorteio.dataEvento) {
+    const [ano, mes, dia] = sorteio.dataEvento.split("-");
+    const data = new Date(ano, mes - 1, dia);
+    const dataFormatada = data.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    });
+    document.getElementById("infoData").textContent = `📅: ${dataFormatada}`;
+  }
 
   if (!sorteio) {
     window.location.href = "./dashboard.html";
     return;
   }
 
-  document.getElementById("adminNomeContainer").style.display = "block";
-  document.getElementById("adminNome").textContent = sorteio.admin.nome;
+  //document.getElementById("adminNomeContainer").style.display = "block";
+  //document.getElementById("adminNome").textContent = sorteio.admin.nome;
 
   
   lista.innerHTML = "";

@@ -14,23 +14,10 @@ export class Sorteio {
         this.participantes = [];
         this.resultado = new Map();
         this.sorteado = false;
-    }
 
-    async gerarId() {
-        const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-        let id, existe = true;
-
-        while (existe) {
-            id = Array.from({ length: 5 }, () =>
-                letras[Math.floor(Math.random() * letras.length)]
-            ).join("");
-
-            const ref = doc(db, "sorteios", id);
-            const snapshot = await getDoc(ref);
-            existe = snapshot.exists();
-        }
-        this.id = id;
-        console.log("🆔 ID único gerado:", this.id);
+        this.nome = null;
+        this.valorMaximo = null;
+        this.dataEvento = null;
     }
 
     // Função para embaralhar um array
@@ -95,7 +82,7 @@ export class Sorteio {
         }
     }
 
-    toFirestore() {
+    toFirestore() { //Usado apenas para salvar o resultado do sorteio (pelo menos por enquanto)
         return {
             adminEmail: this.admin.email,
             adminNome: this.admin.nome,
@@ -105,8 +92,7 @@ export class Sorteio {
         };
     }
 
-    // Cria um novo sorteio no banco
-    async criar() {
+    async gerarId() {
         const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
         let id;
         const dbRef = collection(db, "sorteios");
@@ -118,12 +104,24 @@ export class Sorteio {
             ).join("");
         } while ((await getDoc(doc(db, "sorteios", id))).exists());
 
+        this.id = id;
+        console.log("🆔 ID único gerado:", this.id);
+        return id;
+    }
+
+    // Cria um novo sorteio no banco
+    async criar() {
+        const id = await this.gerarId();
+
         // Estrutura do novo sorteio
         const novo = {
             adminEmail: this.admin.email,
             adminNome: this.admin.nome,
-            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar}],
             criadoEm: this.criadoEm,
+            nome: this.nome,
+            valorMaximo: this.valorMaximo,
+            dataEvento: this.dataEvento,
+            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar}],
         };
 
         try {
@@ -237,7 +235,10 @@ export class Sorteio {
         // Reatribui o ID e outros campos
         sorteio.id = id;
         sorteio.criadoEm = data.criadoEm;
-        sorteio.sorteado = data.sorteado;
+        sorteio.sorteado = data.sorteado;        
+        sorteio.nome = data.nome ?? null;
+        sorteio.valorMaximo = data.valorMaximo ?? null;
+        sorteio.dataEvento = data.dataEvento ?? null;
 
         // Reconstrói os participantes (que vieram como objetos simples)
         sorteio.participantes = (data.participantes || []).map(

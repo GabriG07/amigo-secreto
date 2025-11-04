@@ -50,6 +50,28 @@
 
   <div id="mensagemCopiado">Código Copiado!</div>
 
+  <!-- MODAL DE CRIAÇÃO -->
+  <div id="modalCriar" class="modal">
+    <div class="modal-content">
+      <h2>🎁 Criar Amigo Secreto</h2>
+
+      <label>Nome do sorteio</label>
+      <input id="nomeSorteioInput" type="text" placeholder="Ex: Família, Trabalho, etc...">
+
+      <label>Valor máximo do presente (R$)</label>
+      <input id="valorSorteioInput" type="number" placeholder="Ex: 50">
+
+      <label>Data do evento</label>
+      <input id="dataSorteioInput" type="date">
+
+      <div class="modal-botoes">
+        <button id="confirmarCriar">Criar</button>
+        <button id="cancelarCriar" class="cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
   <script type="module" src="../js/dashboard.js"></script>
 </body>
 </html>

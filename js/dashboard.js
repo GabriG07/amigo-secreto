@@ -82,14 +82,42 @@ onAuthStateChanged(auth, async (user) => {
     };
 
     // Criar novo sorteio
-    btnCriar.onclick = async () => {
-        const confirmar = confirm("🎁 Deseja criar um novo Amigo Secreto?");
-        if (!confirmar) return;
+
+    btnCriar.onclick = () => {
+        document.getElementById("modalCriar").style.display = "flex";
+        document.body.style.overflow = "hidden"; 
+    };
+
+    document.getElementById("cancelarCriar").onclick = () => {
+        document.getElementById("modalCriar").style.display = "none";
+        document.body.style.overflow = "auto"; 
+    };
+
+    document.getElementById("confirmarCriar").onclick = async () => {
+        const nome = document.getElementById("nomeSorteioInput").value.trim();
+        const valor = document.getElementById("valorSorteioInput").value.trim();
+        const data = document.getElementById("dataSorteioInput").value;
 
         const sorteio = new Sorteio(usuario);
+        sorteio.nome = nome || null;
+        sorteio.valorMaximo = Number(valor) || null;
+        sorteio.dataEvento = data || null;
+
         const id = await sorteio.criar();
-        alert(`Novo Amigo Secreto criado com sucesso! Código: ${id}`);
+        document.getElementById("modalCriar").style.display = "none";
+        document.body.style.overflow = "auto"; 
+        alert(`✅ Amigo Secreto criado! Código: ${id}`);
     };
+
+    //Modal
+    const modal = document.getElementById("modalCriar");
+    modal.addEventListener("click", (e) => { // Se clicar fora do modal, fecha ele 
+        if (e.target === modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; 
+        }
+    });
+
 
     // Ver sorteios do usuário
     btnVer.onclick = async () => {
