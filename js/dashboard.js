@@ -40,78 +40,7 @@ onAuthStateChanged(auth, async (user) => {
             window.location.href = "./editarAvatar.html";
         }
     });
-// Seletores do modal
-const btnVerSorteado = document.getElementById("btnVerSorteado");
-const modalSorteado = document.getElementById("modalSorteado");
-const fecharModalSorteado = document.getElementById("fecharModalSorteado");
-const infoSorteado = document.getElementById("infoSorteado");
 
-btnVerSorteado.addEventListener("click", async () => {
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Você precisa estar logado para ver seu sorteado.");
-      return;
-    }
-
-    // Busca o documento do usuário atual
-    const userRef = doc(db, "usuarios", user.uid);
-    const userSnap = await getDoc(userRef);
-    if (!userSnap.exists()) {
-      alert("Usuário não encontrado.");
-      return;
-    }
-
-    const userData = userSnap.data();
-
-    // Verifica se o usuário tem alguém sorteado
-    if (!userData.sorteios || userData.sorteios.length === 0) {
-      alert("Você ainda não realizou o sorteio ou não tirou ninguém.");
-      return;
-    }
-
-    const idSorteado = userData.sorteios[0]; // assumindo que armazena o UID do sorteado
-    const sorteadoRef = doc(db, "usuarios", idSorteado);
-    const sorteadoSnap = await getDoc(sorteadoRef);
-
-    if (!sorteadoSnap.exists()) {
-      alert("Sorteado não encontrado.");
-      return;
-    }
-
-    const sorteado = sorteadoSnap.data();
-
-    // Monta o conteúdo do modal
-    infoSorteado.innerHTML = `
-      <img src="${sorteado.avatar}" alt="Avatar de ${sorteado.nome}">
-      <h3>${sorteado.nome}</h3>
-      <p><strong>Calça:</strong> ${sorteado.calca || "Não informado"}</p>
-      <p><strong>Calçado:</strong> ${sorteado.calcado || "Não informado"}</p>
-      <p><strong>Camisa:</strong> ${sorteado.camisa || "Não informado"}</p>
-      <p><strong>Herói favorito:</strong> ${sorteado.heroi || "Não informado"}</p>
-      <p><strong>Gosta de Harry Potter:</strong> ${sorteado.harrypotter || "Não informado"}</p>
-      <p><strong>É religiosa(o):</strong> ${sorteado.religiosa || "Não informado"}</p>
-      <p><strong>Outras preferências:</strong> ${sorteado.preferencias || "Não informado"}</p>
-    `;
-
-    modalSorteado.style.display = "flex";
-  } catch (error) {
-    console.error("Erro ao buscar sorteado:", error);
-    alert("Erro ao carregar informações do sorteado.");
-  }
-});
-
-// Fechar o modal
-fecharModalSorteado.addEventListener("click", () => {
-  modalSorteado.style.display = "none";
-});
-
-// Fechar clicando fora
-window.addEventListener("click", (event) => {
-  if (event.target === modalSorteado) {
-    modalSorteado.style.display = "none";
-  }
-});
 
 
     // Botões
@@ -260,7 +189,78 @@ window.addEventListener("click", (event) => {
             divItemLista.appendChild(btnCopy);
         });
     };
+// Seletores do modal
+const btnVerSorteado = document.getElementById("btnVerSorteado");
+const modalSorteado = document.getElementById("modalSorteado");
+const fecharModalSorteado = document.getElementById("fecharModalSorteado");
+const infoSorteado = document.getElementById("infoSorteado");
 
+btnVerSorteado.addEventListener("click", async () => {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Você precisa estar logado para ver seu sorteado.");
+      return;
+    }
+
+    // Busca o documento do usuário atual
+    const userRef = doc(db, "usuarios", user.uid);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      alert("Usuário não encontrado.");
+      return;
+    }
+
+    const userData = userSnap.data();
+
+    // Verifica se o usuário tem alguém sorteado
+    if (!userData.sorteios || userData.sorteios.length === 0) {
+      alert("Você ainda não realizou o sorteio ou não tirou ninguém.");
+      return;
+    }
+
+    const idSorteado = userData.sorteios[0]; // assumindo que armazena o UID do sorteado
+    const sorteadoRef = doc(db, "usuarios", idSorteado);
+    const sorteadoSnap = await getDoc(sorteadoRef);
+
+    if (!sorteadoSnap.exists()) {
+      alert("Sorteado não encontrado.");
+      return;
+    }
+
+    const sorteado = sorteadoSnap.data();
+
+    // Monta o conteúdo do modal
+    infoSorteado.innerHTML = `
+      <img src="${sorteado.avatar}" alt="Avatar de ${sorteado.nome}">
+      <h3>${sorteado.nome}</h3>
+      <p><strong>Calça:</strong> ${sorteado.calca || "Não informado"}</p>
+      <p><strong>Calçado:</strong> ${sorteado.calcado || "Não informado"}</p>
+      <p><strong>Camisa:</strong> ${sorteado.camisa || "Não informado"}</p>
+      <p><strong>Herói favorito:</strong> ${sorteado.heroi || "Não informado"}</p>
+      <p><strong>Gosta de Harry Potter:</strong> ${sorteado.harrypotter || "Não informado"}</p>
+      <p><strong>É religiosa(o):</strong> ${sorteado.religiosa || "Não informado"}</p>
+      <p><strong>Outras preferências:</strong> ${sorteado.preferencias || "Não informado"}</p>
+    `;
+
+    modalSorteado.style.display = "flex";
+  } catch (error) {
+    console.error("Erro ao buscar sorteado:", error);
+    alert("Erro ao carregar informações do sorteado.");
+  }
+});
+
+// Fechar o modal
+fecharModalSorteado.addEventListener("click", () => {
+  modalSorteado.style.display = "none";
+});
+
+// Fechar clicando fora
+window.addEventListener("click", (event) => {
+  if (event.target === modalSorteado) {
+    modalSorteado.style.display = "none";
+  }
+});
    
     // Logout
     btnLogout.onclick = async () => {
