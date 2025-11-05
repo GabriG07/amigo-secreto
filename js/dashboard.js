@@ -436,4 +436,13 @@ async function showMeuSorteadoParaSorteio(sorteioId) {
     alert("Erro ao carregar informações do sorteado. Veja console para detalhes.");
   }
 }
+// fechar modal
+document.getElementById("fecharModalSorteado")?.addEventListener("click", () => {
+  document.getElementById("modalSorteado").style.display = "none";
+});
+window.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "modalSorteado") {
+    e.target.style.display = "none";
+  }
+});
 
