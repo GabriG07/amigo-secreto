@@ -310,4 +310,130 @@ function injectButtonsIntoSorteioCards() {
 // chama logo após a renderização dos cards
 // se a lista de sorteios é carregada assincronamente, garanta chamar essa função depois do carregamento
 injectButtonsIntoSorteioCards();
+// precisa das imports do firebase já presentes no seu projeto: doc, getDoc, collection, etc.
+// Usa a mesma variável `db` e `auth` do seu projeto
+
+async function showMeuSorteadoParaSorteio(sorteioId) {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Você precisa estar logado para ver seu sorteado.");
+      return;
+    }
+
+    // 1) Tenta buscar documento do sorteio: /sorteios/{sorteioId}
+    const sorteioRef = doc(db, "sorteios", sorteioId);
+    const sorteioSnap = await getDoc(sorteioRef);
+
+    let idSorteado = null;
+
+    if (sorteioSnap.exists()) {
+      const sData = sorteioSnap.data();
+
+      // Possíveis nomes de campos onde o resultado pode estar guardado:
+      // - um map/objeto: resultados { userId: sorteadoId, ... }
+      // - um campo chamado 'pares' ou 'sorteados' etc.
+      const candidateMaps = [
+        sData.resultados,
+        sData.pares,
+        sData.sorteados,
+        sData.pairings,
+        sData.mapping
+      ];
+
+      for (const map of candidateMaps) {
+        if (map && typeof map === "object") {
+          // map pode usar uids como chaves ou array de pares
+          if (map[user.uid]) {
+            idSorteado = map[user.uid];
+            break;
+          }
+          // se for array de objetos [{quem: uidA, tirou: uidB}, ...]
+          if (Array.isArray(map)) {
+            const found = map.find(item => item.quem === user.uid || item.tirouPor === user.uid || item.p1 === user.uid);
+            if (found) {
+              // tenta localizar campo com o id do sorteado
+              idSorteado = found.tirou || found.sorteado || found.tirado || found.p2 || found.to;
+              if (idSorteado) break;
+            }
+          }
+        }
+      }
+
+      // Se ainda n encontrou, verificar diretamente campos simples (ex.: um array user.sorteios dentro do documento do sorteio)
+      if (!idSorteado && Array.isArray(sData.participantes)) {
+        // pode existir um array de objetos com propriedade 'resultado' por participante
+        const p = sData.participantes.find(p => p.uid === user.uid || p.id === user.uid);
+        if (p) {
+          idSorteado = p.sorteadoId || p.resultado || p.tirou;
+        }
+      }
+    }
+
+    // 2) Se não achou no documento do sorteio, tenta no documento do usuário (coleção usuarios)
+    if (!idSorteado) {
+      const userRef = doc(db, "usuarios", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const uData = userSnap.data();
+        // formatos possíveis:
+        // - uData.sorteios = [{sorteioId: 'abc', sorteadoId: 'xyz'}, ...]
+        // - uData.sorteios = { 'sorteioId': 'sorteadoUid', ... } (map)
+        if (uData.sorteios) {
+          if (Array.isArray(uData.sorteios)) {
+            const entry = uData.sorteios.find(e => e.sorteioId === sorteioId || e.id === sorteioId);
+            if (entry) idSorteado = entry.sorteadoId || entry.sorteado || entry.tirou;
+          } else if (typeof uData.sorteios === "object") {
+            // mapa direto
+            if (uData.sorteios[sorteioId]) idSorteado = uData.sorteios[sorteioId];
+          }
+        }
+        // fallback: campo específico no usuário 'meusResultados' ou 'meusPares'
+        if (!idSorteado) {
+          idSorteado = uData.meusResultados?.[sorteioId] || uData.meusPares?.[sorteioId] || null;
+        }
+      }
+    }
+
+    if (!idSorteado) {
+      alert("Não foi possível localizar quem você tirou neste sorteio. Talvez o sorteio ainda não tenha sido realizado ou os resultados estão em outro formato.");
+      return;
+    }
+
+    // 3) Buscar dados do sorteado na coleção de usuários
+    const sorteadoRef = doc(db, "usuarios", idSorteado);
+    const sorteadoSnap = await getDoc(sorteadoRef);
+    if (!sorteadoSnap.exists()) {
+      alert("Dados do sorteado não foram encontrados no banco (uid: " + idSorteado + ").");
+      return;
+    }
+
+    const sorteado = sorteadoSnap.data();
+
+    // 4) Preencher e abrir o modal (assume modal já existe no DOM, conforme instruções anteriores)
+    const infoSorteado = document.getElementById("infoSorteado");
+    const modalSorteado = document.getElementById("modalSorteado");
+    if (!infoSorteado || !modalSorteado) {
+      alert("Modal de sorteado não encontrado na página. Verifique se o HTML do modal está presente.");
+      return;
+    }
+
+    infoSorteado.innerHTML = `
+      <img src="${sorteado.avatar || ''}" alt="Avatar de ${sorteado.nome || 'Pessoa'}" onerror="this.style.display='none'">
+      <h3>${sorteado.nome || '—'}</h3>
+      <p><strong>Calça:</strong> ${sorteado.calca || "Não informado"}</p>
+      <p><strong>Calçado:</strong> ${sorteado.calcado || "Não informado"}</p>
+      <p><strong>Camisa:</strong> ${sorteado.camisa || "Não informado"}</p>
+      <p><strong>Herói favorito:</strong> ${sorteado.heroi || "Não informado"}</p>
+      <p><strong>Gosta de Harry Potter:</strong> ${sorteado.harrypotter || "Não informado"}</p>
+      <p><strong>É religiosa(o):</strong> ${sorteado.religiosa || "Não informado"}</p>
+      <p><strong>Outras preferências:</strong> ${sorteado.preferencias || "Não informado"}</p>
+    `;
+
+    modalSorteado.style.display = "flex";
+  } catch (err) {
+    console.error("Erro ao buscar sorteado para sorteioId=", sorteioId, err);
+    alert("Erro ao carregar informações do sorteado. Veja console para detalhes.");
+  }
+}
 
