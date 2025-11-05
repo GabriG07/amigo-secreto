@@ -268,3 +268,46 @@ window.addEventListener("click", (event) => {
         window.location.href = "loginPage.html";
     };
 });
+
+/* ===========================
+   Injetar botão "Ver meu sorteado" em cada cartão de sorteio
+   =========================== */
+
+// CONFIGURE: seletores conforme seu HTML
+// Ajuste se seus cards tiverem outra classe/estrutura
+const SELETOR_CARD_SORTEIO = ".sorteio-card"; // <- adapte se necessário
+const ATTR_ID_SORTEIO = "data-sorteio-id";   // cada card deve ter esse atributo com o id do sorteio (se não tiver, veja abaixo como adaptar)
+
+function injectButtonsIntoSorteioCards() {
+  const cards = document.querySelectorAll(SELETOR_CARD_SORTEIO);
+  cards.forEach(card => {
+    // não inserir duas vezes
+    if (card.querySelector(".meu-sorteio-btn")) return;
+
+    // tenta ler o id do sorteio a partir de atributo. Se seu markup usa outro nome, altere ATTR_ID_SORTEIO
+    const sorteioId = card.getAttribute(ATTR_ID_SORTEIO) || card.dataset.sorteioId || null;
+
+    // cria botão
+    const btn = document.createElement("button");
+    btn.className = "meu-sorteio-btn";
+    btn.textContent = "🎁 Ver quem eu tirei";
+    btn.addEventListener("click", () => {
+      if (!sorteioId) {
+        // se não houver id no card, tenta descobrir por outras formas (p.ex. um texto com nome do sorteio)
+        alert("Sorteio sem ID disponível no card. Verifique o atributo data-sorteio-id.");
+        return;
+      }
+      // chama a função que busca o sorteado para este sorteioId
+      showMeuSorteadoParaSorteio(sorteioId);
+    });
+
+    // insere o botão no card (ajuste a posição conforme layout)
+    // por exemplo, inserir ao final do card:
+    card.appendChild(btn);
+  });
+}
+
+// chama logo após a renderização dos cards
+// se a lista de sorteios é carregada assincronamente, garanta chamar essa função depois do carregamento
+injectButtonsIntoSorteioCards();
+
