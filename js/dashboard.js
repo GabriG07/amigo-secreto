@@ -34,8 +34,9 @@ onAuthStateChanged(auth, async (user) => {
     const btnAvatarEdit = document.querySelector(".btnEdit");
 
     avatarImg.src = usuario.avatar;
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     avatarWrapper.addEventListener("click", () =>{
-        if(getComputedStyle(btnAvatarEdit).opacity === "1"){
+        if(getComputedStyle(btnAvatarEdit).opacity === "1" || isDesktop){
             window.location.href = "./editarAvatar.html";
         }
     });
@@ -81,14 +82,46 @@ onAuthStateChanged(auth, async (user) => {
     };
 
     // Criar novo sorteio
-    btnCriar.onclick = async () => {
-        const confirmar = confirm("🎁 Deseja criar um novo Amigo Secreto?");
-        if (!confirmar) return;
+    const container = document.querySelector(".container");
+    btnCriar.onclick = () => {
+        document.getElementById("modalCriar").style.display = "flex";
+        document.body.style.overflow = "hidden"; 
+        container.classList.add("blur-fundo");
+    };
+
+    document.getElementById("cancelarCriar").onclick = () => {
+        document.getElementById("modalCriar").style.display = "none";
+        document.body.style.overflow = "auto"; 
+        container.classList.remove("blur-fundo");
+    };
+
+    document.getElementById("confirmarCriar").onclick = async () => {
+        const nome = document.getElementById("nomeSorteioInput").value.trim();
+        const valor = document.getElementById("valorSorteioInput").value.trim();
+        const data = document.getElementById("dataSorteioInput").value;
 
         const sorteio = new Sorteio(usuario);
+        sorteio.nome = nome || null;
+        sorteio.valorMaximo = Number(valor) || null;
+        sorteio.dataEvento = data || null;
+
         const id = await sorteio.criar();
-        alert(`Novo Amigo Secreto criado com sucesso! Código: ${id}`);
+        document.getElementById("modalCriar").style.display = "none";
+        document.body.style.overflow = "auto"; 
+        container.classList.remove("blur-fundo");
+        alert(`✅ Amigo Secreto criado! Código: ${id}`);
     };
+
+    //Modal
+    const modal = document.getElementById("modalCriar");
+    modal.addEventListener("click", (e) => { // Se clicar fora do modal, fecha ele 
+        if (e.target === modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; 
+            container.classList.remove("blur-fundo");
+        }
+    });
+
 
     // Ver sorteios do usuário
     btnVer.onclick = async () => {
