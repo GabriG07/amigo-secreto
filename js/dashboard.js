@@ -34,13 +34,11 @@ onAuthStateChanged(auth, async (user) => {
     const btnAvatarEdit = document.querySelector(".btnEdit");
 
     avatarImg.src = usuario.avatar;
-    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     avatarWrapper.addEventListener("click", () =>{
-        if(getComputedStyle(btnAvatarEdit).opacity === "1" || isDesktop){
+        if(getComputedStyle(btnAvatarEdit).opacity === "1"){
             window.location.href = "./editarAvatar.html";
         }
     });
-
 
 
     // Botões
@@ -83,46 +81,14 @@ onAuthStateChanged(auth, async (user) => {
     };
 
     // Criar novo sorteio
-    const container = document.querySelector(".container");
-    btnCriar.onclick = () => {
-        document.getElementById("modalCriar").style.display = "flex";
-        document.body.style.overflow = "hidden"; 
-        container.classList.add("blur-fundo");
-    };
-
-    document.getElementById("cancelarCriar").onclick = () => {
-        document.getElementById("modalCriar").style.display = "none";
-        document.body.style.overflow = "auto"; 
-        container.classList.remove("blur-fundo");
-    };
-
-    document.getElementById("confirmarCriar").onclick = async () => {
-        const nome = document.getElementById("nomeSorteioInput").value.trim();
-        const valor = document.getElementById("valorSorteioInput").value.trim();
-        const data = document.getElementById("dataSorteioInput").value;
+    btnCriar.onclick = async () => {
+        const confirmar = confirm("🎁 Deseja criar um novo Amigo Secreto?");
+        if (!confirmar) return;
 
         const sorteio = new Sorteio(usuario);
-        sorteio.nome = nome || null;
-        sorteio.valorMaximo = Number(valor) || null;
-        sorteio.dataEvento = data || null;
-
         const id = await sorteio.criar();
-        document.getElementById("modalCriar").style.display = "none";
-        document.body.style.overflow = "auto"; 
-        container.classList.remove("blur-fundo");
-        alert(`✅ Amigo Secreto criado! Código: ${id}`);
+        alert(`Novo Amigo Secreto criado com sucesso! Código: ${id}`);
     };
-
-    //Modal
-    const modal = document.getElementById("modalCriar");
-    modal.addEventListener("click", (e) => { // Se clicar fora do modal, fecha ele 
-        if (e.target === modal) {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto"; 
-            container.classList.remove("blur-fundo");
-        }
-    });
-
 
     // Ver sorteios do usuário
     btnVer.onclick = async () => {
@@ -189,78 +155,7 @@ onAuthStateChanged(auth, async (user) => {
             divItemLista.appendChild(btnCopy);
         });
     };
-// Seletores do modal
-const btnVerSorteado = document.getElementById("btnVerSorteado");
-const modalSorteado = document.getElementById("modalSorteado");
-const fecharModalSorteado = document.getElementById("fecharModalSorteado");
-const infoSorteado = document.getElementById("infoSorteado");
 
-btnVerSorteado.addEventListener("click", async () => {
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Você precisa estar logado para ver seu sorteado.");
-      return;
-    }
-
-    // Busca o documento do usuário atual
-    const userRef = doc(db, "usuarios", user.uid);
-    const userSnap = await getDoc(userRef);
-    if (!userSnap.exists()) {
-      alert("Usuário não encontrado.");
-      return;
-    }
-
-    const userData = userSnap.data();
-
-    // Verifica se o usuário tem alguém sorteado
-    if (!userData.sorteios || userData.sorteios.length === 0) {
-      alert("Você ainda não realizou o sorteio ou não tirou ninguém.");
-      return;
-    }
-
-    const idSorteado = userData.sorteios[0]; // assumindo que armazena o UID do sorteado
-    const sorteadoRef = doc(db, "usuarios", idSorteado);
-    const sorteadoSnap = await getDoc(sorteadoRef);
-
-    if (!sorteadoSnap.exists()) {
-      alert("Sorteado não encontrado.");
-      return;
-    }
-
-    const sorteado = sorteadoSnap.data();
-
-    // Monta o conteúdo do modal
-    infoSorteado.innerHTML = `
-      <img src="${sorteado.avatar}" alt="Avatar de ${sorteado.nome}">
-      <h3>${sorteado.nome}</h3>
-      <p><strong>Calça:</strong> ${sorteado.calca || "Não informado"}</p>
-      <p><strong>Calçado:</strong> ${sorteado.calcado || "Não informado"}</p>
-      <p><strong>Camisa:</strong> ${sorteado.camisa || "Não informado"}</p>
-      <p><strong>Herói favorito:</strong> ${sorteado.heroi || "Não informado"}</p>
-      <p><strong>Gosta de Harry Potter:</strong> ${sorteado.harrypotter || "Não informado"}</p>
-      <p><strong>É religiosa(o):</strong> ${sorteado.religiosa || "Não informado"}</p>
-      <p><strong>Outras preferências:</strong> ${sorteado.preferencias || "Não informado"}</p>
-    `;
-
-    modalSorteado.style.display = "flex";
-  } catch (error) {
-    console.error("Erro ao buscar sorteado:", error);
-    alert("Erro ao carregar informações do sorteado.");
-  }
-});
-
-// Fechar o modal
-fecharModalSorteado.addEventListener("click", () => {
-  modalSorteado.style.display = "none";
-});
-
-// Fechar clicando fora
-window.addEventListener("click", (event) => {
-  if (event.target === modalSorteado) {
-    modalSorteado.style.display = "none";
-  }
-});
    
     // Logout
     btnLogout.onclick = async () => {
@@ -268,181 +163,3 @@ window.addEventListener("click", (event) => {
         window.location.href = "loginPage.html";
     };
 });
-
-/* ===========================
-   Injetar botão "Ver meu sorteado" em cada cartão de sorteio
-   =========================== */
-
-// CONFIGURE: seletores conforme seu HTML
-// Ajuste se seus cards tiverem outra classe/estrutura
-const SELETOR_CARD_SORTEIO = ".sorteio-card"; // <- adapte se necessário
-const ATTR_ID_SORTEIO = "data-sorteio-id";   // cada card deve ter esse atributo com o id do sorteio (se não tiver, veja abaixo como adaptar)
-
-function injectButtonsIntoSorteioCards() {
-  const cards = document.querySelectorAll(SELETOR_CARD_SORTEIO);
-  cards.forEach(card => {
-    // não inserir duas vezes
-    if (card.querySelector(".meu-sorteio-btn")) return;
-
-    // tenta ler o id do sorteio a partir de atributo. Se seu markup usa outro nome, altere ATTR_ID_SORTEIO
-    const sorteioId = card.getAttribute(ATTR_ID_SORTEIO) || card.dataset.sorteioId || null;
-
-    // cria botão
-    const btn = document.createElement("button");
-    btn.className = "meu-sorteio-btn";
-    btn.textContent = "🎁 Ver quem eu tirei";
-    btn.addEventListener("click", () => {
-      if (!sorteioId) {
-        // se não houver id no card, tenta descobrir por outras formas (p.ex. um texto com nome do sorteio)
-        alert("Sorteio sem ID disponível no card. Verifique o atributo data-sorteio-id.");
-        return;
-      }
-      // chama a função que busca o sorteado para este sorteioId
-      showMeuSorteadoParaSorteio(sorteioId);
-    });
-
-    // insere o botão no card (ajuste a posição conforme layout)
-    // por exemplo, inserir ao final do card:
-    card.appendChild(btn);
-  });
-}
-
-// chama logo após a renderização dos cards
-// se a lista de sorteios é carregada assincronamente, garanta chamar essa função depois do carregamento
-injectButtonsIntoSorteioCards();
-// precisa das imports do firebase já presentes no seu projeto: doc, getDoc, collection, etc.
-// Usa a mesma variável `db` e `auth` do seu projeto
-
-async function showMeuSorteadoParaSorteio(sorteioId) {
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      alert("Você precisa estar logado para ver seu sorteado.");
-      return;
-    }
-
-    // 1) Tenta buscar documento do sorteio: /sorteios/{sorteioId}
-    const sorteioRef = doc(db, "sorteios", sorteioId);
-    const sorteioSnap = await getDoc(sorteioRef);
-
-    let idSorteado = null;
-
-    if (sorteioSnap.exists()) {
-      const sData = sorteioSnap.data();
-
-      // Possíveis nomes de campos onde o resultado pode estar guardado:
-      // - um map/objeto: resultados { userId: sorteadoId, ... }
-      // - um campo chamado 'pares' ou 'sorteados' etc.
-      const candidateMaps = [
-        sData.resultados,
-        sData.pares,
-        sData.sorteados,
-        sData.pairings,
-        sData.mapping
-      ];
-
-      for (const map of candidateMaps) {
-        if (map && typeof map === "object") {
-          // map pode usar uids como chaves ou array de pares
-          if (map[user.uid]) {
-            idSorteado = map[user.uid];
-            break;
-          }
-          // se for array de objetos [{quem: uidA, tirou: uidB}, ...]
-          if (Array.isArray(map)) {
-            const found = map.find(item => item.quem === user.uid || item.tirouPor === user.uid || item.p1 === user.uid);
-            if (found) {
-              // tenta localizar campo com o id do sorteado
-              idSorteado = found.tirou || found.sorteado || found.tirado || found.p2 || found.to;
-              if (idSorteado) break;
-            }
-          }
-        }
-      }
-
-      // Se ainda n encontrou, verificar diretamente campos simples (ex.: um array user.sorteios dentro do documento do sorteio)
-      if (!idSorteado && Array.isArray(sData.participantes)) {
-        // pode existir um array de objetos com propriedade 'resultado' por participante
-        const p = sData.participantes.find(p => p.uid === user.uid || p.id === user.uid);
-        if (p) {
-          idSorteado = p.sorteadoId || p.resultado || p.tirou;
-        }
-      }
-    }
-
-    // 2) Se não achou no documento do sorteio, tenta no documento do usuário (coleção usuarios)
-    if (!idSorteado) {
-      const userRef = doc(db, "usuarios", user.uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        const uData = userSnap.data();
-        // formatos possíveis:
-        // - uData.sorteios = [{sorteioId: 'abc', sorteadoId: 'xyz'}, ...]
-        // - uData.sorteios = { 'sorteioId': 'sorteadoUid', ... } (map)
-        if (uData.sorteios) {
-          if (Array.isArray(uData.sorteios)) {
-            const entry = uData.sorteios.find(e => e.sorteioId === sorteioId || e.id === sorteioId);
-            if (entry) idSorteado = entry.sorteadoId || entry.sorteado || entry.tirou;
-          } else if (typeof uData.sorteios === "object") {
-            // mapa direto
-            if (uData.sorteios[sorteioId]) idSorteado = uData.sorteios[sorteioId];
-          }
-        }
-        // fallback: campo específico no usuário 'meusResultados' ou 'meusPares'
-        if (!idSorteado) {
-          idSorteado = uData.meusResultados?.[sorteioId] || uData.meusPares?.[sorteioId] || null;
-        }
-      }
-    }
-
-    if (!idSorteado) {
-      alert("Não foi possível localizar quem você tirou neste sorteio. Talvez o sorteio ainda não tenha sido realizado ou os resultados estão em outro formato.");
-      return;
-    }
-
-    // 3) Buscar dados do sorteado na coleção de usuários
-    const sorteadoRef = doc(db, "usuarios", idSorteado);
-    const sorteadoSnap = await getDoc(sorteadoRef);
-    if (!sorteadoSnap.exists()) {
-      alert("Dados do sorteado não foram encontrados no banco (uid: " + idSorteado + ").");
-      return;
-    }
-
-    const sorteado = sorteadoSnap.data();
-
-    // 4) Preencher e abrir o modal (assume modal já existe no DOM, conforme instruções anteriores)
-    const infoSorteado = document.getElementById("infoSorteado");
-    const modalSorteado = document.getElementById("modalSorteado");
-    if (!infoSorteado || !modalSorteado) {
-      alert("Modal de sorteado não encontrado na página. Verifique se o HTML do modal está presente.");
-      return;
-    }
-
-    infoSorteado.innerHTML = `
-      <img src="${sorteado.avatar || ''}" alt="Avatar de ${sorteado.nome || 'Pessoa'}" onerror="this.style.display='none'">
-      <h3>${sorteado.nome || '—'}</h3>
-      <p><strong>Calça:</strong> ${sorteado.calca || "Não informado"}</p>
-      <p><strong>Calçado:</strong> ${sorteado.calcado || "Não informado"}</p>
-      <p><strong>Camisa:</strong> ${sorteado.camisa || "Não informado"}</p>
-      <p><strong>Herói favorito:</strong> ${sorteado.heroi || "Não informado"}</p>
-      <p><strong>Gosta de Harry Potter:</strong> ${sorteado.harrypotter || "Não informado"}</p>
-      <p><strong>É religiosa(o):</strong> ${sorteado.religiosa || "Não informado"}</p>
-      <p><strong>Outras preferências:</strong> ${sorteado.preferencias || "Não informado"}</p>
-    `;
-
-    modalSorteado.style.display = "flex";
-  } catch (err) {
-    console.error("Erro ao buscar sorteado para sorteioId=", sorteioId, err);
-    alert("Erro ao carregar informações do sorteado. Veja console para detalhes.");
-  }
-}
-// fechar modal
-document.getElementById("fecharModalSorteado")?.addEventListener("click", () => {
-  document.getElementById("modalSorteado").style.display = "none";
-});
-window.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "modalSorteado") {
-    e.target.style.display = "none";
-  }
-});
-
