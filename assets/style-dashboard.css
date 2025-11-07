@@ -1,8 +1,4 @@
 /* Fonte base e fundo */
-html {
-  /* Use a cor mais escura do seu gradiente aqui */
-  background-color: #0f1027; 
-}
 body {
   font-family: "Inter", sans-serif;
   background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
@@ -22,12 +18,6 @@ body {
   text-align: center;
   width: 100%;
   max-width: 480px;
-
-  transition: filter 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 /* Card principal */
@@ -70,11 +60,6 @@ button {
 button:hover {
   transform: scale(1.04);
   box-shadow: 0 4px 12px rgba(155, 135, 255, 0.5);
-}
-
-#btnEntrarSorteio2{
-  width: auto;
-  background: linear-gradient(180deg, #b7ffc1, #0fb63b);
 }
 
 /* Botão de logout */
@@ -213,86 +198,6 @@ button:hover {
   text-align: center;
 }
 
-/* --- MODAL --- */
-.modal {
-position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  touch-action: none;
-}
-
-.modal-content {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 14px;
-  padding: 24px;
-  width: 90%;
-  max-width: 380px;
-  text-align: left;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  animation: aparecer 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.container.blur-fundo{
-  filter: blur(10px);
-}
-
-input::placeholder {
-  color: rgba(255, 255, 255, 0.708);
-}
-
-@keyframes aparecer {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.modal-content h2 {
-  text-align: center;
-  color: #c7b7ff;
-  margin-bottom: 20px;
-}
-
-.modal-content label {
-  display: block;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #d1d2ef;
-}
-
-.modal-content input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.1);
-  color: white;
-  font-size: 15px;
-}
-
-.modal-botoes {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.modal-botoes button {
-  flex: 1;
-}
-
-.modal-botoes .cancelar {
-  background: linear-gradient(180deg, #ff9292, #ff6a6a);
-}
-
-
 @media (max-width:480px){
   .btnCopy{
     width: 24px;
@@ -308,71 +213,4 @@ input::placeholder {
   }
 
 
-}
-
-.meu-sorteio-btn-container {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.meu-sorteio-btn {
-  background-color: #0b6db1;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: 0.3s;
-}
-
-.meu-sorteio-btn:hover {
-  background-color: #094f80;
-}
-
-/* Modal */
-.modal-sorteado {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content-sorteado {
-  background: #1b1f38;
-  padding: 25px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  color: white;
-  text-align: center;
-  position: relative;
-}
-
-.fechar-modal {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  font-size: 1.5rem;
-}
-
-.info-sorteado img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-  object-fit: cover;
-}
-
-.info-sorteado p {
-  text-align: left;
-  font-size: 0.95rem;
-  margin: 4px 0;
 }
