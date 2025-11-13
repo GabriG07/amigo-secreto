@@ -180,7 +180,8 @@ export class Sorteio {
                 participantes: arrayUnion({
                     nome: participante.nome,
                     email: participante.email,
-                    avatar: participante.avatar
+                    avatar: participante.avatar,
+                    ...participante.preferencias
                 })
             });
             alert(`✅ Entrada com sucesso no sorteio ${this.id}!`);

@@ -333,6 +333,15 @@ html {
   opacity: 1;
 }
 
+#btnSortear {
+    width: auto;
+    min-width: 160px;
+    padding: 10px 18px;
+    font-size: 15px;
+    margin: 10px 0;
+    display: inline-block;
+  }
+
 /* -------------------------------
    MODAIS
 --------------------------------*/
