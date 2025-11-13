@@ -1,6 +1,12 @@
 /* -------------------------------
    GERAL
 --------------------------------*/
+html {
+  /* Use a cor mais escura do seu gradiente aqui */
+  background-color: #0f1027; 
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -256,6 +262,7 @@ html {
 
 .sorteio-item:hover {
   background: rgba(123, 155, 255, 0.1);
+  transform: scale(1.01);
 }
 
 .sorteio-info strong {
@@ -279,6 +286,7 @@ html {
 
 .btnCopy:hover {
   opacity: 1;
+  transform: scale(1.15);
 }
 
 /* -------------------------------
@@ -579,7 +587,6 @@ html, body {
   height: auto !important;
   cursor: pointer !important;
   opacity: 0.9 !important;
-  display: inline-block !important;
   user-select: none;
   -webkit-user-drag: none;
 }

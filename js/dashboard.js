@@ -171,9 +171,10 @@ onAuthStateChanged(auth, async (user) => {
             copyImg.style.pointerEvents = "none"; 
 
             if(navigator.clipboard){
-                btnCopy.style.display = "block";
+                copyImg.style.display = "flex";
                 actions.addEventListener("click", async (ev) => {
                     ev.stopPropagation();
+                    
                     const msg = document.getElementById("mensagemCopiado");
                     try {
                         msg.classList.add("mostrar");
