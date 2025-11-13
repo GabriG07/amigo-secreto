@@ -22,6 +22,14 @@ export class Pessoa {
         };
     }
 
+    toFirestoreSemPreferencias() {
+        return {
+            nome: this.nome,
+            email: this.email,
+            avatar: this.avatar,
+        };
+    }
+
     async salvar(cred) {
         await setDoc(doc(db, "usuarios", cred.user.uid), this.toFirestore());
     }
@@ -63,4 +71,15 @@ export class Pessoa {
             console.log("Erro ao atualizar o avatar: " + e);
         }
     }
+
+    static async buscarUidPeloEmail(email) {
+        const q = query(collection(db, "usuarios"), where("email", "==", email));
+        const snap = await getDocs(q);
+
+        if (snap.empty) return null;
+
+        return snap.docs[0].id;
+    }
+
+    
 }

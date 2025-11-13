@@ -34,7 +34,6 @@ onAuthStateChanged(auth, async (user) => {
   const usuario = await Pessoa.carregar(user.uid);
 
   terminaAnimacaoCarregando(anim, msgCarregando);
-  console.log(usuario.preferencias);
 
   // mostra elementos
   document.querySelector(".dashboardTitle").style.display = "block";
@@ -301,8 +300,8 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     // pega o amigo sorteado do usuário atual
-    const amigo = sorteio.buscaResultadoPorEmail(user.email);
-    if (!amigo) {
+    const _amigo = sorteio.buscaResultadoPorEmail(user.email);
+    if (!_amigo) {
       document.getElementById("resultadoAvatar").src =
         "../assets/avatars/avatar1.png";
       document.getElementById("resultadoNome").textContent =
@@ -315,6 +314,9 @@ onAuthStateChanged(auth, async (user) => {
       modalResultado.setAttribute("aria-hidden", "false");
       return;
     }
+
+    const uidAmigo = await Pessoa.buscarUidPeloEmail(_amigo.email);
+    const amigo = await Pessoa.carregar(uidAmigo);
 
     // Preenche a coluna esquerda com os dados do amigo sorteado
     document.getElementById("resultadoAvatar").src =
