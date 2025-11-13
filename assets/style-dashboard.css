@@ -1,0 +1,311 @@
+/* Fonte base e fundo */
+html {
+  /* Use a cor mais escura do seu gradiente aqui */
+  background-color: #0f1027; 
+}
+body {
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
+              radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
+              linear-gradient(120deg, #0f1027, #111936);
+  color: #e6e8ee;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container principal */
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+
+  transition: filter 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card principal */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  backdrop-filter: blur(12px);
+  margin-top: 20px;
+}
+
+h1 {
+  font-weight: 800;
+  color: #c7b7ff;
+  margin-bottom: 15px;
+}
+
+.welcome {
+  font-size: 18px;
+  color: #dcdffa;
+  margin-bottom: 15px;
+}
+
+/* Botões principais */
+button {
+  background: linear-gradient(180deg, #c7b7ff, #9b87ff);
+  color: #0b0d1b;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 8px 0px;
+  width: 100%;
+}
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(155, 135, 255, 0.5);
+}
+
+#btnEntrarSorteio2{
+  width: auto;
+  background: linear-gradient(180deg, #b7ffc1, #0fb63b);
+}
+
+/* Botão de logout */
+.logout {
+  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+  color: #1a1a1a;
+  margin-top: 20px;
+}
+
+.logout:hover {
+  box-shadow: 0 4px 12px rgba(255, 110, 110, 0.6);
+}
+
+/* Campo de entrada de código */
+.entrada {
+  display: none;
+  margin-top: 20px;
+  margin-right: 0;
+}
+
+.entrada input {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.entrada input::placeholder {
+  color: #b9bfd0;
+  padding: 10px;
+}
+
+/* Lista de sorteios */
+.lista {
+  margin-top: 25px;
+  text-align: left;
+}
+
+.lista h3 {
+  color: #c7b7ff;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.lista ul {
+  list-style: none;
+  padding: 0;
+}
+
+
+.itemLista, #listaParticipantes li {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  margin: 8px 0;
+  padding: 10px;
+  color: #e6e8ee;
+  font-size: 15px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.itemLista:hover, #listaParticipantes li:hover {
+  background: rgba(155, 135, 255, 0.25);
+}
+
+
+.itemLista{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btnCopy{
+  width: 28px;
+  height: auto;
+}
+
+#mensagemCopiado {
+  position: fixed;
+  background: #07d950;
+  bottom: 0px;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: sans-serif;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#mensagemCopiado.mostrar {
+  opacity: 1;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 100%;
+}
+
+.avatarPerfil{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.4s ease;
+}
+
+.btnEdit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  filter: invert();
+}
+
+.avatarWrapper:hover .avatarPerfil {
+  filter: blur(6px) brightness(0.7);
+  
+}
+
+.avatarWrapper:hover .btnEdit {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#msgCarregandoLista{
+  text-align: center;
+}
+
+/* --- MODAL --- */
+.modal {
+position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  touch-action: none;
+}
+
+.modal-content {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 24px;
+  width: 90%;
+  max-width: 380px;
+  text-align: left;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  animation: aparecer 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container.blur-fundo{
+  filter: blur(10px);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.708);
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #c7b7ff;
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #d1d2ef;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 15px;
+}
+
+.modal-botoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-botoes button {
+  flex: 1;
+}
+
+.modal-botoes .cancelar {
+  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+}
+
+
+@media (max-width:480px){
+  .btnCopy{
+    width: 24px;
+    height: auto;
+  }
+
+  .avatarWrapper:active .avatarPerfil {
+    filter: blur(6px) brightness(0.7); 
+  }
+
+  .avatarWrapper:active .btnEdit {
+    opacity: 1; 
+  }
+
+
+}

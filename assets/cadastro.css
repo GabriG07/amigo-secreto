@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+html {
+  /* Use a cor mais escura do seu gradiente aqui */
+  background-color: #0f1027; 
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(-45deg,#0b1028,#161a3a,#0f1830,#071225);
+  background-size:400% 400%;
+  animation:gradientMove 14s ease infinite;
+  color:#e6e8ee;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  min-height: 100vh;
+}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+h1{font-size:1.9rem;margin-bottom:12px;font-weight:700}
+
+input:focus,select:focus{box-shadow:0 6px 20px rgba(155,135,255,0.08);border-color:rgba(155,135,255,0.3)}
+button{
+  background:linear-gradient(135deg,#7b9bff,#b89bff);
+  color:#081024;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 8px 30px rgba(123,110,255,0.12);
+  margin: 15px;
+}
+button:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(123,110,255,0.18)}
+
+.container{
+  width:100%;
+  max-width:520px;
+  background:rgba(255,255,255,0.06);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.45);
+  text-align:center;
+}
+
+#txtLogin{
+  transition:all .22s ease; 
+}
+
+#txtLogin:hover{
+  cursor: pointer;
+  transform: scale(1.015);
+}
+
+@media (max-width:480px){
+  .container{padding:20px}
+  h1{font-size:1.5rem}
+  input,button{width:94%;max-width:360px;font-size:15px;padding:10px}
+  body{
+    padding: 5px;
+  }
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.extra-questions {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+}
+
+.extra-questions h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+.extra-questions label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.extra-questions input,
+.extra-questions select,
+.extra-questions textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  resize: none;
+}
+
