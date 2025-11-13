@@ -18,6 +18,8 @@ export class Sorteio {
         this.nome = null;
         this.valorMaximo = null;
         this.dataEvento = null;
+
+        this.admin.preferencias = admin.preferencias;
     }
 
     // Função para embaralhar um array
@@ -121,12 +123,14 @@ export class Sorteio {
             nome: this.nome,
             valorMaximo: this.valorMaximo,
             dataEvento: this.dataEvento,
-            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar}],
+            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar, preferencias: {...this.admin.preferencias}}],
         };
 
         try {
             await setDoc(doc(db, "sorteios", id), novo);
             console.log(`🎁 Novo sorteio criado: ${id} (${this.admin.nome})`);
+            console.log(this.admin.preferencias);
+           
             return id;
         } catch (e) {
             console.error("❌ Erro ao criar sorteio:", e);
@@ -181,7 +185,7 @@ export class Sorteio {
                     nome: participante.nome,
                     email: participante.email,
                     avatar: participante.avatar,
-                    ...participante.preferencias
+                    preferencias: {...participante.preferencias}
                 })
             });
             alert(`✅ Entrada com sucesso no sorteio ${this.id}!`);
@@ -243,7 +247,7 @@ export class Sorteio {
 
         // Reconstrói os participantes (que vieram como objetos simples)
         sorteio.participantes = (data.participantes || []).map(
-            p => new Pessoa(p.nome, p.email, p.avatar)
+            p => new Pessoa(p.nome, p.email, p.avatar, p.preferencias)
         );
 
         if(sorteio.sorteado){
@@ -256,7 +260,7 @@ export class Sorteio {
                     // pares = { [email]: { nome, email, avatar } }
                     for (const [email, v] of Object.entries(pares)) {
                         const k = sorteio.participantes.find(p => p.email === email);
-                        const vPessoa = new Pessoa(v.nome, v.email, v.avatar);
+                        const vPessoa = new Pessoa(v.nome, v.email, v.avatar, v.preferencias);
                         if (k) sorteio.resultado.set(k, vPessoa);
                     }
                     console.log(`🧩 Resultado reconstruído com ${sorteio.resultado.size} pares.`);

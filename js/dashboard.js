@@ -34,6 +34,7 @@ onAuthStateChanged(auth, async (user) => {
   const usuario = await Pessoa.carregar(user.uid);
 
   terminaAnimacaoCarregando(anim, msgCarregando);
+  console.log(usuario.preferencias);
 
   // mostra elementos
   document.querySelector(".dashboardTitle").style.display = "block";
@@ -247,6 +248,7 @@ onAuthStateChanged(auth, async (user) => {
       item.appendChild(img);
       item.appendChild(nomeEl);
       listaPartModal.appendChild(item);
+      console.log(p.preferencias);
     });
 
     //Botão de realizar o sorteio
@@ -325,7 +327,7 @@ onAuthStateChanged(auth, async (user) => {
     // Exibe as perguntas / preferências que estão guardadas junto ao sorteio (campo 'participantes' => p.perguntas)
     // Em sua modelagem, perguntas estão no objeto do participante salvo no sorteio; tentamos acessar por amigo.perguntas
     // Caso não existam, tentamos campos comuns (ex: gosta, tamanhoRoupa, tamanhoCalcado, observacoes)
-    const perguntasObj = amigo.perguntas || {};
+    const perguntasObj = amigo.preferencias || {};
     // Se objeto vazio, tentamos propriedades diretas
     const fallbackFields = {};
     if (amigo.gosta) fallbackFields["Gosta de"] = amigo.gosta;
@@ -355,13 +357,8 @@ onAuthStateChanged(auth, async (user) => {
 
     // Se nada encontrado, informa
     if (detalhes.children.length === 0) {
-      detalhes.innerHTML = `<div class="info-item">Nenhuma informação disponível.</div>`;
-    } else {
-      const div = document.createElement("div");
-      div.className = "info-item";
-      div.textContent = `${campo}: ${valor || "—"}`;
-      detalhes.appendChild(div);
-    }
+        detalhes.innerHTML = `<div class="info-item">Nenhuma informação disponível.</div>`;
+    } 
 
     // Abre modal
     modalResultado.style.display = "flex";

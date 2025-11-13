@@ -18,7 +18,7 @@ export class Pessoa {
             nome: this.nome,
             email: this.email,
             avatar: this.avatar,
-            ...this.preferencias // insere dinamicamente os novos campos
+            preferencias: {...this.preferencias} // insere dinamicamente os novos campos
         };
     }
 
@@ -38,7 +38,7 @@ export class Pessoa {
         }
 
         const data = snap.data();
-        return new Pessoa(data.nome, data.email, data.avatar);
+        return new Pessoa(data.nome, data.email, data.avatar, data.preferencias);
     }
 
     async editarAvatar(novoAvatar){
