@@ -340,6 +340,7 @@ html {
   display: none;
   justify-content: center;
   align-items: center;
+  padding-top: 40px;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -352,6 +353,10 @@ html {
   padding: 24px;
   border-radius: 14px;
   max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
   width: 90%;
   text-align: center;
   box-shadow: 0 5px 25px rgba(184, 155, 255, 0.25);
