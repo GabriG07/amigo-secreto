@@ -109,7 +109,7 @@ body {
 }
 
 .avatarWrapper:hover .avatarPerfil {
-  filter: blur(2px) brightness(0.8);
+  filter: blur(6px) brightness(0.7);
 }
 
 .avatarWrapper:hover .btnEdit {
@@ -132,11 +132,11 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 32px;
-  height: 32px;
+  width: 50%;
+  height: auto;
   transform: translate(-50%, -50%);
   opacity: 0;
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+  filter: invert();
   transition: opacity 0.3s ease;
   z-index: 2;
 }
@@ -546,9 +546,15 @@ html {
   display: block;
 }
 
-.acoes {
+  .acoes {
     margin-top: 16px;
   }
+
+  .dashboardTitle{
+    text-align: center;
+    padding: 10px;
+  }
+
 
 }
 
