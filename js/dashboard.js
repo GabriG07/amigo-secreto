@@ -252,12 +252,12 @@ onAuthStateChanged(auth, async (user) => {
 
     //Botão de realizar o sorteio
     const btnSortear = document.getElementById("btnSortear");
+
+    if (sorteio.admin.email !== user.email) btnSortear.style.display = "none";
+          
     if (!sorteio.sorteado) {
       // Função de realizar o sorteio (admin)
       btnSortear.onclick = async () => {
-        if (sorteio.admin.email !== user.email)
-          btnSortear.style.display = "none";
-
         if (sorteio.participantes.length < 3) {
           alert("É necessário pelo menos 3 participantes para sortear!");
           return;
