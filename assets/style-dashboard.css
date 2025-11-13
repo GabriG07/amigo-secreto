@@ -1,311 +1,587 @@
-/* Fonte base e fundo */
-html {
-  /* Use a cor mais escura do seu gradiente aqui */
-  background-color: #0f1027; 
-}
-body {
-  font-family: "Inter", sans-serif;
-  background: radial-gradient(1200px 800px at 20% -10%, #1a1c44 5%, transparent 55%),
-              radial-gradient(1000px 600px at 110% 10%, #0b6db1 0, transparent 60%),
-              linear-gradient(120deg, #0f1027, #111936);
-  color: #e6e8ee;
+/* -------------------------------
+   GERAL
+--------------------------------*/
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background:linear-gradient(-45deg,#0b1028,#161a3a,#0f1830,#071225);
+  color: #e6e8ee;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+.container {
+  animation: fadeSlideIn 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-/* Container principal */
-.container {
-  text-align: center;
-  width: 100%;
-  max-width: 480px;
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.avatarWrapper {
+  position: relative;
+  display: inline-block;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  transition: filter 0.3s ease;
+.avatarWrapper:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(78, 115, 223, 0.4);
+}
+
+/* -------------------------------
+   CONTAINER PRINCIPAL
+--------------------------------*/
+.container {
+  width: 100%;
+  max-width: 950px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+  padding: 24px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.blur-fundo {
+  filter: blur(4px);
+}
+
+/* -------------------------------
+   CABEÇALHO / USUÁRIO
+--------------------------------*/
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.user-block {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Card principal */
-.card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  padding: 30px;
-  backdrop-filter: blur(12px);
-  margin-top: 20px;
-}
-
-h1 {
-  font-weight: 800;
-  color: #c7b7ff;
-  margin-bottom: 15px;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .welcome {
-  font-size: 18px;
-  color: #dcdffa;
-  margin-bottom: 15px;
-}
-
-/* Botões principais */
-button {
-  background: linear-gradient(180deg, #c7b7ff, #9b87ff);
-  color: #0b0d1b;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 8px 0px;
-  width: 100%;
-}
-
-button:hover {
-  transform: scale(1.04);
-  box-shadow: 0 4px 12px rgba(155, 135, 255, 0.5);
-}
-
-#btnEntrarSorteio2{
-  width: auto;
-  background: linear-gradient(180deg, #b7ffc1, #0fb63b);
-}
-
-/* Botão de logout */
-.logout {
-  background: linear-gradient(180deg, #ff9292, #ff6a6a);
-  color: #1a1a1a;
-  margin-top: 20px;
-}
-
-.logout:hover {
-  box-shadow: 0 4px 12px rgba(255, 110, 110, 0.6);
-}
-
-/* Campo de entrada de código */
-.entrada {
-  display: none;
-  margin-top: 20px;
-  margin-right: 0;
-}
-
-.entrada input {
-  width: 100%;
-  padding: 10px 0;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.entrada input::placeholder {
-  color: #b9bfd0;
-  padding: 10px;
-}
-
-/* Lista de sorteios */
-.lista {
-  margin-top: 25px;
-  text-align: left;
-}
-
-.lista h3 {
-  color: #c7b7ff;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.lista ul {
-  list-style: none;
-  padding: 0;
-}
-
-
-.itemLista, #listaParticipantes li {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  margin: 8px 0;
-  padding: 10px;
-  color: #e6e8ee;
-  font-size: 15px;
-  transition: background 0.2s ease;
-  cursor: pointer;
-}
-
-.itemLista:hover, #listaParticipantes li:hover {
-  background: rgba(155, 135, 255, 0.25);
-}
-
-
-.itemLista{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btnCopy{
-  width: 28px;
-  height: auto;
-}
-
-#mensagemCopiado {
-  position: fixed;
-  background: #07d950;
-  bottom: 0px;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: sans-serif;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-#mensagemCopiado.mostrar {
-  opacity: 1;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #c9c9ff;
 }
 
 .avatarWrapper {
   position: relative;
-  width: 72px;
-  height: 72px;
+  display: inline-block;
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
+  border-radius: 50%;
   overflow: hidden;
-  border-radius: 100%;
+  transition: transform 0.3s ease;
 }
 
-.avatarPerfil{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: filter 0.4s ease;
-}
-
-.btnEdit {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  filter: invert();
+.avatarWrapper:hover {
+  transform: scale(1.05);
 }
 
 .avatarWrapper:hover .avatarPerfil {
-  filter: blur(6px) brightness(0.7);
-  
+  filter: blur(2px) brightness(0.8);
 }
 
 .avatarWrapper:hover .btnEdit {
   opacity: 1;
-  cursor: pointer;
 }
 
-#msgCarregandoLista{
+
+.avatarWrapper:hover {
+  transform: scale(1.05);
+}
+
+.avatarPerfil {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.btnEdit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.btnEdit img {
+  width: 100%;
+  height: 100%;
+  filter: brightness(0) invert(1) contrast(1000%);
+  transition: filter 0.3s ease;
+}
+
+.avatarWrapper:hover .btnEdit {
+  opacity: 1;
+}
+
+/* -------------------------------
+   AÇÕES PRINCIPAIS
+--------------------------------*/
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.acoes button {
+  background: linear-gradient(135deg, #7b9bff, #b89bff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.acoes button:hover {
+  opacity: 0.85;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(78, 115, 223, 0.3);
+}
+
+/* -------------------------------
+   ENTRAR EM SORTEIO
+--------------------------------*/
+.entrada {
+  display: none;
+  margin-top: 16px;
   text-align: center;
 }
 
-/* --- MODAL --- */
+.entrada input {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #3b3b55;
+  border-radius: 8px;
+  width: 180px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e6e8ee;
+}
+
+.entrada input:focus {
+  border: 1px solid #7b9bff;
+}
+
+.entrada button {
+  background: linear-gradient(135deg, #1cc88a, #17a673);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.3s ease, transform 0.2s;
+}
+
+.entrada button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* -------------------------------
+   LISTA DE SORTEIOS
+--------------------------------*/
+.lista {
+  margin-top: 24px;
+}
+
+.lista h3 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: #c9c9ff;
+}
+
+.lista-ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.sorteio-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(123, 155, 255, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sorteio-item:hover {
+  background: rgba(123, 155, 255, 0.1);
+  transform: scale(1.01);
+}
+
+.sorteio-info strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: #b89bff;
+}
+
+.sorteio-info small {
+  color: #b0b0d0;
+}
+
+.btnCopy {
+  width: 22px;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s;
+  filter: invert(80%) hue-rotate(180deg);
+}
+
+.btnCopy:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* -------------------------------
+   BOTÃO SAIR
+--------------------------------*/
+.logout {
+  display: block;
+  margin: 24px auto 0 auto;
+  background: linear-gradient(135deg, #e74a3b, #c0392b);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+.logout:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* -------------------------------
+   MENSAGEM COPIADO
+--------------------------------*/
+#mensagemCopiado {
+  position: fixed;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #7b9bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 999;
+}
+
+#mensagemCopiado.mostrar {
+  bottom: 30px;
+  opacity: 1;
+}
+
+/* -------------------------------
+   MODAIS
+--------------------------------*/
 .modal {
-position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
-  touch-action: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 14px;
+  background: rgba(27, 27, 47, 0.95);
   padding: 24px;
+  border-radius: 14px;
+  max-width: 420px;
   width: 90%;
-  max-width: 380px;
-  text-align: left;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  animation: aparecer 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.container.blur-fundo{
-  filter: blur(10px);
-}
-
-input::placeholder {
-  color: rgba(255, 255, 255, 0.708);
-}
-
-@keyframes aparecer {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.modal-content h2 {
   text-align: center;
-  color: #c7b7ff;
-  margin-bottom: 20px;
+  box-shadow: 0 5px 25px rgba(184, 155, 255, 0.25);
+  animation: scaleUp 0.25s ease;
+  color: #e6e8ee;
 }
 
-.modal-content label {
-  display: block;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #d1d2ef;
-}
-
+/* -------------------------------
+   MODAL CRIAR SORTEIO
+--------------------------------*/
 .modal-content input {
   width: 100%;
+  margin: 8px 0 14px;
   padding: 10px;
-  margin-top: 6px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.1);
-  color: white;
-  font-size: 15px;
+  border: 1px solid rgba(123, 155, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
 }
 
 .modal-botoes {
   display: flex;
+  justify-content: space-between;
   gap: 10px;
-  margin-top: 20px;
 }
 
 .modal-botoes button {
   flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.modal-botoes .cancelar {
-  background: linear-gradient(180deg, #ff9292, #ff6a6a);
+#confirmarCriar {
+  background: linear-gradient(135deg, #7b9bff, #b89bff);
+  color: #fff;
 }
 
+#confirmarCriar:hover {
+  opacity: 0.85;
+}
 
-@media (max-width:480px){
-  .btnCopy{
-    width: 24px;
-    height: auto;
+.cancelar {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ccc;
+}
+
+.cancelar:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.sorteio-item:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* -------------------------------
+   MODAL RESULTADO
+--------------------------------*/
+.resultado-modal .resultado-content {
+  max-width: 850px;
+  width: 95%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: #fff;
+}
+
+.resultado-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.resultado-card {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(123, 155, 255, 0.15);
+}
+
+.resultado-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 10px auto;
+  border: 3px solid #7b9bff;
+}
+
+.resultado-infos .info-item {
+  background: rgba(255, 255, 255, 0.08);
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.lista-participantes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.participante-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 8px;
+  text-align: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.participante-item:hover {
+  transform: translateY(-3px);
+  background: rgba(123, 155, 255, 0.1);
+}
+
+.participante-item img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #7b9bff;
+}
+
+.p-nome {
+  font-size: 0.85rem;
+  margin-top: 5px;
+  color: #e6e8ee;
+}
+
+/* -------------------------------
+   MOBILE RESPONSIVO
+--------------------------------*/
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+    align-items: flex-start;
   }
 
-  .avatarWrapper:active .avatarPerfil {
-    filter: blur(6px) brightness(0.7); 
+  .container {
+    padding: 18px;
   }
 
-  .avatarWrapper:active .btnEdit {
-    opacity: 1; 
+  .top-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
+  .acoes {
+    justify-content: center;
+  }
 
+  .resultado-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resultado-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .participante-item img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .avatarWrapper {
+  margin: 0 auto; 
+  display: block;
+}
+
+.acoes {
+    margin-top: 16px;
+  }
+
+}
+
+/* --- Mobile scrolling fixes --- */
+
+/* Permite rolagem suave no iOS */
+html, body {
+  -webkit-overflow-scrolling: touch;
+  touch-action: auto; /* garante que o touch não seja bloqueado globalmente */
+}
+
+/* Se você tiver modais que adicionam touch-action: none, garanta que apenas o modal o use quando necessário.
+   Se existir `touch-action: none;` em .modal, remova-o ou sobrescreva aqui: */
+.modal {
+  touch-action: auto;
+}
+
+/* Avatar-grid / listas horizontais — força scroll x no mobile com comportamento nativo */
+.avatar-grid,
+.avatar-grid * {
+  -webkit-overflow-scrolling: touch;
+}
+
+.avatar-grid.scroll-x, .avatar-grid {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Certifique-se que não exista overflow:hidden no body enquanto NÃO houver modal aberto.
+   (Isto é apenas um lembrete — o JS controla body.style.overflow ao abrir/fechar modais) */
+
+/* Pequeno ajuste para o botão de copiar: garante que seja clicável e com tamanho controlado */
+.btnCopy {
+  width: 22px !important;
+  height: auto !important;
+  cursor: pointer !important;
+  opacity: 0.9 !important;
+  display: inline-block !important;
+  user-select: none;
+  -webkit-user-drag: none;
 }

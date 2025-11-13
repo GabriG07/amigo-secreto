@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,16 +18,20 @@
     <h1 class="dashboardTitle" style="display: none;">🎁 Amigo Secreto</h1>
 
     <div class="card" style="display: none">
-      <p class="welcome">Olá, <strong id="meuNome"></strong>!</p>
-      <div class="avatarWrapper">
-        <img class="avatarPerfil">
-        <img src="../assets/img/edit.png" class="btnEdit">
-      </div>
+      <div class="top-row">
+        <div class="user-block">
+          <p class="welcome">Olá, <strong id="meuNome"></strong>!</p>
+          <div class="avatarWrapper" id="avatarWrapper">
+            <img class="avatarPerfil" id="avatarPerfil" alt="Avatar do usuário">
+            <img src="../assets/img/edit.png" class="btnEdit" id="btnAvatarEdit" alt="Editar avatar">
+          </div>
+        </div>
 
-      <div class="acoes">
-        <button id="btnCriarSorteio">✨ Criar novo sorteio</button>
-        <button id="btnEntrarSorteio">➕ Entrar em sorteio</button>
-        <button id="btnVerSorteios">👀 Ver meus sorteios</button>
+        <div class="acoes">
+          <button id="btnCriarSorteio">✨ Criar novo sorteio</button>
+          <button id="btnEntrarSorteio">➕ Entrar em sorteio</button>
+          <button id="btnVerSorteios">👀 Ver meus sorteios</button>
+        </div>
       </div>
 
       <div id="entrarSorteio" class="entrada">
@@ -34,10 +39,9 @@
         <button id="btnEntrarSorteio2">Entrar</button>
       </div>
 
-      <div id="sorteiosUsuario" class="lista" style="display:block;">
+      <div id="sorteiosUsuario" class="lista">
         <h3 id="textoMeusSorteios" style="display: none;">🎉 Meus sorteios</h3>
-        <ul id="listaSorteios">
-        </ul>
+        <ul id="listaSorteios" class="lista-ul"></ul>
       </div>
 
       <button id="logout" class="logout">🚪 Sair</button>
@@ -50,7 +54,7 @@
 
   <div id="mensagemCopiado">Código Copiado!</div>
 
-  <!-- MODAL DE CRIAÇÃO -->
+  <!-- MODAL CRIAR -->
   <div id="modalCriar" class="modal">
     <div class="modal-content">
       <h2>🎁 Criar Amigo Secreto</h2>
@@ -71,7 +75,32 @@
     </div>
   </div>
 
+  <!-- MODAL RESULTADO (aparece ao clicar na DIV do sorteio) -->
+  <div id="modalResultado" class="modal resultado-modal" aria-hidden="true">
+    <div class="modal-content resultado-content">
+      <button class="close" id="fecharResultado" aria-label="Fechar">&times;</button>
+      <div class="resultado-grid">
+        <!-- Esquerda: seu resultado (quem você tirou) -->
+        <div class="resultado-left">
+          <div class="resultado-card">
+            <h3>🎉 Você tirou</h3>
+            <img id="resultadoAvatar" class="resultado-avatar" src="../assets/avatars/avatar1.png"
+              alt="Avatar do sorteado">
+            <h4 id="resultadoNome">—</h4>
+            <div id="resultadoDetalhes" class="resultado-infos"></div>
+          </div>
+        </div>
+
+        <!-- Direita: lista de participantes -->
+        <div class="resultado-right">
+          <h4>Participantes</h4>
+          <div id="listaParticipantesModal" class="lista-participantes"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="../js/dashboard.js"></script>
 </body>
+
 </html>
