@@ -151,39 +151,49 @@ onAuthStateChanged(auth, async (user) => {
             infoDiv.appendChild(subt);
 
             // área de ações (copy)
+            // área de ações (container do botão de copiar)
             const actions = document.createElement("div");
+            actions.className = "actions";
             actions.style.display = "flex";
             actions.style.flexDirection = "column";
             actions.style.alignItems = "flex-end";
-            actions.style.gap = "8px";
+            actions.style.justifyContent = "center"; // Centraliza verticalmente
+            actions.style.gap = "20px";
+            actions.style.padding = "8px"; // Aumenta a área de clique
+            actions.style.cursor = "pointer"; // Mostra a mãozinha em tudo
 
             const copyImg = document.createElement("img");
             copyImg.className = "btnCopy";
+            copyImg.style.display = "none";
             copyImg.src = "../assets/img/copy.png";
             copyImg.alt = "Copiar código";
             copyImg.title = "Copiar código do sorteio";
+            copyImg.style.pointerEvents = "none"; 
 
-            // copiar código (impede abrir modal)
-            copyImg.addEventListener("click", async (ev) => {
-                ev.stopPropagation();
-                const msg = document.getElementById("mensagemCopiado");
-                try {
-                    msg.classList.add("mostrar");
-                    await navigator.clipboard.writeText(s.id);
-                    setTimeout(() => msg.classList.remove("mostrar"), 1400);
-                } catch (err) {
-                    msg.textContent = "❌ Erro ao copiar!";
-                    msg.classList.add("mostrar");
-                    setTimeout(() => { msg.classList.remove("mostrar"); msg.textContent = "Código Copiado!"; }, 1400);
-                }
-            });
+            if(navigator.clipboard){
+                btnCopy.style.display = "block";
+                actions.addEventListener("click", async (ev) => {
+                    ev.stopPropagation();
+                    const msg = document.getElementById("mensagemCopiado");
+                    try {
+                        msg.classList.add("mostrar");
+                        await navigator.clipboard.writeText(s.id);
+                        setTimeout(() => msg.classList.remove("mostrar"), 1400);
+                    } catch (err) {
+                        msg.textContent = "❌ Erro ao copiar!";
+                        msg.classList.add("mostrar");
+                        msg.style.backgroundColor = "#ff0000";
+                        setTimeout(() => { msg.classList.remove("mostrar");}, 1400);
+                    }
+                });
+            }
 
-            // adiciona conteúdo e ações
+            // adiciona imagem na div e div no item
             actions.appendChild(copyImg);
             itemDiv.appendChild(infoDiv);
             itemDiv.appendChild(actions);
 
-            // clique na div abre modal (exceto no botão de copiar)
+            // clique na div item abre modal (mas o stopPropagation acima protege o botão copy)
             itemDiv.addEventListener("click", () => {
                 abrirModalResultado(s.id);
             });

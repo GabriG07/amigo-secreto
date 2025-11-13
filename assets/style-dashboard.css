@@ -256,7 +256,6 @@ html {
 
 .sorteio-item:hover {
   background: rgba(123, 155, 255, 0.1);
-  transform: scale(1.01);
 }
 
 .sorteio-info strong {
@@ -280,7 +279,6 @@ html {
 
 .btnCopy:hover {
   opacity: 1;
-  transform: scale(1.15);
 }
 
 /* -------------------------------
