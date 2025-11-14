@@ -57,13 +57,13 @@
   <!-- MODAL CRIAR -->
   <div id="modalCriar" class="modal">
     <div class="modal-content">
-      <h2>🎁 Criar Amigo Secreto</h2>
+      <h2 id="tituloModalCriarAmigoSecreto">🎁 Criar Amigo Secreto</h2>
 
       <label>Nome do sorteio</label>
       <input id="nomeSorteioInput" type="text" placeholder="Ex: Família, Trabalho, etc...">
 
       <label>Valor máximo do presente (R$)</label>
-      <input id="valorSorteioInput" type="number" placeholder="Ex: 50">
+      <input id="valorSorteioInput" type="number" placeholder="Ex: 50" min="0">
 
       <label>Data do evento</label>
       <input id="dataSorteioInput" type="date">
@@ -78,6 +78,7 @@
   <!-- MODAL RESULTADO (aparece ao clicar na DIV do sorteio) -->
   <div id="modalResultado" class="modal resultado-modal" aria-hidden="true">
     <div class="modal-content resultado-content">
+      <h2 id="nomeSorteio" style="display:none;"></h2>
       <button class="close" id="fecharResultado" aria-label="Fechar">&times;</button>
       <h1 id="msgCarregandoResultado" style="display:none;"></h1>
       <div class="resultado-grid" style="display:none;">
@@ -90,6 +91,10 @@
               alt="Avatar do sorteado">
             <h4 id="resultadoNome">—</h4>
             <div id="resultadoDetalhes" class="resultado-infos"></div>
+          </div>
+          <div id="infosAmigoSecreto">
+            <p><span id="infoValor"></span></p>
+            <p><span id="infoData"></span></p>
           </div>
         </div>
 

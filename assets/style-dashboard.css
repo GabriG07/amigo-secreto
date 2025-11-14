@@ -68,7 +68,11 @@ body {
 }
 
 .blur-fundo {
-  filter: blur(4px);
+  filter: blur(8px);
+  overflow: hidden;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
 }
 
 /* -------------------------------
@@ -494,6 +498,7 @@ html {
   border-radius: 14px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(123, 155, 255, 0.15);
+  margin-bottom: 24px;
 }
 
 .resultado-avatar {
@@ -552,6 +557,22 @@ html {
 
 #resultadoNome {
   margin-bottom: 24px;
+}
+
+#nomeSorteio,
+#infoValor,
+#infoData {
+  display: block;
+  margin: 12px;
+}
+
+#infoValor,
+#infoData {
+  font-size: 16px;
+}
+
+#tituloModalCriarAmigoSecreto {
+  padding-bottom: 16px;
 }
 
 /* -------------------------------

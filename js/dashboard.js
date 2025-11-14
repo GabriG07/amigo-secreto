@@ -230,12 +230,16 @@ onAuthStateChanged(auth, async (user) => {
 
     const msgCarregandoResultado = document.getElementById("msgCarregandoResultado");
     const grid = document.querySelector(".resultado-grid");
+    const cardResultado = document.querySelector(".resultado-card");
 
     // Reset do conteúdo para evitar piscar
     document.getElementById("resultadoAvatar").src = "";
     document.getElementById("resultadoNome").textContent = "";
     document.getElementById("resultadoDetalhes").innerHTML = "";
     document.getElementById("listaParticipantesModal").innerHTML = "";
+    document.getElementById("nomeSorteio").innerHTML = "";
+    document.getElementById("infoValor").innerHTML = "";
+    document.getElementById("infoData").innerHTML = "";
 
     // Oculta o conteúdo antes de carregar
     grid.style.display = "none";
@@ -281,9 +285,27 @@ onAuthStateChanged(auth, async (user) => {
     //Botão de realizar o sorteio
     const btnSortear = document.getElementById("btnSortear");
 
-    if (sorteio.admin.email !== user.email) btnSortear.style.display = "none";
+    //Mostra as informações do amigo secreto
+    document.getElementById("nomeSorteio").textContent = sorteio.nome || `ID: ${sorteio.id}`;
+    if(sorteio.valorMaximo) document.getElementById("infoValor").textContent = `💵: R$${Number(sorteio.valorMaximo).toFixed(2)}`;
+    if (sorteio.dataEvento) {
+      const [ano, mes, dia] = sorteio.dataEvento.split("-");
+      const data = new Date(ano, mes - 1, dia);
+      const dataFormatada = data.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      });
+      document.getElementById("infoData").textContent = `📅: ${dataFormatada}`;
+    }
           
     if (!sorteio.sorteado) {
+      //Se ainda não foi sorteado, então não mostra o card do resultado 
+      cardResultado.style.display = "none";
+
+      if (sorteio.admin.email !== user.email) btnSortear.style.display = "none";
+      else btnSortear.style.display = "block";
+
       // Função de realizar o sorteio (admin)
       btnSortear.onclick = async () => {
         if (sorteio.participantes.length < 3) {
@@ -310,6 +332,7 @@ onAuthStateChanged(auth, async (user) => {
       //já foi sorteado
       const btnSortear = document.getElementById("btnSortear");
       if (btnSortear) btnSortear.style.display = "none";
+      cardResultado.style.display = "block";
     }
 
     // Se sorteado: busca quem o usuário tirou usando método da classe
@@ -401,6 +424,7 @@ onAuthStateChanged(auth, async (user) => {
         grid.style.visibility = "visible";
         grid.style.opacity = "1";
         grid.style.display = "grid";
+        document.getElementById("nomeSorteio").style.display = "block";
     }
   }
 
@@ -412,6 +436,7 @@ onAuthStateChanged(auth, async (user) => {
     document.body.style.overflow = "auto";
     modalResultado.setAttribute("aria-hidden", "true");
     container.classList.remove("blur-fundo");
+    document.getElementById("nomeSorteio").style.display = "none";
   }
 
   // logout
