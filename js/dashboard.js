@@ -251,8 +251,6 @@ onAuthStateChanged(auth, async (user) => {
     msgCarregandoResultado.style.display = "block";
     const anim = animacaoCarregando(msgCarregandoResultado, "Carregando Amigo Secreto");
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
     // Carrega o sorteio (Firestore) usando sua classe
     const sorteio = await Sorteio.carregar(sorteioId);
     if (!sorteio){

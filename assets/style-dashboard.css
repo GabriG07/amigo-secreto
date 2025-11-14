@@ -354,7 +354,8 @@ html {
 }
 
 #codigoEntrada {
-  width: auto;
+  /*  quantidade de caracteres do placeholder */
+  min-width: 25ch;
 }
 
 #msgCarregandoLista {
