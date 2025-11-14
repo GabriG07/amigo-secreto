@@ -300,8 +300,9 @@ onAuthStateChanged(auth, async (user) => {
     }
           
     if (!sorteio.sorteado) {
-      //Se ainda não foi sorteado, então não mostra o card do resultado 
+      //Se ainda não foi sorteado, então não mostra o card do resultado e mensagem de que está aguardando o sorteio
       cardResultado.style.display = "none";
+      document.querySelector("#msgAguardandoSorteio").style.display = "block";
 
       if (sorteio.admin.email !== user.email) btnSortear.style.display = "none";
       else btnSortear.style.display = "block";
@@ -437,6 +438,7 @@ onAuthStateChanged(auth, async (user) => {
     modalResultado.setAttribute("aria-hidden", "true");
     container.classList.remove("blur-fundo");
     document.getElementById("nomeSorteio").style.display = "none";
+    document.querySelector("#msgAguardandoSorteio").style.display = "none";
   }
 
   // logout
