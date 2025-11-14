@@ -14,10 +14,10 @@
 </head>
 
 <body>
-  <div class="container">
-    <h1 class="dashboardTitle" style="display: none;">🎁 Amigo Secreto</h1>
+  <div class="container" style="display: none;">
+    <h1 class="dashboardTitle">🎁 Amigo Secreto</h1>
 
-    <div class="card" style="display: none">
+    <div class="card">
       <div class="top-row">
         <div class="user-block">
           <p class="welcome">Olá, <strong id="meuNome"></strong>!</p>
@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <div>
+  <div class="divMsgCarregando">
     <h1 id="msgCarregando"></h1>
   </div>
 
@@ -79,7 +79,8 @@
   <div id="modalResultado" class="modal resultado-modal" aria-hidden="true">
     <div class="modal-content resultado-content">
       <button class="close" id="fecharResultado" aria-label="Fechar">&times;</button>
-      <div class="resultado-grid">
+      <h1 id="msgCarregandoResultado" style="display:none;"></h1>
+      <div class="resultado-grid" style="display:none;">
         <!-- Esquerda: seu resultado (quem você tirou) -->
         <div class="resultado-left">
           <button id="btnSortear">🎲 Realizar Sorteio</button>

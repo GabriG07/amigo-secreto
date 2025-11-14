@@ -30,15 +30,16 @@ onAuthStateChanged(auth, async (user) => {
   const msgCarregando = document.getElementById("msgCarregando");
   const anim = animacaoCarregando(msgCarregando);
 
+  
+
   // carrega dados do usuário (sua classe Pessoa)
   const usuario = await Pessoa.carregar(user.uid);
 
   terminaAnimacaoCarregando(anim, msgCarregando);
 
   // mostra elementos
-  document.querySelector(".dashboardTitle").style.display = "block";
-  document.querySelector(".card").style.display = "block";
-  document.querySelector(".welcome").style.display = "block";
+  document.querySelector(".container").style.display = "block";
+
 
   const nome = usuario.nome || usuario.email;
   document.getElementById("meuNome").textContent = nome;
@@ -226,9 +227,38 @@ onAuthStateChanged(auth, async (user) => {
   });
 
   async function abrirModalResultado(sorteioId) {
+
+    const msgCarregandoResultado = document.getElementById("msgCarregandoResultado");
+    const grid = document.querySelector(".resultado-grid");
+
+    // Reset do conteúdo para evitar piscar
+    document.getElementById("resultadoAvatar").src = "";
+    document.getElementById("resultadoNome").textContent = "";
+    document.getElementById("resultadoDetalhes").innerHTML = "";
+    document.getElementById("listaParticipantesModal").innerHTML = "";
+
+    // Oculta o conteúdo antes de carregar
+    grid.style.display = "none";
+    grid.style.visibility = "hidden";
+    grid.style.opacity = "0";
+
+    // Abre modal somente com loader
+    modalResultado.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    modalResultado.setAttribute("aria-hidden", "false");
+    container.classList.add("blur-fundo");
+
+    msgCarregandoResultado.style.display = "block";
+    const anim = animacaoCarregando(msgCarregandoResultado, "Carregando Amigo Secreto");
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
     // Carrega o sorteio (Firestore) usando sua classe
     const sorteio = await Sorteio.carregar(sorteioId);
-    if (!sorteio) return alert("Erro ao carregar sorteio.");
+    if (!sorteio){
+        alert("Erro ao carregar sorteio.");
+        return 
+    } 
 
     // mostra participantes na coluna direita
     const listaPartModal = document.getElementById("listaParticipantesModal");
@@ -286,33 +316,37 @@ onAuthStateChanged(auth, async (user) => {
 
     // Se sorteado: busca quem o usuário tirou usando método da classe
     if (!sorteio.sorteado) {
-      // mostra mensagem na esquerda
-      document.getElementById("resultadoAvatar").src =
-        "../assets/avatars/avatar1.png";
-      document.getElementById("resultadoNome").textContent =
-        "Sorteio ainda não realizado";
-      const detalhes = document.getElementById("resultadoDetalhes");
-      detalhes.innerHTML = `<div class="info-item">O sorteio não foi realizado ainda.</div>`;
-      modalResultado.style.display = "flex";
-      document.body.style.overflow = "hidden";
-      modalResultado.setAttribute("aria-hidden", "false");
-      return;
+        terminaAnimacaoCarregando(anim, msgCarregandoResultado);
+        mostrarModalResultadoAposCarregamento(grid);
+        // mostra mensagem na esquerda
+        document.getElementById("resultadoAvatar").src =
+            "../assets/avatars/avatar1.png";
+        document.getElementById("resultadoNome").textContent =
+            "Sorteio ainda não realizado";
+        const detalhes = document.getElementById("resultadoDetalhes");
+        detalhes.innerHTML = `<div class="info-item">O sorteio não foi realizado ainda.</div>`;
+        modalResultado.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        modalResultado.setAttribute("aria-hidden", "false");
+        return;
     }
 
     // pega o amigo sorteado do usuário atual
     const _amigo = sorteio.buscaResultadoPorEmail(user.email);
     if (!_amigo) {
-      document.getElementById("resultadoAvatar").src =
-        "../assets/avatars/avatar1.png";
-      document.getElementById("resultadoNome").textContent =
-        "Resultado não encontrado para você";
-      document.getElementById(
-        "resultadoDetalhes"
-      ).innerHTML = `<div class="info-item">Você não possui resultado neste sorteio.</div>`;
-      modalResultado.style.display = "flex";
-      document.body.style.overflow = "hidden";
-      modalResultado.setAttribute("aria-hidden", "false");
-      return;
+        terminaAnimacaoCarregando(anim, msgCarregandoResultado);
+        mostrarModalResultadoAposCarregamento(grid);
+        document.getElementById("resultadoAvatar").src =
+            "../assets/avatars/avatar1.png";
+        document.getElementById("resultadoNome").textContent =
+            "Resultado não encontrado para você";
+        document.getElementById(
+            "resultadoDetalhes"
+        ).innerHTML = `<div class="info-item">Você não possui resultado neste sorteio.</div>`;
+        modalResultado.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        modalResultado.setAttribute("aria-hidden", "false");
+        return;
     }
 
     const uidAmigo = await Pessoa.buscarUidPeloEmail(_amigo.email);
@@ -362,17 +396,24 @@ onAuthStateChanged(auth, async (user) => {
         detalhes.innerHTML = `<div class="info-item">Nenhuma informação disponível.</div>`;
     } 
 
-    // Abre modal
-    modalResultado.style.display = "flex";
-    document.body.style.overflow = "hidden";
-    modalResultado.setAttribute("aria-hidden", "false");
+    terminaAnimacaoCarregando(anim, msgCarregandoResultado);
+    mostrarModalResultadoAposCarregamento(grid);
+
+    function mostrarModalResultadoAposCarregamento(grid){
+        grid.style.visibility = "visible";
+        grid.style.opacity = "1";
+        grid.style.display = "grid";
+    }
   }
+
+  
 
   function fecharModalResultado() {
     const modalResultado = document.getElementById("modalResultado");
     modalResultado.style.display = "none";
     document.body.style.overflow = "auto";
     modalResultado.setAttribute("aria-hidden", "true");
+    container.classList.remove("blur-fundo");
   }
 
   // logout
