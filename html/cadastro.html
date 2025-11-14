@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -9,60 +10,67 @@
   <link rel="stylesheet" href="../assets/cadastro.css">
   <link rel="stylesheet" href="../assets/toast.css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>Cadastro</h1>
-        <div class="form-row">
-            <label for="nome" class="label">Nome</label>
-            <input id="nome" type="text" placeholder="Digite seu nome" required>
+  <div class="container">
+    <h1>Cadastro</h1>
+    <div class="form-row">
+      <label for="nome" class="label">Nome</label>
+      <input id="nome" type="text" placeholder="Digite seu nome" required>
 
-            <label for="email" class="label">Email</label>
-            <input id="email" type="email" placeholder="Digite seu email">
+      <label for="email" class="label">Email</label>
+      <input id="email" type="email" placeholder="Digite seu email">
 
-            <div class="extra-questions">
-              <h3>🎁 Suas Preferências</h3>
-            
-              <label for="calca">Número da calça:</label>
-              <input type="text" id="calca" name="calca" placeholder="Ex: 40">
-            
-              <label for="calcado">Número do calçado:</label>
-              <input type="text" id="calcado" name="calcado" placeholder="Ex: 42">
-            
-              <label for="camisa">Tamanho da camisa:</label>
-              <input type="text" id="camisa" name="camisa" placeholder="Ex: M, G, GG">
-            
-              <label for="heroi">Herói favorito:</label>
-              <input type="text" id="heroi" name="heroi" placeholder="Ex: Homem de Ferro, Batman...">
-            
-              <label for="harrypotter">Gosta de Harry Potter?</label>
-              <select id="harrypotter" name="harrypotter">
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
-              </select>
-            
-              <label for="religiosa">É religiosa(o)?</label>
-              <select id="religiosa" name="religiosa">
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
-              </select>
-            
-              <label for="preferencias">Outras preferências (marcas, hobbies, etc):</label>
-              <textarea id="preferencias" name="preferencias" rows="3" placeholder="Ex: gosta de café, perfume doce, filmes de ação..."></textarea>
-            </div>
+      <div class="extra-questions">
+        <h3>🎁 Suas Preferências <br> <span
+            style="font-size: 14px; margin-bottom: 24px; display: block;">(opcional)</span>
+        </h3>
+
+        <label for="calca">Número da calça:</label>
+        <input type="text" id="calca" name="calca" placeholder="Ex: 40">
+
+        <label for="calcado">Número do calçado:</label>
+        <input type="text" id="calcado" name="calcado" placeholder="Ex: 42">
+
+        <label for="camisa">Tamanho da camisa:</label>
+        <input type="text" id="camisa" name="camisa" placeholder="Ex: M, G, GG">
+
+        <label for="heroi">Herói favorito:</label>
+        <input type="text" id="heroi" name="heroi" placeholder="Ex: Homem de Ferro, Batman...">
+
+        <label for="harrypotter">Gosta de Harry Potter?</label>
+        <select id="harrypotter" name="harrypotter">
+          <option value="">-</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+        </select>
+
+        <label for="religiosa">É religiosa(o)?</label>
+        <select id="religiosa" name="religiosa">
+          <option value="">-</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+        </select>
+
+        <label for="preferencias">Outras preferências (marcas, hobbies, etc):</label>
+        <textarea id="preferencias" name="preferencias" rows="3"
+          placeholder="Ex: gosta de café, perfume doce, filmes de ação..."></textarea>
+      </div>
 
 
-            <label for="senha" class="label">Senha</label>
-            <input id="senha" type="password" placeholder="Crie uma senha">
+      <label for="senha" class="label">Senha</label>
+      <input id="senha" type="password" placeholder="Crie uma senha">
 
-            <label class="label">Escolha seu avatar</label>
-            <div class="avatar-grid" id="avatarGrid"></div>
+      <label class="label">Escolha seu avatar</label>
+      <div class="avatar-grid" id="avatarGrid"></div>
 
-            <button id="btnCadastrar">Cadastrar</button>
-            <p id="txtLogin" style="font-size: 14px;">Já tem uma conta? <strong>Faça login agora</strong></p>
-        </div>
+      <button id="btnCadastrar">Cadastrar</button>
+      <p id="txtLogin" style="font-size: 14px;">Já tem uma conta? <strong>Faça login agora</strong></p>
     </div>
+  </div>
 
- 
-    <script type="module" src="../js/cadastro.js"></script>
+
+  <script type="module" src="../js/cadastro.js"></script>
 </body>
+
 </html>
