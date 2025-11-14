@@ -85,6 +85,10 @@ onAuthStateChanged(auth, async (user) => {
   // criar novo sorteio (abre modal)
   const container = document.querySelector(".container");
   btnCriar.onclick = () => {
+    // Define a data mínima como "hoje" ao abrir o modal
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("dataSorteioInput").setAttribute("min", today);
+
     document.getElementById("modalCriar").style.display = "flex";
     document.body.style.overflow = "hidden";
     container.classList.add("blur-fundo");
