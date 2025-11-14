@@ -65,7 +65,7 @@ onAuthStateChanged(auth, async (user) => {
 
   btnEntrar.onclick = () => {
     const div = document.getElementById("entrarSorteio");
-    div.style.display = div.style.display === "block" ? "none" : "block";
+    div.style.display = div.style.display === "flex" ? "none" : "flex";
   };
 
   // entrar em sorteio existente (usa sua classe Sorteio)

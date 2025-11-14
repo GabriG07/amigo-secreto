@@ -3,7 +3,7 @@
 --------------------------------*/
 html {
   /* Use a cor mais escura do seu gradiente aqui */
-  background-color: #0f1027; 
+  background-color: #0f1027;
 }
 
 
@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  background:linear-gradient(-45deg,#0b1028,#161a3a,#0f1830,#071225);
+  background: linear-gradient(-45deg, #0b1028, #161a3a, #0f1830, #071225);
   color: #e6e8ee;
   min-height: 100vh;
   display: flex;
@@ -23,6 +23,7 @@ body {
   align-items: flex-start;
   padding: 20px;
 }
+
 .container {
   animation: fadeSlideIn 0.5s ease forwards;
   opacity: 0;
@@ -35,6 +36,7 @@ body {
     transform: translateY(0);
   }
 }
+
 .avatarWrapper {
   position: relative;
   display: inline-block;
@@ -334,13 +336,24 @@ html {
 }
 
 #btnSortear {
-    width: auto;
-    min-width: 160px;
-    padding: 10px 18px;
-    font-size: 15px;
-    margin: 10px 0;
-    display: inline-block;
-  }
+  width: auto;
+  min-width: 160px;
+  padding: 10px 18px;
+  font-size: 15px;
+  margin: 10px 0;
+  display: inline-block;
+}
+
+#entrarSorteio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#codigoEntrada {
+  width: auto;
+}
 
 /* -------------------------------
    MODAIS
@@ -421,6 +434,7 @@ html {
 .cancelar:hover {
   background: rgba(255, 255, 255, 0.25);
 }
+
 .sorteio-item:active {
   transform: scale(0.97);
   transition: transform 0.1s ease;
@@ -556,15 +570,15 @@ html {
   }
 
   .avatarWrapper {
-  margin: 0 auto; 
-  display: block;
-}
+    margin: 0 auto;
+    display: block;
+  }
 
   .acoes {
     margin-top: 16px;
   }
 
-  .dashboardTitle{
+  .dashboardTitle {
     text-align: center;
     padding: 10px;
   }
@@ -575,9 +589,11 @@ html {
 /* --- Mobile scrolling fixes --- */
 
 /* Permite rolagem suave no iOS */
-html, body {
+html,
+body {
   -webkit-overflow-scrolling: touch;
-  touch-action: auto; /* garante que o touch não seja bloqueado globalmente */
+  touch-action: auto;
+  /* garante que o touch não seja bloqueado globalmente */
 }
 
 /* Se você tiver modais que adicionam touch-action: none, garanta que apenas o modal o use quando necessário.
@@ -592,7 +608,8 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
-.avatar-grid.scroll-x, .avatar-grid {
+.avatar-grid.scroll-x,
+.avatar-grid {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
