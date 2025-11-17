@@ -60,12 +60,6 @@ export class Pessoa {
             const ref = doc(db, "usuarios", user.uid);
             await updateDoc(ref, {avatar: novoAvatar});
             this.avatar = novoAvatar;
-
-            //Pega os sorteios que o usuario participa e atualiza o avatar na tabela deles também
-            const sorteiosParticipante = await Sorteio.listarPorEmail(this.email);
-            sorteiosParticipante.forEach((s) => {
-                s.editarAvatar(this.email, novoAvatar);
-            });
         }
         catch(e){
             console.log("Erro ao atualizar o avatar: " + e);

@@ -270,12 +270,14 @@ onAuthStateChanged(auth, async (user) => {
     const listaPartModal = document.getElementById("listaParticipantesModal");
     listaPartModal.innerHTML = "";
 
-    sorteio.participantes.forEach((p) => {
+    sorteio.participantes.forEach(async (p) => {
+      const uidParticipante = await Pessoa.buscarUidPeloEmail(p.email);
+      const participante = await Pessoa.carregar(uidParticipante);
       const item = document.createElement("div");
       item.className =
         "participante-item" + (p.email === sorteio.admin.email ? " admin" : "");
       const img = document.createElement("img");
-      img.src = p.avatar || "../assets/avatars/avatar1.png";
+      img.src = participante.avatar || "../assets/avatars/avatar1.png";
       img.alt = p.nome || "Participante";
       const nomeEl = document.createElement("div");
       nomeEl.className = "p-nome";
