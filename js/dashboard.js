@@ -304,6 +304,7 @@ onAuthStateChanged(auth, async (user) => {
       });
       document.getElementById("infoData").textContent = `📅: ${dataFormatada}`;
     }
+    if(sorteio.valorMaximo || sorteio.dataEvento) document.getElementById("infosAmigoSecreto").style.display = "block";
           
     if (!sorteio.sorteado) {
       //Se ainda não foi sorteado, então não mostra o card do resultado e mensagem de que está aguardando o sorteio
