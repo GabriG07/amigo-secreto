@@ -19,7 +19,6 @@ export class Sorteio {
         this.valorMaximo = null;
         this.dataEvento = null;
 
-        this.admin.preferencias = admin.preferencias;
     }
 
     // Função para embaralhar um array
@@ -28,19 +27,25 @@ export class Sorteio {
     }
 
     async sortear(){
-        const sorteados = [...this.participantes];
-        this.shuffle(this.participantes);
-        this.shuffle(sorteados);
-        this.noRepeat(sorteados);  
-        this.sorteado = true;
+        try{
+            const sorteados = [...this.participantes];
+            this.shuffle(this.participantes);
+            this.shuffle(sorteados);
+            await this.noRepeat(sorteados);  
+            this.sorteado = true;
 
-        //Atualiza no firestore
-        const sorteioRef = doc(db, "sorteios", this.id);
-        await updateDoc(sorteioRef, { sorteado: true });
+            //Atualiza no firestore
+            const sorteioRef = doc(db, "sorteios", this.id);
+            await updateDoc(sorteioRef, { sorteado: true });
+        }
+        catch(e){
+            throw new Error(e.message);
+        }
+        
     }
 
     //Embaralha segundo array até ninguém tirar a si mesmo
-    noRepeat(sorteados){
+    async noRepeat(sorteados){
         let contador = 0;
         let valido = false;
         while (!valido){
@@ -55,15 +60,15 @@ export class Sorteio {
             contador++;
         }
         console.log("Iterações necessárias: " + contador);
-        this.fillMap(sorteados);
+        await this.fillMap(sorteados);
     }
 
-    fillMap(sorteados){
+    async fillMap(sorteados){
         for(let i = 0; i < this.participantes.length; i++){
             this.resultado.set(this.participantes[i], sorteados[i]);
         }
         this.printMapSorteados();
-        this.salvarResultado();
+        await this.salvarResultado();
     }
 
     printMapSorteados(){
@@ -81,6 +86,7 @@ export class Sorteio {
             console.log("Resultado salvo no Firestore com sucesso!");
         } catch (e) {
             console.error("Erro ao salvar no Firestore:", e);
+            throw new Error(e.message);
         }
     }
 
@@ -123,13 +129,12 @@ export class Sorteio {
             nome: this.nome,
             valorMaximo: this.valorMaximo,
             dataEvento: this.dataEvento,
-            participantes: [{ nome: this.admin.nome, email: this.admin.email, avatar: this.admin.avatar, preferencias: {...this.admin.preferencias}}],
+            participantes: [{ nome: this.admin.nome, email: this.admin.email}],
         };
 
         try {
             await setDoc(doc(db, "sorteios", id), novo);
             console.log(`🎁 Novo sorteio criado: ${id} (${this.admin.nome})`);
-            console.log(this.admin.preferencias);
            
             return id;
         } catch (e) {
@@ -245,7 +250,7 @@ export class Sorteio {
 
         // Reconstrói os participantes (que vieram como objetos simples)
         sorteio.participantes = (data.participantes || []).map(
-            p => new Pessoa(p.nome, p.email, p.avatar, p.preferencias)
+            p => new Pessoa(p.nome, p.email)
         );
 
         if(sorteio.sorteado){
@@ -255,10 +260,10 @@ export class Sorteio {
                 if (resultadoSnap.exists()) {
                     const pares = resultadoSnap.data();
 
-                    // pares = { [email]: { nome, email, avatar } }
+                    // pares = { [email]: { nome, email } }
                     for (const [email, v] of Object.entries(pares)) {
                         const k = sorteio.participantes.find(p => p.email === email);
-                        const vPessoa = new Pessoa(v.nome, v.email, v.avatar, v.preferencias);
+                        const vPessoa = new Pessoa(v.nome, v.email);
                         if (k) sorteio.resultado.set(k, vPessoa);
                     }
                     console.log(`🧩 Resultado reconstruído com ${sorteio.resultado.size} pares.`);

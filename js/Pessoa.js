@@ -26,7 +26,6 @@ export class Pessoa {
         return {
             nome: this.nome,
             email: this.email,
-            avatar: this.avatar,
         };
     }
 

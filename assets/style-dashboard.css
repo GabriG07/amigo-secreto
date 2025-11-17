@@ -612,9 +612,23 @@ html {
   filter: brightness(1.08);
 }
 
+
+#btnSortear:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 14px rgba(64, 123, 255, 0.22);
+}
+
+#btnSortear:disabled {
+  background: rgba(140, 140, 160, 0.4);
+  color: #cfcffb;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
 #infosAmigoSecreto {
   margin-top: 16px;
-  border-radius: 10px 10px 10px 10px;
+  border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.05);
 }
 
