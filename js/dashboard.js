@@ -149,7 +149,7 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
 
-    sorteios.forEach((s) => {
+    sorteios.forEach(async (s) => {
       const itemDiv = document.createElement("div");
       itemDiv.className = "sorteio-item";
       itemDiv.setAttribute("data-id", s.id);
@@ -159,7 +159,11 @@ onAuthStateChanged(auth, async (user) => {
       const titulo = document.createElement("strong");
       titulo.textContent = s.nome || `Sorteio ${s.id}`;
       const subt = document.createElement("small");
-      subt.textContent = `Admin: ${s.admin.nome} • ${s.participantes.length} participantes`;
+
+      //Carregando nome do admin
+      const uidAdmin = await Pessoa.buscarUidPeloEmail(s.admin.email);
+      const admin = await Pessoa.carregar(uidAdmin);
+      subt.textContent = `Admin: ${admin.nome} • ${s.participantes.length} participantes`;
 
       infoDiv.appendChild(titulo);
       infoDiv.appendChild(subt);
@@ -244,6 +248,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("nomeSorteio").innerHTML = "";
     document.getElementById("infoValor").innerHTML = "";
     document.getElementById("infoData").innerHTML = "";
+    document.getElementById("infosAmigoSecreto").style.display = "none";
 
     // Oculta o conteúdo antes de carregar
     grid.style.display = "none";
@@ -278,14 +283,13 @@ onAuthStateChanged(auth, async (user) => {
         "participante-item" + (p.email === sorteio.admin.email ? " admin" : "");
       const img = document.createElement("img");
       img.src = participante.avatar || "../assets/avatars/avatar1.png";
-      img.alt = p.nome || "Participante";
+      img.alt = participante.nome || "Participante";
       const nomeEl = document.createElement("div");
       nomeEl.className = "p-nome";
-      nomeEl.textContent = p.nome || p.email;
+      nomeEl.textContent = participante.nome || participante.email;
       item.appendChild(img);
       item.appendChild(nomeEl);
       listaPartModal.appendChild(item);
-      console.log(p.preferencias);
     });
 
     //Botão de realizar o sorteio

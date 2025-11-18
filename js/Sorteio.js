@@ -93,7 +93,6 @@ export class Sorteio {
     toFirestore() { //Usado apenas para salvar o resultado do sorteio (pelo menos por enquanto)
         return {
             adminEmail: this.admin.email,
-            adminNome: this.admin.nome,
             criadoEm: this.criadoEm,
             participantes: null,
             sorteado: this.sorteado
@@ -124,12 +123,11 @@ export class Sorteio {
         // Estrutura do novo sorteio
         const novo = {
             adminEmail: this.admin.email,
-            adminNome: this.admin.nome,
             criadoEm: this.criadoEm,
             nome: this.nome,
             valorMaximo: this.valorMaximo,
             dataEvento: this.dataEvento,
-            participantes: [{ nome: this.admin.nome, email: this.admin.email}],
+            participantes: [{email: this.admin.email}],
         };
 
         try {
@@ -187,7 +185,6 @@ export class Sorteio {
 
             await updateDoc(sorteioRef, {
                 participantes: arrayUnion({
-                    nome: participante.nome,
                     email: participante.email,
                 })
             });
@@ -207,7 +204,6 @@ export class Sorteio {
             this.participantes = this.participantes.filter(p => p.email !== email); //mantém todos os participantes, exceto o que queremos remover
 
             const participantesFS = this.participantes.map(p => ({
-                nome: p.nome,
                 email: p.email
             }));
 
@@ -237,7 +233,7 @@ export class Sorteio {
         const data = snap.data();
 
         // Reconstrói o admin como Pessoa
-        const admin = new Pessoa(data.adminNome, data.adminEmail);
+        const admin = new Pessoa(null, data.adminEmail);
         const sorteio = new Sorteio(admin);
 
         // Reatribui o ID e outros campos
@@ -250,7 +246,7 @@ export class Sorteio {
 
         // Reconstrói os participantes (que vieram como objetos simples)
         sorteio.participantes = (data.participantes || []).map(
-            p => new Pessoa(p.nome, p.email)
+            p => new Pessoa(null, p.email)
         );
 
         if(sorteio.sorteado){
@@ -260,10 +256,10 @@ export class Sorteio {
                 if (resultadoSnap.exists()) {
                     const pares = resultadoSnap.data();
 
-                    // pares = { [email]: { nome, email } }
+                    // pares = { [email]: {email} }
                     for (const [email, v] of Object.entries(pares)) {
                         const k = sorteio.participantes.find(p => p.email === email);
-                        const vPessoa = new Pessoa(v.nome, v.email);
+                        const vPessoa = new Pessoa(null, v.email);
                         if (k) sorteio.resultado.set(k, vPessoa);
                     }
                     console.log(`🧩 Resultado reconstruído com ${sorteio.resultado.size} pares.`);
