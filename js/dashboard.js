@@ -163,7 +163,7 @@ onAuthStateChanged(auth, async (user) => {
       //Carregando nome do admin
       const uidAdmin = await Pessoa.buscarUidPeloEmail(s.admin.email);
       const admin = await Pessoa.carregar(uidAdmin);
-      subt.textContent = `Admin: ${admin.nome} • ${s.participantes.length} participantes`;
+      subt.textContent = `Admin: ${admin.nome} • ${s.participantes.length} ${ s.participantes.length === 1 ? "participante" : "participantes"}`;
 
       infoDiv.appendChild(titulo);
       infoDiv.appendChild(subt);
