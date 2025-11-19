@@ -125,3 +125,53 @@ button:hover {
     height: 70px !important;
   }
 }
+/* ------------------------------------------- */
+/* ESTILO DO RESULTADO DO SORTEIO             */
+/* ------------------------------------------- */
+
+.resultado-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  padding: 24px;
+  border-radius: 18px;
+  color: #fff;
+  width: 90%;
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.resultado-card h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.resultado-card h3 {
+  font-size: 20px;
+  margin: 12px 0;
+  color: #fff;
+}
+
+.avatar-resultado {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  border: 3px solid rgba(255,255,255,0.4);
+}
+
+.resultado-card p {
+  font-size: 15px;
+  margin: 6px 0;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+#voltarDashboard {
+  margin-top: 25px;
+  width: 90%;
+  max-width: 420px;
+}
