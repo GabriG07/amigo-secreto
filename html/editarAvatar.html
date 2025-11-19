@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cadastro - Amigo Secreto</title>
-  <link rel="icon" href="../assets/favicon.ico">
-  <link rel="stylesheet" href="../assets/globals.css">
-  <link rel="stylesheet" href="../assets/editarAvatar.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cadastro - Amigo Secreto</title>
+    <link rel="icon" href="../assets/favicon.ico">
+    <link rel="stylesheet" href="../assets/globals.css">
+    <link rel="stylesheet" href="../assets/editarAvatar.css">
 </head>
+
 <body>
     <div class="container">
         <h1>Mudar Avatar</h1>
@@ -15,12 +17,43 @@
             <label class="label">Escolha seu avatar</label>
             <div class="avatar-grid" id="avatarGrid"></div>
 
-            <button id="btnAlterar">Alterar</button>
+            <hr class="sep">
+
+            <h2>Editar Informações</h2>
+
+            <div class="edit-fields">
+                <input id="nome" placeholder="Seu nome" type="text">
+
+                <label>Calça</label>
+                <input id="calca" type="text">
+
+                <label>Camisa</label>
+                <input id="camisa" type="text">
+
+                <label>Calçado</label>
+                <input id="calcado" type="text">
+
+                <label>Herói favorito</label>
+                <input id="heroi" type="text">
+
+                <label>Casa de Harry Potter</label>
+                <input id="harrypotter" type="text">
+
+                <label>Religiosa</label>
+                <input id="religiosa" type="text">
+
+                <label>Preferências gerais</label>
+                <textarea id="preferencias"></textarea>
+            </div>
+
+            <button id="btnSalvarTudo">Salvar Tudo</button>
+
             <button id="btnVoltar" class="logout">⬅ Voltar</button>
         </div>
     </div>
 
- 
+
     <script type="module" src="../js/editarAvatar.js"></script>
 </body>
+
 </html>
