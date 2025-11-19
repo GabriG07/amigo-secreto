@@ -48,6 +48,24 @@ export class Pessoa {
         return new Pessoa(data.nome, data.email, data.avatar, data.preferencias);
     }
 
+    async salvarEdicao() {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            console.error("Usuário não autenticado!");
+            return;
+        }
+
+        const ref = doc(db, "usuarios", user.uid);
+
+        await updateDoc(ref, this.toFirestore());
+        console.log("✔ Dados atualizados no Firestore");
+    } catch (e) {
+        console.error("❌ Erro ao salvar edição:", e);
+    }
+}
+
+
     async editarAvatar(novoAvatar){
         try{
             const user = auth.currentUser;
