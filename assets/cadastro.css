@@ -156,3 +156,57 @@ button:hover {
 option {
   color: black;
 }
+/* ------------------------------------------- */
+/* PADRONIZAÇÃO DOS CAMPOS DO CADASTRO        */
+/* ------------------------------------------- */
+
+.form-row label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+  opacity: 0.85;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 16px;
+  font-family: inherit;
+  color: #fff;
+  transition: 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+.form-row textarea {
+  min-height: 110px;
+  resize: none;
+  line-height: 1.4;
+}
+
+.extra-questions h3 {
+  margin-top: 12px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.extra-questions {
+  margin-top: 20px;
+  width: 100%;
+}
