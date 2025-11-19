@@ -15,7 +15,20 @@ onAuthStateChanged(auth, async (user) => {
         window.location.href = "./loginPage.html";
         return;
     }
-    
+
+    const dados = await Pessoa.carregar(user.uid);
+
+    // Preenche campos
+    document.getElementById("nome").value = dados.nome || "";
+    document.getElementById("calca").value = dados.preferencias?.calca || "";
+    document.getElementById("camisa").value = dados.preferencias?.camisa || "";
+    document.getElementById("calcado").value = dados.preferencias?.calcado || "";
+    document.getElementById("heroi").value = dados.preferencias?.heroi || "";
+    document.getElementById("harrypotter").value = dados.preferencias?.harrypotter || "";
+    document.getElementById("religiosa").value = dados.preferencias?.religiosa || "";
+    document.getElementById("preferencias").value = dados.preferencias?.preferencias || "";
+
+
     const btnAlterar = document.getElementById("btnAlterar");
     const btnVoltar = document.getElementById("btnVoltar");
 
@@ -32,28 +45,40 @@ onAuthStateChanged(auth, async (user) => {
         avatarGrid.appendChild(el);
     });
 
-    
-    btnAlterar.addEventListener("click", async () => {
-        if(selected !== null){
-            console.log(selected);
-            btnAlterar.disabled = true;
+    const btnSalvarTudo = document.getElementById("btnSalvarTudo");
+    btnSalvarTudo.addEventListener("click", async () => {
+        const usuario = await Pessoa.carregar(user.uid);
 
-            const anim = animacaoCarregando(btnAlterar, "Salvando");
-            const usuario = await Pessoa.carregar(user.uid);
-            btnVoltar.style.display = "none"; //Tira o botão de voltar enquanto espera o novo avatar ser salvo
-            await usuario.editarAvatar(selected);
-            terminaAnimacaoCarregando(anim, btnAlterar);
-            btnAlterar.style.display = "block";
-            btnAlterar.textContent = "Avatar atualizado!";
-            setTimeout(() => { 
-                window.location.href = "./dashboard.html" 
-            }, 1000); // Pequeno atraso para garantir consistência
-            
+        const nome = document.getElementById("nome").value.trim();
+        const calca = document.getElementById("calca").value.trim();
+        const camisa = document.getElementById("camisa").value.trim();
+        const calcado = document.getElementById("calcado").value.trim();
+        const heroi = document.getElementById("heroi").value.trim();
+        const harrypotter = document.getElementById("harrypotter").value.trim();
+        const religiosa = document.getElementById("religiosa").value.trim();
+        const preferencias = document.getElementById("preferencias").value.trim();
+
+        // Atualiza objeto
+        if (selected) {
+            usuario.avatar = selected; // avatar escolhido na grid
         }
-        else {
-            alert("❌ Selecione um avatar!");
-        }
+        usuario.nome = nome || usuario.nome;
+        usuario.preferencias = {
+            calca,
+            camisa,
+            calcado,
+            heroi,
+            harrypotter,
+            religiosa,
+            preferencias
+        };
+
+        await usuario.salvarEdicao(); // Você cria esse método na Pessoa.js
+
+        alert("Dados atualizados com sucesso!");
+        window.location.href = "./dashboard.html";
     });
+
 
     // Voltar ao dashboard
     btnVoltar.onclick = () => {
