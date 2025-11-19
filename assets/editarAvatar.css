@@ -158,13 +158,6 @@ button:hover {
     padding: 0;
   }
 
-  .avatar-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 0 auto;
-    justify-content: center;
-  }
-
   .avatar-option img {
     width: 75px;
     height: 75px;
