@@ -198,39 +198,98 @@ button:hover {
 /* ----- PADRONIZAÇÃO DOS CAMPOS DE PREFERÊNCIAS ----- */
 
 .edit-fields label {
-    font-size: 15px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 2px;
-    opacity: 0.8;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2px;
+  opacity: 0.8;
 }
 
 .edit-fields input,
 .edit-fields textarea {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.08);
-    font-size: 16px;
-    font-family: inherit;
-    color: #fff;
-    transition: 0.2s ease;
-    backdrop-filter: blur(4px);
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 16px;
+  font-family: inherit;
+  color: #fff;
+  transition: 0.2s ease;
+  backdrop-filter: blur(4px);
 }
 
 /* Efeito ao clicar no input */
 .edit-fields input:focus,
 .edit-fields textarea:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
 }
 
 /* Estilo do textarea para ficar mais limpo */
 .edit-fields textarea {
-    min-height: 110px;
-    resize: none;
-    line-height: 1.4;
-    border-radius: 14px;
+  min-height: 110px;
+  resize: none;
+  line-height: 1.4;
+  border-radius: 14px;
+}
+
+
+/* ===== PADRONIZAÇÃO DE LABELS ===== */
+label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ===== PADRONIZAÇÃO DE SELECT ===== */
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  font-size: 16px;
+  color: #ffffff;
+  outline: none;
+  margin-bottom: 18px;
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+/* Cor da fonte dentro das opções */
+select option {
+  background-color: #1c1c1c;
+  color: #ffffff;
+}
+
+/* Efeito ao focar */
+select:focus {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== PADRONIZAÇÃO DE INPUT E TEXTAREA (caso ainda não exista) ===== */
+input,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  font-size: 16px;
+  color: #ffffff;
+  outline: none;
+  margin-bottom: 18px;
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.15);
 }
