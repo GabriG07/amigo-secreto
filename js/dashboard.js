@@ -30,7 +30,7 @@ onAuthStateChanged(auth, async (user) => {
   const msgCarregando = document.getElementById("msgCarregando");
   const anim = animacaoCarregando(msgCarregando);
 
-  
+
 
   // carrega dados do usuário (sua classe Pessoa)
   const usuario = await Pessoa.carregar(user.uid);
@@ -163,7 +163,7 @@ onAuthStateChanged(auth, async (user) => {
       //Carregando nome do admin
       const uidAdmin = await Pessoa.buscarUidPeloEmail(s.admin.email);
       const admin = await Pessoa.carregar(uidAdmin);
-      subt.textContent = `Admin: ${admin.nome} • ${s.participantes.length} ${ s.participantes.length === 1 ? "participante" : "participantes"}`;
+      subt.textContent = `Admin: ${admin.nome} • ${s.participantes.length} ${s.participantes.length === 1 ? "participante" : "participantes"}`;
 
       infoDiv.appendChild(titulo);
       infoDiv.appendChild(subt);
@@ -266,10 +266,10 @@ onAuthStateChanged(auth, async (user) => {
 
     // Carrega o sorteio (Firestore) usando sua classe
     const sorteio = await Sorteio.carregar(sorteioId);
-    if (!sorteio){
-        alert("Erro ao carregar sorteio.");
-        return 
-    } 
+    if (!sorteio) {
+      alert("Erro ao carregar sorteio.");
+      return
+    }
 
     // mostra participantes na coluna direita
     const listaPartModal = document.getElementById("listaParticipantesModal");
@@ -295,9 +295,33 @@ onAuthStateChanged(auth, async (user) => {
     //Botão de realizar o sorteio
     const btnSortear = document.getElementById("btnSortear");
 
+    const btnCompartilhar = document.getElementById("btnCompartilhar");
+
+    // link para compartilhar (base do seu sistema + código do sorteio)
+    const linkConvite = `${window.location.origin}/pages/entrarSorteio.html?codigo=${sorteioId}`;
+
+    btnCompartilhar.onclick = async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Convite para Amigo Secreto",
+            text: "Entre no meu sorteio!",
+            url: linkConvite
+          });
+        } catch (err) {
+          alert("O compartilhamento foi cancelado.");
+        }
+      } else {
+        // fallback copiar
+        await navigator.clipboard.writeText(linkConvite);
+        alert("📋 Link copiado para a área de transferência!");
+      }
+    };
+
+
     //Mostra as informações do amigo secreto
     document.getElementById("nomeSorteio").textContent = sorteio.nome || `ID: ${sorteio.id}`;
-    if(sorteio.valorMaximo) document.getElementById("infoValor").textContent = `💵: R$${Number(sorteio.valorMaximo).toFixed(2)}`;
+    if (sorteio.valorMaximo) document.getElementById("infoValor").textContent = `💵: R$${Number(sorteio.valorMaximo).toFixed(2)}`;
     if (sorteio.dataEvento) {
       const [ano, mes, dia] = sorteio.dataEvento.split("-");
       const data = new Date(ano, mes - 1, dia);
@@ -308,8 +332,8 @@ onAuthStateChanged(auth, async (user) => {
       });
       document.getElementById("infoData").textContent = `📅: ${dataFormatada}`;
     }
-    if(sorteio.valorMaximo || sorteio.dataEvento) document.getElementById("infosAmigoSecreto").style.display = "block";
-          
+    if (sorteio.valorMaximo || sorteio.dataEvento) document.getElementById("infosAmigoSecreto").style.display = "block";
+
     if (!sorteio.sorteado) {
       //Se ainda não foi sorteado, então não mostra o card do resultado e mensagem de que está aguardando o sorteio
       cardResultado.style.display = "none";
@@ -349,37 +373,37 @@ onAuthStateChanged(auth, async (user) => {
 
     // Se sorteado: busca quem o usuário tirou usando método da classe
     if (!sorteio.sorteado) {
-        terminaAnimacaoCarregando(anim, msgCarregandoResultado);
-        mostrarModalResultadoAposCarregamento(grid);
-        // mostra mensagem na esquerda
-        document.getElementById("resultadoAvatar").src =
-            "../assets/avatars/avatar1.png";
-        document.getElementById("resultadoNome").textContent =
-            "Sorteio ainda não realizado";
-        const detalhes = document.getElementById("resultadoDetalhes");
-        detalhes.innerHTML = `<div class="info-item">O sorteio não foi realizado ainda.</div>`;
-        modalResultado.style.display = "flex";
-        document.body.style.overflow = "hidden";
-        modalResultado.setAttribute("aria-hidden", "false");
-        return;
+      terminaAnimacaoCarregando(anim, msgCarregandoResultado);
+      mostrarModalResultadoAposCarregamento(grid);
+      // mostra mensagem na esquerda
+      document.getElementById("resultadoAvatar").src =
+        "../assets/avatars/avatar1.png";
+      document.getElementById("resultadoNome").textContent =
+        "Sorteio ainda não realizado";
+      const detalhes = document.getElementById("resultadoDetalhes");
+      detalhes.innerHTML = `<div class="info-item">O sorteio não foi realizado ainda.</div>`;
+      modalResultado.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      modalResultado.setAttribute("aria-hidden", "false");
+      return;
     }
 
     // pega o amigo sorteado do usuário atual
     const _amigo = sorteio.buscaResultadoPorEmail(user.email);
     if (!_amigo) {
-        terminaAnimacaoCarregando(anim, msgCarregandoResultado);
-        mostrarModalResultadoAposCarregamento(grid);
-        document.getElementById("resultadoAvatar").src =
-            "../assets/avatars/avatar1.png";
-        document.getElementById("resultadoNome").textContent =
-            "Resultado não encontrado para você";
-        document.getElementById(
-            "resultadoDetalhes"
-        ).innerHTML = `<div class="info-item">Você não possui resultado neste sorteio.</div>`;
-        modalResultado.style.display = "flex";
-        document.body.style.overflow = "hidden";
-        modalResultado.setAttribute("aria-hidden", "false");
-        return;
+      terminaAnimacaoCarregando(anim, msgCarregandoResultado);
+      mostrarModalResultadoAposCarregamento(grid);
+      document.getElementById("resultadoAvatar").src =
+        "../assets/avatars/avatar1.png";
+      document.getElementById("resultadoNome").textContent =
+        "Resultado não encontrado para você";
+      document.getElementById(
+        "resultadoDetalhes"
+      ).innerHTML = `<div class="info-item">Você não possui resultado neste sorteio.</div>`;
+      modalResultado.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      modalResultado.setAttribute("aria-hidden", "false");
+      return;
     }
 
     const uidAmigo = await Pessoa.buscarUidPeloEmail(_amigo.email);
@@ -426,21 +450,21 @@ onAuthStateChanged(auth, async (user) => {
 
     // Se nada encontrado, informa
     if (detalhes.children.length === 0) {
-        detalhes.innerHTML = `<div class="info-item">Nenhuma informação disponível.</div>`;
-    } 
+      detalhes.innerHTML = `<div class="info-item">Nenhuma informação disponível.</div>`;
+    }
 
     terminaAnimacaoCarregando(anim, msgCarregandoResultado);
     mostrarModalResultadoAposCarregamento(grid);
 
-    function mostrarModalResultadoAposCarregamento(grid){
-        grid.style.visibility = "visible";
-        grid.style.opacity = "1";
-        grid.style.display = "grid";
-        document.getElementById("nomeSorteio").style.display = "block";
+    function mostrarModalResultadoAposCarregamento(grid) {
+      grid.style.visibility = "visible";
+      grid.style.opacity = "1";
+      grid.style.display = "grid";
+      document.getElementById("nomeSorteio").style.display = "block";
     }
   }
 
-  
+
 
   function fecharModalResultado() {
     const modalResultado = document.getElementById("modalResultado");
