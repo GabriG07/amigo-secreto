@@ -77,7 +77,6 @@ onAuthStateChanged(auth, async (user) => {
       .toUpperCase();
     if (codigo.length !== 5) return alert("O código deve ter 5 caracteres!");
     const sorteio = await Sorteio.carregar(codigo);
-    if (!sorteio) return alert("Sorteio não encontrado!");
     if (sorteio.sorteado) return alert("O sorteio já foi realizado!");
     await sorteio.adicionarParticipante(usuario);
   };

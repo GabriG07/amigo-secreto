@@ -16,6 +16,9 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
+    const msgCarregando = document.getElementById("msgCarregando");
+    const anim = animacaoCarregando(msgCarregando);
+
     const dados = await Pessoa.carregar(user.uid);
 
     // Preenche campos
@@ -28,7 +31,9 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("religiosa").value = dados.preferencias?.religiosa || "";
     document.getElementById("preferencias").value = dados.preferencias?.preferencias || "";
 
+    terminaAnimacaoCarregando(anim, msgCarregando);
 
+    document.querySelector(".container").style.display = "block";
     const btnAlterar = document.getElementById("btnAlterar");
     const btnVoltar = document.getElementById("btnVoltar");
 
@@ -47,6 +52,8 @@ onAuthStateChanged(auth, async (user) => {
 
     const btnSalvarTudo = document.getElementById("btnSalvarTudo");
     btnSalvarTudo.addEventListener("click", async () => {
+        const anim = animacaoCarregando(btnSalvarTudo, "Salvando");
+        btnSalvarTudo.disabled = true;
         const usuario = await Pessoa.carregar(user.uid);
 
         const nome = document.getElementById("nome").value.trim();
@@ -74,7 +81,7 @@ onAuthStateChanged(auth, async (user) => {
         };
 
         await usuario.salvarEdicao(); // Você cria esse método na Pessoa.js
-
+        terminaAnimacaoCarregando(anim, btnSalvarTudo);
         alert("Dados atualizados com sucesso!");
         window.location.href = "./dashboard.html";
     });

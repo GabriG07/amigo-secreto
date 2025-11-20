@@ -227,7 +227,6 @@ body {
   border: none;
   border-radius: 8px;
   padding: 10px 16px;
-  margin-left: 10px;
   cursor: pointer;
   font-size: 1rem;
   transition: opacity 0.3s ease, transform 0.2s;
@@ -306,9 +305,16 @@ html {
 /* -------------------------------
    BOTÃO SAIR
 --------------------------------*/
+#containerLogout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .logout {
   display: block;
-  margin: 24px auto 0 auto;
+  margin: 24px 0 0 0;
+  align-self: center;
   background: linear-gradient(135deg, #e74a3b, #c0392b);
   color: #fff;
   border: none;

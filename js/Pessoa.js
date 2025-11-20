@@ -22,9 +22,8 @@ export class Pessoa {
         };
     }
 
-    toFirestoreSemPreferencias() {
+    toFirestoreResultado() {
         return {
-            nome: this.nome,
             email: this.email,
         };
     }

@@ -78,7 +78,7 @@ export class Sorteio {
     async salvarResultado() {
         const pares = {};
         this.resultado.forEach((v, k) => {
-            pares[k.email] = v.toFirestoreSemPreferencias();
+            pares[k.email] = v.toFirestoreResultado();
         });
 
         try {
