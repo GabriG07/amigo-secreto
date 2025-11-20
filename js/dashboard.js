@@ -366,6 +366,7 @@ onAuthStateChanged(auth, async (user) => {
       //já foi sorteado
       const btnSortear = document.getElementById("btnSortear");
       if (btnSortear) btnSortear.style.display = "none";
+      if (btnCompartilhar) btnCompartilhar.style.display = "none"; 
       cardResultado.style.display = "block";
     }
 
