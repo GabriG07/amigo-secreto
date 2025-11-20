@@ -128,6 +128,7 @@ export class Sorteio {
             valorMaximo: this.valorMaximo,
             dataEvento: this.dataEvento,
             participantes: [{email: this.admin.email}],
+            sorteado: this.sorteado
         };
 
         try {

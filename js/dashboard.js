@@ -235,6 +235,9 @@ onAuthStateChanged(auth, async (user) => {
   async function abrirModalResultado(sorteioId) {
 
     const msgCarregandoResultado = document.getElementById("msgCarregandoResultado");
+    msgCarregandoResultado.style.display = "block";
+    const anim = animacaoCarregando(msgCarregandoResultado, "Carregando Amigo Secreto");
+    
     const grid = document.querySelector(".resultado-grid");
     const cardResultado = document.querySelector(".resultado-card");
 
@@ -259,8 +262,6 @@ onAuthStateChanged(auth, async (user) => {
     modalResultado.setAttribute("aria-hidden", "false");
     container.classList.add("blur-fundo");
 
-    msgCarregandoResultado.style.display = "block";
-    const anim = animacaoCarregando(msgCarregandoResultado, "Carregando Amigo Secreto");
 
     // Carrega o sorteio (Firestore) usando sua classe
     const sorteio = await Sorteio.carregar(sorteioId);
@@ -338,6 +339,7 @@ onAuthStateChanged(auth, async (user) => {
 
       if (sorteio.admin.email !== user.email) btnSortear.style.display = "none";
       else btnSortear.style.display = "block";
+      btnCompartilhar.style.display = "block"; 
 
       // Função de realizar o sorteio (admin)
       btnSortear.onclick = async () => {
