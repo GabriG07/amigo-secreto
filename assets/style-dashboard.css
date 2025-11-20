@@ -37,11 +37,15 @@ body {
   }
 }
 
+.dashboardTitle {
+  text-align: center;
+  padding: 10px 10px 30px 10px;
+}
+
 .avatarWrapper {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: 80px;
   /* ajuste fino horizontal */
   position: relative;
   top: 9px;
@@ -91,9 +95,11 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  margin-left: 80px;
 }
 
 .welcome {
+  text-align: center;
   font-size: 1.1rem;
   font-weight: 500;
   color: #c9c9ff;
@@ -236,7 +242,7 @@ body {
    LISTA DE SORTEIOS
 --------------------------------*/
 .lista {
-  margin-top: 24px;
+  margin-top: 40px;
 }
 
 .lista h3 {

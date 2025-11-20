@@ -92,5 +92,10 @@ export class Pessoa {
         return snap.docs[0].id;
     }
 
+    static async carregarPorEmail(email) {
+        const uid = await Pessoa.buscarUidPeloEmail(email);
+        return await Pessoa.carregar(uid);
+    }
+
     
 }

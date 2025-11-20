@@ -161,8 +161,7 @@ onAuthStateChanged(auth, async (user) => {
       const subt = document.createElement("small");
 
       //Carregando nome do admin
-      const uidAdmin = await Pessoa.buscarUidPeloEmail(s.admin.email);
-      const admin = await Pessoa.carregar(uidAdmin);
+      const admin = await Pessoa.carregarPorEmail(s.admin.email);
       subt.textContent = `Admin: ${admin.nome} • ${s.participantes.length} ${s.participantes.length === 1 ? "participante" : "participantes"}`;
 
       infoDiv.appendChild(titulo);
@@ -276,8 +275,7 @@ onAuthStateChanged(auth, async (user) => {
     listaPartModal.innerHTML = "";
 
     sorteio.participantes.forEach(async (p) => {
-      const uidParticipante = await Pessoa.buscarUidPeloEmail(p.email);
-      const participante = await Pessoa.carregar(uidParticipante);
+      const participante = await Pessoa.carregarPorEmail(p.email);
       const item = document.createElement("div");
       item.className =
         "participante-item" + (p.email === sorteio.admin.email ? " admin" : "");
@@ -406,8 +404,7 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
 
-    const uidAmigo = await Pessoa.buscarUidPeloEmail(_amigo.email);
-    const amigo = await Pessoa.carregar(uidAmigo);
+    const amigo = await Pessoa.carregarPorEmail(_amigo.email);
 
     // Preenche a coluna esquerda com os dados do amigo sorteado
     document.getElementById("resultadoAvatar").src =

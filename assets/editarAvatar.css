@@ -56,6 +56,10 @@ h1 {
   text-align: center;
 }
 
+input {
+  margin-top: 0;
+}
+
 input:focus,
 select:focus {
   box-shadow: 0 6px 20px rgba(155, 135, 255, 0.08);
@@ -137,7 +141,14 @@ button:hover {
 
 #btnSalvarTudo {
   margin-top: 20px;
-  width: 100%;
+  width: 50%;
+}
+
+.edit-fields {
+  padding: 25px 40px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
 }
 
 /* ----- RESPONSIVIDADE MOBILE ----- */
