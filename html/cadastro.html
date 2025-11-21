@@ -16,10 +16,10 @@
     <h1>Cadastro</h1>
     <div class="form-row">
       <label for="nome" class="label">Nome</label>
-      <input id="nome" type="text" placeholder="Digite seu nome" required>
+      <input id="nome" type="text" placeholder="Digite seu nome" required maxlength="50">
 
       <label for="email" class="label">Email</label>
-      <input id="email" type="email" placeholder="Digite seu email">
+      <input id="email" type="email" placeholder="Digite seu email" maxlength="100">
 
       <div class="extra-questions">
         <h3>🎁 Suas Preferências <br> <span
@@ -27,16 +27,16 @@
         </h3>
 
         <label for="calca">Número da calça:</label>
-        <input type="text" id="calca" name="calca" placeholder="Ex: 40">
+        <input type="text" id="calca" name="calca" placeholder="Ex: 40" maxlength="30">
 
         <label for="calcado">Número do calçado:</label>
-        <input type="text" id="calcado" name="calcado" placeholder="Ex: 42">
+        <input type="text" id="calcado" name="calcado" placeholder="Ex: 42" maxlength="30">
 
         <label for="camisa">Tamanho da camisa:</label>
-        <input type="text" id="camisa" name="camisa" placeholder="Ex: M, G, GG">
+        <input type="text" id="camisa" name="camisa" placeholder="Ex: M, G, GG" maxlength="30">
 
         <label for="heroi">Herói favorito:</label>
-        <input type="text" id="heroi" name="heroi" placeholder="Ex: Homem de Ferro, Batman...">
+        <input type="text" id="heroi" name="heroi" placeholder="Ex: Homem de Ferro, Batman..." maxlength="50">
 
         <label for="harrypotter">Gosta de Harry Potter?</label>
         <select id="harrypotter" name="harrypotter">
@@ -59,7 +59,7 @@
 
 
       <label for="senha" class="label">Senha</label>
-      <input id="senha" type="password" placeholder="Crie uma senha">
+      <input id="senha" type="password" placeholder="Crie uma senha" maxlength="30">
 
       <label class="label">Escolha seu avatar</label>
       <div class="avatar-grid" id="avatarGrid"></div>
