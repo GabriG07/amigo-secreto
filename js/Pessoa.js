@@ -58,7 +58,6 @@ export class Pessoa {
         const ref = doc(db, "usuarios", user.uid);
 
         await updateDoc(ref, this.toFirestore());
-        console.log("✔ Dados atualizados no Firestore");
     } catch (e) {
         console.error("❌ Erro ao salvar edição:", e);
     }

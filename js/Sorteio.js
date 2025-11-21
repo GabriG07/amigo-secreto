@@ -59,7 +59,7 @@ export class Sorteio {
             }
             contador++;
         }
-        console.log("Iterações necessárias: " + contador);
+        //console.log("Iterações necessárias: " + contador);
         await this.fillMap(sorteados);
     }
 
@@ -67,7 +67,7 @@ export class Sorteio {
         for(let i = 0; i < this.participantes.length; i++){
             this.resultado.set(this.participantes[i], sorteados[i]);
         }
-        this.printMapSorteados();
+        //this.printMapSorteados();
         await this.salvarResultado();
     }
 
@@ -83,7 +83,6 @@ export class Sorteio {
 
         try {
             await setDoc(doc(db, "resultados", this.id), pares);
-            console.log("Resultado salvo no Firestore com sucesso!");
         } catch (e) {
             console.error("Erro ao salvar no Firestore:", e);
             throw new Error(e.message);
@@ -112,7 +111,6 @@ export class Sorteio {
         } while ((await getDoc(doc(db, "sorteios", id))).exists());
 
         this.id = id;
-        console.log("🆔 ID único gerado:", this.id);
         return id;
     }
 
@@ -133,7 +131,6 @@ export class Sorteio {
 
         try {
             await setDoc(doc(db, "sorteios", id), novo);
-            console.log(`🎁 Novo sorteio criado: ${id} (${this.admin.nome})`);
            
             return id;
         } catch (e) {
@@ -211,7 +208,6 @@ export class Sorteio {
             const sorteioRef = doc(db, "sorteios", this.id);
             await setDoc(sorteioRef, { participantes: participantesFS }, { merge: true });
 
-            console.log(`🗑️ Participante com email ${email} removido do sorteio ${this.id}`);
             return true;
         } catch (err) {
             console.error("Erro ao remover participante:", err);
@@ -263,7 +259,6 @@ export class Sorteio {
                         const vPessoa = new Pessoa(null, v.email);
                         if (k) sorteio.resultado.set(k, vPessoa);
                     }
-                    console.log(`🧩 Resultado reconstruído com ${sorteio.resultado.size} pares.`);
                 } else {
                     console.warn("⚠️ Nenhum resultado encontrado para o sorteio:", id);
                 }
@@ -271,9 +266,6 @@ export class Sorteio {
                 console.error("Erro ao carregar resultado:", err);
             }
         }
-
-        console.log(sorteio.resultado);
-        console.log(`🎁 Sorteio ${id} carregado com sucesso!`);
         return sorteio;
     }
 
