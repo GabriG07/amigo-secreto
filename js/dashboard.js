@@ -434,7 +434,47 @@ onAuthStateChanged(auth, async (user) => {
       for (const [campo, valor] of Object.entries(perguntasObj)) {
         const div = document.createElement("div");
         div.className = "info-item";
-        div.textContent = `${campo}: ${valor || "—"}`;
+        let labelCampo;
+        let valorFormatado; 
+
+        switch(campo){
+          case ("camisa"):
+            labelCampo = "Tamanho de Camisa";
+            valorFormatado = valor;
+            break;
+          case("preferencias"):
+            labelCampo = "Outras preferências";
+            valorFormatado = valor;
+            break;
+          case("religiosa"):
+            labelCampo = "Relioso(a)";
+            if(valor == "nao") valorFormatado = "Não";
+            else if(valor == "sim") valorFormatado = "Sim";
+            break;
+          case("harrypotter"):
+            labelCampo = "Gosta de Harry Potter";
+            if(valor == "nao") valorFormatado = "Não";
+            else if(valor == "sim") valorFormatado = "Sim";
+            break;
+          case("calcado"):
+            labelCampo = "Tamanho de Calçado";
+            valorFormatado = valor;
+            break;
+          case("calca"):
+            labelCampo = "Tamanho de Calça";
+            valorFormatado = valor;
+            break;
+          case("heroi"):
+            labelCampo = "Super-Herói Favorito";
+            valorFormatado = valor;
+            break;
+        }
+
+        div.innerHTML = `
+          <span class="labelInfos">${labelCampo}:</span>
+          <span class="valorInfos">${valorFormatado || "—"}</span>
+        `;
+
         detalhes.appendChild(div);
       }
     }
