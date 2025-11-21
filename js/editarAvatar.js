@@ -1,6 +1,6 @@
 import { auth, db } from './firebaseConfig.js';
 import { Pessoa } from './Pessoa.js';
-import { animacaoCarregando, terminaAnimacaoCarregando } from './utils.js';
+import { capitalize, animacaoCarregando, terminaAnimacaoCarregando } from './utils.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
 // Avatares
@@ -56,7 +56,7 @@ onAuthStateChanged(auth, async (user) => {
         btnSalvarTudo.disabled = true;
         const usuario = await Pessoa.carregar(user.uid);
 
-        const nome = document.getElementById("nome").value.trim();
+        const nome = capitalize(document.getElementById("nome").value.trim());
         const calca = document.getElementById("calca").value.trim();
         const camisa = document.getElementById("camisa").value.trim();
         const calcado = document.getElementById("calcado").value.trim();
