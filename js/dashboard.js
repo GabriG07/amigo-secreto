@@ -296,7 +296,7 @@ onAuthStateChanged(auth, async (user) => {
     const btnCompartilhar = document.getElementById("btnCompartilhar");
 
     // link para compartilhar (base do seu sistema + código do sorteio)
-    const linkConvite = `${window.location.origin}/pages/entrarSorteio.html?codigo=${sorteioId}`;
+    const linkConvite = `${window.location.origin}${window.location.pathname.replace(/\/[^\/]*$/, '')}/entrarSorteio.html?codigo=${sorteioId}`;
 
     btnCompartilhar.onclick = async () => {
       if (navigator.share) {

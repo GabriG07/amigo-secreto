@@ -106,6 +106,13 @@ document.getElementById('cadastroEmail').addEventListener('click', async () => {
 // -------------------------
 onAuthStateChanged(auth, async (user) => {
     if (user) {
+        //Se tem um codigo de convite e ainda nao estava logado
+        const codigoConvite = localStorage.getItem("codigoConvite");
+        if (codigoConvite) {
+          localStorage.removeItem("codigoConvite");
+          window.location.href = `./entrarSorteio.html?codigo=${codigoConvite}`;
+          return;
+        }
         window.location.href = './dashboard.html';
     } 
 });
