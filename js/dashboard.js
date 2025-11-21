@@ -434,43 +434,54 @@ onAuthStateChanged(auth, async (user) => {
       fallbackFields["Tamanho do calçado"] = amigo.tamanhoCalcado;
     if (amigo.observacoes) fallbackFields["Observações"] = amigo.observacoes;
 
-    // Primeiro mostra perguntasObj (se tiver)
+
+    // Ordem fixa que você quer mostrar na tela
+    const ordemCampos = [
+      "camisa",
+      "calca",
+      "calcado",
+      "heroi",
+      "harrypotter",
+      "religiosa",
+      "preferencias",
+    ];
+
     if (Object.keys(perguntasObj).length > 0) {
-      for (const [campo, valor] of Object.entries(perguntasObj)) {
+      ordemCampos.forEach((campo) => {
+        const valor = perguntasObj[campo];
+
         const div = document.createElement("div");
         div.className = "info-item";
         let labelCampo;
-        let valorFormatado; 
+        let valorFormatado;
 
-        switch(campo){
-          case ("camisa"):
+        switch (campo) {
+          case "camisa":
             labelCampo = "Tamanho de Camisa";
             valorFormatado = valor;
             break;
-          case("preferencias"):
-            labelCampo = "Outras preferências";
-            valorFormatado = valor;
-            break;
-          case("religiosa"):
-            labelCampo = "Relioso(a)";
-            if(valor == "nao") valorFormatado = "Não";
-            else if(valor == "sim") valorFormatado = "Sim";
-            break;
-          case("harrypotter"):
-            labelCampo = "Gosta de Harry Potter";
-            if(valor == "nao") valorFormatado = "Não";
-            else if(valor == "sim") valorFormatado = "Sim";
-            break;
-          case("calcado"):
-            labelCampo = "Tamanho de Calçado";
-            valorFormatado = valor;
-            break;
-          case("calca"):
+          case "calca":
             labelCampo = "Tamanho de Calça";
             valorFormatado = valor;
             break;
-          case("heroi"):
+          case "calcado":
+            labelCampo = "Tamanho de Calçado";
+            valorFormatado = valor;
+            break;
+          case "heroi":
             labelCampo = "Super-Herói Favorito";
+            valorFormatado = valor;
+            break;
+          case "harrypotter":
+            labelCampo = "Gosta de Harry Potter";
+            valorFormatado = valor === "sim" ? "Sim" : "Não";
+            break;
+          case "religiosa":
+            labelCampo = "Religioso(a)";
+            valorFormatado = valor === "sim" ? "Sim" : "Não";
+            break;
+          case "preferencias":
+            labelCampo = "Outras preferências";
             valorFormatado = valor;
             break;
         }
@@ -481,8 +492,9 @@ onAuthStateChanged(auth, async (user) => {
         `;
 
         detalhes.appendChild(div);
-      }
+      });
     }
+
 
     // Depois fallback fields
     for (const [k, v] of Object.entries(fallbackFields)) {
