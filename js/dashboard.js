@@ -84,6 +84,11 @@ onAuthStateChanged(auth, async (user) => {
   // criar novo sorteio (abre modal)
   const container = document.querySelector(".container");
   btnCriar.onclick = () => {
+    //Garantindo que campos do modal iniciem vazios
+    document.getElementById("nomeSorteioInput").value = "";
+    document.getElementById("valorSorteioInput").value = "";
+    document.getElementById("dataSorteioInput").value = "";
+
     // Define a data mínima como "hoje" ao abrir o modal
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("dataSorteioInput").setAttribute("min", today);
@@ -100,12 +105,12 @@ onAuthStateChanged(auth, async (user) => {
 
   document.getElementById("confirmarCriar").onclick = async () => {
     const nome = document.getElementById("nomeSorteioInput").value.trim();
-    const valor = document.getElementById("valorSorteioInput").value.trim();
+    let valor = document.getElementById("valorSorteioInput").value.trim();
     const data = document.getElementById("dataSorteioInput").value;
 
     const sorteio = new Sorteio(usuario);
     sorteio.nome = nome || null;
-    sorteio.valorMaximo = Number(valor) || null;
+    sorteio.valorMaximo = Math.abs(Number(valor)) || null;
     sorteio.dataEvento = data || null;
 
     const id = await sorteio.criar();
