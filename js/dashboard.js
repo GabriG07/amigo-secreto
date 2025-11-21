@@ -349,7 +349,7 @@ onAuthStateChanged(auth, async (user) => {
       // Função de realizar o sorteio (admin)
       btnSortear.onclick = async () => {
         if (sorteio.participantes.length < 3) {
-          alert("É necessário pelo menos 3 participantes para sortear!");
+          alert("São necessários pelo menos 3 participantes para sortear!");
           return;
         }
 

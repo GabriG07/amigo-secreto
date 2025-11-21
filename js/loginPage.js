@@ -88,32 +88,32 @@ btnEsqueci.addEventListener("click", async () => {
 /*document.getElementById('loginGoogle').addEventListener('click', async () => {
   try {
     await signInWithPopup(auth, provider);
-  } catch (error) {
-    alert("Erro ao logar com Google: " + error.message);
-  }
-});
-*/
+    } catch (error) {
+      alert("Erro ao logar com Google: " + error.message);
+      }
+      });
+      */
+     
+     
+     //Redirecionar para o cadastro
+     document.getElementById('cadastroEmail').addEventListener('click', async () => {
+       window.location.href = 'cadastro.html';
+      });
 
-
-//Redirecionar para o cadastro
-document.getElementById('cadastroEmail').addEventListener('click', async () => {
-    window.location.href = 'cadastro.html';
-});
-
-
+      
 // -------------------------
 // 👀 Observa se está logado
 // -------------------------
 onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        //Se tem um codigo de convite e ainda nao estava logado
-        const codigoConvite = localStorage.getItem("codigoConvite");
-        if (codigoConvite) {
-          localStorage.removeItem("codigoConvite");
-          window.location.href = `./entrarSorteio.html?codigo=${codigoConvite}`;
-          return;
-        }
-        window.location.href = './dashboard.html';
-    } 
+  if (user) {
+    //Se tem um codigo de convite e ainda nao estava logado
+    const codigoConvite = localStorage.getItem("codigoConvite");
+    if (codigoConvite) {
+      localStorage.removeItem("codigoConvite");
+      window.location.href = `./entrarSorteio.html?codigo=${codigoConvite}`;
+      return;
+    }
+    window.location.href = './dashboard.html';
+  } 
 });
 
